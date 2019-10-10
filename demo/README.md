@@ -1,0 +1,1 @@
+This is for building a mock rest service to learn Node better for my 320 software engineering class. Tutorial followed here: https://www.codementor.io/olatundegaruba/nodejs-restful-apis-in-10-minutes-q0sgsfhbd
