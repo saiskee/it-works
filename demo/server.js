@@ -2,7 +2,7 @@ var express = require('express'), // Import Express
   app = express(), // Init Express
   port = process.env.PORT || 3000, // Either the port we were assigned, or 3000
   mongoose = require('mongoose'),
-  Login = require('./api/models/restModel'),
+  Login = require('./api/models/demoModel'),
   cors = require('cors'),
   body_parser = require('body-parser');
 
@@ -14,7 +14,7 @@ mongoose.connect('mongodb://localhost/mockrestdb');
 app.use(body_parser.urlencoded({ extended: true }));
 app.use(body_parser.json())
 
-var routes = require('./api/routes/restRoutes');
+var routes = require('./api/routes/demoRoutes');
 routes(app);
 
 app.listen(port);
