@@ -99,14 +99,12 @@
       width: 70%;
       padding: 40px;
       height: 100vh;
-      background: linear-gradient(60deg, rgba(158, 189, 19, 0.5), rgba(0, 133, 82, 0.7)), url('download2.png') center no-repeat;
+      background: linear-gradient(60deg, rgba(158, 189, 19, 0.5), rgba(0, 133, 82, 0.7)), url(download2.png) center no-repeat;
       background-size: cover;
       display: flex;
-      flex-wrap: wrap;
-      align-items: flex-end;
-      justify-content: flex-end;
-      align-content: center;
-      flex-direction: row;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     .background h1 {
       max-width: 420px;
@@ -159,12 +157,15 @@
         <a href="#">Forgot your password?</a>
       </div>
       <div class="background">
+        <div style="background: rgba(5,100,0,0.1); padding: 40px; border-radius: 15px;">
         <h1>Log in to the It Works Survey Management Tool</h1>
         <p>Create surveys, participate in them, and track survey analytics over time</p>
+      </div>
       </div>
     </div>
     <script>
       function login_result(data) {
+        console.log(data)
         if (data.valid) {
           window.location.href = "main_screen.html"
         } else {

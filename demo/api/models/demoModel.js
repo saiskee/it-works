@@ -16,4 +16,4 @@ var LoginSchema = new Schema({
 });
 
 // Publicize our message schema.
-module.exports = mongoose.model('Login', LoginSchema);
+module.exports = mongoose.model('login', LoginSchema);
