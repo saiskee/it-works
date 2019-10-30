@@ -21,6 +21,10 @@ const SurveySchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    survey_template:{
+        type: Object,
+        default: {}
+    }
 });
 const Survey = mongoose.model('survey', SurveySchema);
 export default Survey;

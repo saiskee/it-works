@@ -4,9 +4,9 @@ import Logo from "./logo.png";
 import "./Register.css";
 import {signup} from '../../actions/session'
 import {connect} from 'react-redux';
+import {Link} from "react-router-dom";
 
 
-import $ from "jquery";
 
 const mapStateToProps = ({ errors }) => ({
   errors
@@ -20,7 +20,6 @@ const Register = ({history, errors, signup}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
-  const [error, setError] = useState(false);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -51,7 +50,8 @@ const Register = ({history, errors, signup}) => {
           </div>
           <p id="register_result"></p>
           <button type="submit" id="register_submit">Register</button>
-        <a href="" onClick={e => history.push('/login')}>Already have an account?</a>
+          <Link to={'/login'}>Already have an account?</Link>
+        {/*<a href="" onClick={e => history.push('/login')}>Already have an account?</a>*/}
         </form>
       </div>
       <div className="background">

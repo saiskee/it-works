@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import * as SurveyJS from "survey-react";
 
-import { connect } from "react-redux";
-import { logout } from "../../actions/session";
+import {connect} from "react-redux";
+import {logout} from "../../actions/session";
+import {getSurvey} from "../../actions/survey";
 
 import "survey-react/survey.css";
 import "bootstrap/dist/css/bootstrap.css"
@@ -19,93 +20,70 @@ import "jquery-ui/ui/widgets/datepicker.js";
 import "select2/dist/js/select2.js";
 import "jquery-bar-rating";
 
-import * as widgets from "surveyjs-widgets";
 
 import "icheck/skins/square/blue.css";
+
 window["$"] = window["jQuery"] = $;
-require("icheck");
 
 SurveyJS.StylesManager.applyTheme("default");
 
-widgets.icheck(SurveyJS, $);
-widgets.select2(SurveyJS, $);
-widgets.inputmask(SurveyJS);
-widgets.jquerybarrating(SurveyJS, $);
-widgets.jqueryuidatepicker(SurveyJS, $);
-widgets.nouislider(SurveyJS);
-widgets.select2tagbox(SurveyJS, $);
-widgets.signaturepad(SurveyJS);
-widgets.sortablejs(SurveyJS);
-widgets.ckeditor(SurveyJS);
-widgets.autocomplete(SurveyJS, $);
-widgets.bootstrapslider(SurveyJS);
-
-
-const mapStateToProps = ({ session }) => ({
-  session
+const mapStateToProps = ({session, survey}) => ({
+  session,
+  survey
 });
 
 const mapDispatchToProps = dispatch => ({
-  logout: () => dispatch(logout())
+  logout: () => dispatch(logout()),
+  getSurvey: (surveyId) => dispatch(getSurvey(surveyId))
 });
 
-class Survey extends Component{
-    
-    state = {
-        survey_model :  {},
-        show : false,
+class Survey extends Component {
+
+
+  componentDidMount() {
+    const {surveyId} = this.props.match.params;
+    this.props.getSurvey(surveyId);
+
+  }
+
+  onValueChanged(result) {
+    console.log(result.data)
+  }
+
+  onComplete(result) {
+    console.log(result.data);
+  }
+
+  render() {
+    const survey_template = this.props.survey.survey.survey_template;
+    console.log("TEMPLATE", survey_template);
+    const {fullName} = this.props.session;
+    let surveyJSON = {
+      title: `Survey for ${fullName}`,
+      showProgressBar: "top",
+      ...survey_template
     }
 
-    componentDidMount(){
-        $.ajax({
-            url: 'http://localhost:4000/api/users/survey',
-            type: 'post',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            dataType: 'json',
-          })
-          .done( (data) => {
-            let json = {title: `Survey for ${this.props.session.fullName}`,
-              showProgressBar: "top",
-              ...JSON.parse(data)
-            }
-            this.setState({
-              survey_model: new SurveyJS.Model(json),
-              show: true
-            }
-            );
-          })
-    }
+    window.survey_template = survey_template;
+    console.log("JSON", surveyJSON);
 
-    onValueChanged(result){
-        console.log(result.data)
-    }
+    return (
 
-    onComplete(result){
-        console.log(result.data);
-    }
-
-    render(){
-
-        return (
-            this.state.show && // Only show once AJAX received
-
-            <div className="surveyjs">
-                
-                <SurveyJS.Survey 
-                    model = {this.state.survey_model}
-                    onComplete = {this.onComplete}
-                    onValueChanged = {this.onValueChanged}
-                />
-            </div>
-        )
-
-    }
-
+        <div className="surveyjs">
+          {
+            Object.keys(survey_template).length > 0 &&
+            <SurveyJS.Survey
+                json={surveyJSON}
+                onComplete={this.onComplete}
+                onValueChanged={this.onValueChanged}
+            />
+          }
+        </div>
+    )
+  }
 }
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(Survey);

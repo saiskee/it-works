@@ -21,13 +21,20 @@ export const signup = user => (
 
   export const logout = () => (
     fetch("api/session", { 
-        method: "DELETE" 
+        method: "DELETE"
     })
   );
 
-  export const getSurveys = user => (
-    fetch("api/users/surveys", {
-      method: "GET"
+  export const getSurveys = () => (
+
+    fetch("/api/users/surveys", {
+      method: "GET",
+    })
+);
+
+  export const getSurvey = surveyId => (
+    fetch("/api/users/survey/"+surveyId, {
+      method: "GET",
     })
 );
 

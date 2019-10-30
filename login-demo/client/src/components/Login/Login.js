@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 
 import Logo from "./logo.png";
 import "./Login.css";
@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
 const Login = ({errors, login}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  // const [error, setError] = useState(false);
 
   
 

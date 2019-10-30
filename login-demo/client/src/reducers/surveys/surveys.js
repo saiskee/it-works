@@ -1,6 +1,6 @@
 import {
   GET_CURRENT_USER_SURVEYS
-} from "../../actions/session";
+} from "../../actions/survey";
 
 // Default session value when logged out
 const _nullSurveys = { surveys: [] }
