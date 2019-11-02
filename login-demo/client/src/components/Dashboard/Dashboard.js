@@ -63,7 +63,7 @@ class Dashboard extends Component {
                   <Typography type={'title'} variant={'h4'}>Survey Dashboard</Typography>
                 </Grid>
                 <Grid item>
-                  <Button color={'accent'} onClick={logout}><Typography variant={'h5'}>Logout</Typography></Button>
+                  <Button  onClick={logout}><Typography variant={'h5'}>Logout</Typography></Button>
                 </Grid>
               </Grid>
             </Toolbar>
@@ -94,7 +94,7 @@ class Dashboard extends Component {
                         <TableRow key={survey._id}>
 
                           <TableCell>
-                            <Link to={'/survey/' + survey._id}>{survey.survey_template.title}</Link>
+                            <Link to={'/survey/' + survey._id}>{survey.survey_template.title ? survey.survey_template.title : "Survey"}</Link>
                           </TableCell>
                           <TableCell>
                             <Typography variant={'subtitle1'}>{survey.creation_date}</Typography>

@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import * as SurveyJSCreator from "survey-creator";
+import "survey-creator/survey-creator.css";
 
 import $ from "jquery";
 
@@ -10,7 +11,7 @@ class SurveyBuilder extends Component{
 
   saveSurvey = () => {
     console.log(JSON.stringify(this.surveyCreator.JSON));
-    $.ajax('http://localhost:3000/api/users/survey', {
+    $.ajax('/api/survey', {
       method: 'POST',
       data: JSON.stringify(this.surveyCreator.JSON),
       contentType:'application/json'

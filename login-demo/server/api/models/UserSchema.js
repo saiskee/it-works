@@ -10,25 +10,21 @@ const UserSchema = new mongoose.Schema({
     username: {
       type: String,
       required: true,
-      validate: {
-          validator: username => User.doesNotExist({ username }),
-          message: "Username has already been registered"
-      }
+      // validate: {
+      //     validator: username => User.doesNotExist({ username }),
+      //     message: "Username has already been registered"
+      // }
     },
     password: {
       type: String,
       required: true
     },
     surveys_assigned: {
-        type: Array,
+        type: [{ type: mongoose.Types.ObjectId, ref:'survey'}],
         default: []
     },
-    surveys_taken: {
-        type: Array,
-        default: []
-    },
-    surveys_owned_by: {
-        type: Array,
+    created_surveys: {
+        type: [{ type: mongoose.Types.ObjectId, ref:'survey'}],
         default: []
     },
     role: {

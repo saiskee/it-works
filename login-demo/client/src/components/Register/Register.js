@@ -41,7 +41,7 @@ const Register = ({history, errors, signup}) => {
           <div className="input-email">
             <i className="fas fa-envelope icon"></i>
             <input id="email" type="email" placeholder="E-mail" value={email} onChange={e => {setEmail(e.target.value)}} />
-            <span color={'red'}>{errors}</span>
+            <span>{errors}</span>
           </div>
           <label htmlFor="password"> Password</label>
           <div className="input-password">

@@ -43,7 +43,7 @@ const Login = ({errors, login}) => {
             <i className="fas fa-lock icon"></i>
             <input type="password" placeholder="type your password" value={password} onChange={e => {setPassword(e.target.value)}} />
           </div>
-          <span color={'red'}>{errors}</span>
+          <span >{errors}</span>
           {/* {error===true && <span style={{color: 'red'}}>Incorrect e-mail or password</span>} */}
           <p id="login_result"></p>
           <button type="submit" id="login_submit">Login</button>

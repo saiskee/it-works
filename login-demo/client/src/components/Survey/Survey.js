@@ -47,11 +47,31 @@ class Survey extends Component {
   }
 
   onValueChanged(result) {
-    console.log(result.data)
+    // console.log(result.data)
   }
 
-  onComplete(result) {
-    console.log(result.data);
+  onComplete = (result) => {
+    console.log(result);
+    result = result.data;
+    console.log(result);
+    const {pages} = this.props.survey.survey.survey_template;
+    pages.map((page) => {
+      const {elements} = page;
+      elements.map((question) => {
+        if (result.hasOwnProperty(question.name)){
+          Object.defineProperty(result, question.question_id,
+              Object.getOwnPropertyDescriptor(result, question.name));
+          delete result[question.name];
+        }
+      });
+    });
+    console.log(result)
+
+    $.ajax('/api/survey/'+this.props.match.params.surveyId, {
+      method: 'POST',
+      data: JSON.stringify(result),
+      contentType: 'application/json'
+    })
   }
 
   render() {

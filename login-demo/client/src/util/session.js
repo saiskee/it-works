@@ -27,13 +27,13 @@ export const signup = user => (
 
   export const getSurveys = () => (
 
-    fetch("/api/users/surveys", {
+    fetch("/api/survey/surveys", {
       method: "GET",
     })
 );
 
   export const getSurvey = surveyId => (
-    fetch("/api/users/survey/"+surveyId, {
+    fetch("/api/survey/"+surveyId, {
       method: "GET",
     })
 );

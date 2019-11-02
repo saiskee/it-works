@@ -26,6 +26,7 @@ class App extends Component {
     return (
         <div className="App">
           <CssBaseline />
+
           <AuthRoute path="/login" exact component={Login}/>
           <AuthRoute path="/register" exact component={Register}/>
           <MuiThemeProvider theme={theme}>
