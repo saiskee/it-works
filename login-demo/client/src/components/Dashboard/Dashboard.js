@@ -87,23 +87,28 @@ class Dashboard extends Component {
                       <TableCell>
                         Survey Expiry Date
                       </TableCell>
+                      <TableCell>
+                        Status
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {surveys.surveys.map(survey => (
-                        <TableRow key={survey._id}>
-
+                    {surveys.surveys.map((survey_object) => (
+                        <TableRow key={survey_object.survey._id}>
                           <TableCell>
-                            <Link to={'/survey/' + survey._id}>{survey.survey_template.title ? survey.survey_template.title : "Survey"}</Link>
+                            <Typography variant={'subtitle1'} >{survey_object.survey._id}</Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography variant={'subtitle1'}>{survey.creation_date}</Typography>
+                            <Link to={survey_object.survey_status === 'Unfinished'? '/survey/' + survey_object.survey._id : '/dashboard'}>{survey_object.survey.survey_template.title ? survey_object.survey.survey_template.title : "Survey"}</Link>
                           </TableCell>
                           <TableCell>
-                            <Typography variant={'subtitle1'}>{survey.expiry_date}</Typography>
+                            <Typography variant={'subtitle1'}>{survey_object.survey.creation_date}</Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography variant={'subtitle1'} >{survey._id}</Typography>
+                            <Typography variant={'subtitle1'}>{survey_object.survey.expiry_date}</Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant={'subtitle1'}>{survey_object.survey_status}</Typography>
                           </TableCell>
                         </TableRow>
                     ))}

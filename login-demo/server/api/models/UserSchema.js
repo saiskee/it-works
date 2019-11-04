@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
       required: true
     },
     surveys_assigned: {
-        type: [{ type: mongoose.Types.ObjectId, ref:'survey'}],
+        type: [{ survey_id: { type: mongoose.Types.ObjectId, ref:'survey'}, survey_status: String }],
         default: []
     },
     created_surveys: {
