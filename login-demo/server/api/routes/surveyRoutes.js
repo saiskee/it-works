@@ -106,7 +106,7 @@ surveyRoutes.post('', async (req, res) => {
 
       if (err) throw new Error(err);
 
-      User.findOne({}, (err, user) => {
+      User.findOne({ _id: userId }, (err, user) => {
         user.surveys_assigned.push({survey_id: survey.id, survey_status: SurveyStatus.UNFINISHED});
         user.save();
       });

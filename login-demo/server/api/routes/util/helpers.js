@@ -6,17 +6,20 @@ const parseNewTemplateIntoQuestions = async (surveyTemplate, userId) => {
   let {title, description, pages} = surveyTemplate;
   const new_pages = await Promise.all(pages.map(async (page) => {
         const {elements} = page;
-        page.elements = await Promise.all(elements.map(async (element) => {
-          const question = new Question({
-            question_data: element,
-            name: element.name,
-            author: userId
-          });
+        if (elements != undefined) {
+          page.elements = await Promise.all(elements.map(async (element) => {
+            const question = new Question({
+              question_data: element,
+              name: element.name,
+              author: userId
+            });
 
-          const savedQuestion = await question.save(); //This gives us back the question that we just saved in the database
-          return mongoose.Types.ObjectId(savedQuestion._id);
-        }));
-
+            const savedQuestion = await question.save(); //This gives us back the question that we just saved in the database
+            return mongoose.Types.ObjectId(savedQuestion._id);
+          }));
+        } else {
+            page.elements = [];
+        }
         return page;
       })
   );
