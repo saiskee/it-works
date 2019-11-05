@@ -81,8 +81,6 @@ surveyRoutes.post('/:surveyId', async(req, res) => {
   const surveyId = req.params.surveyId;
   const answers = req.body;
   const survey_entry = user.surveys_assigned.find((entry) => entry.survey_id.equals(mongoose.Types.ObjectId(surveyId)));
-  console.log(survey_entry !== undefined);
-  console.log(survey_entry.survey_status === SurveyStatus.UNFINISHED);
   if(survey_entry !== undefined && survey_entry.survey_status === SurveyStatus.UNFINISHED) {
     for (const answer_id in answers){
       survey_entry.survey_status = SurveyStatus.FINISHED;
