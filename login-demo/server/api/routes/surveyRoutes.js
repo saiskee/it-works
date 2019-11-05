@@ -9,6 +9,12 @@ import {parseNewTemplateIntoQuestions,  parseExistingTemplateIntoQuestions} from
 
 const surveyRoutes = express.Router();
 
+const SurveyStatus = {
+    UNFINISHED: "Unfinished",
+    FINISHED: "Finished",
+    EXPIRED: "Expired"
+}
+
 surveyRoutes.get('/surveys', (req, res) => {
       const {userId} = req.session.user;
 
@@ -17,9 +23,16 @@ surveyRoutes.get('/surveys', (req, res) => {
           if (err) throw new Error(err);
 
           Survey.find({
-            _id: {$in: user.surveys_assigned.map((survey) => (mongoose.Types.ObjectId(survey)))}
+              _id: {$in: user.surveys_assigned.map((survey_object) => (mongoose.Types.ObjectId(survey_object.survey_id))) }
           }, (err, surveys) => {
-            res.send({surveys: surveys});
+            // Append all the statuses to the surveys.
+            let surveys_with_statuses = surveys.map((survey_object) => {
+                let user_survey_object = user.surveys_assigned.find((user_survey) => (mongoose.Types.ObjectId(user_survey.survey_id).equals(survey_object._id)));
+                // Return the survey with the status appended.
+                let final_object = {survey: survey_object, survey_status: user_survey_object.survey_status};
+                return final_object;
+            });
+            res.send({surveys: surveys_with_statuses});
           });
         } catch (err) {
           res.status(400).send(parseError(err));
@@ -35,22 +48,24 @@ surveyRoutes.get('/:surveyId', async (req, res) => {
         try{
           if (err) throw new Error(err);
           if (!user) throw new Error("Please try logging back in!");
-          if (!user.surveys_assigned.includes(surveyId)){
+          const survey_entry = user.surveys_assigned.find((survey_entry) => (survey_entry.survey_id.equals(mongoose.Types.ObjectId(surveyId))));
+          if (survey_entry === undefined){
             throw new Error("This survey was not assigned to you, or does not exist.");
+          }
+          if (survey_entry.survey_status === SurveyStatus.FINISHED || survey_entry.survey_status === SurveyStatus.EXPIRED) {
+            throw new Error("Survey already answered or no longer open.");
           }
 
           Survey.findOne({_id: surveyId}, async (err, survey) => {
             try {
               if (err) throw new Error(err);
               if (!survey) throw new Error('Invalid Survey');
-
               survey = await parseExistingTemplateIntoQuestions(survey);
-              res.send({survey: survey})
-
+              res.send({survey: survey});
             } catch (err) {
               res.status(400).send(parseError(err));
             }
-          })
+          });
         }
         catch(err){
           res.status(400).send(parseError(err));
@@ -65,13 +80,16 @@ surveyRoutes.post('/:surveyId', async(req, res) => {
   const user = await User.findOne({_id: userId});
   const surveyId = req.params.surveyId;
   const answers = req.body;
-  if(user.surveys_assigned.includes(surveyId)){ //also add check to make sure that survey hasn't been completed before
+  const survey_entry = user.surveys_assigned.find((entry) => entry.survey_id.equals(mongoose.Types.ObjectId(surveyId)));
+  if(survey_entry !== undefined && survey_entry.survey_status === SurveyStatus.UNFINISHED) {
     for (const answer_id in answers){
+      survey_entry.survey_status = SurveyStatus.FINISHED;
+      user.save();
       const question = await Question.findOne({_id: answer_id});
       const answerObj = {question_id: answer_id, answer: answers[answer_id], survey_id: surveyId};
       question.survey_responses.push(answerObj);
       let question1 = await question.save();
-      console.log(question1);
+      
     }
   }
 })
@@ -86,8 +104,8 @@ surveyRoutes.post('', async (req, res) => {
 
       if (err) throw new Error(err);
 
-      User.findOne({}, (err, user) => {
-        user.surveys_assigned.push(survey.id);
+      User.findOne({ _id: userId }, (err, user) => {
+        user.surveys_assigned.push({survey_id: survey.id, survey_status: SurveyStatus.UNFINISHED});
         user.save();
       });
 
