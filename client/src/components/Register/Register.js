@@ -30,7 +30,7 @@ const Register = ({history, errors, signup}) => {
   return (
     <div id="register-page">
       <div className="register">
-        <img src={Logo} alt="It Works Logo"/>
+        <img src={Logo} alt="It Works Logo" class="logo"/>
         <form onSubmit = {handleSubmit} className="form-register">
         <label htmlFor="name"> Full Name</label>
           <div className="input-email">
