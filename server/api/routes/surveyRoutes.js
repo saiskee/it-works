@@ -13,7 +13,7 @@ const SurveyStatus = {
     UNFINISHED: "Unfinished",
     FINISHED: "Finished",
     EXPIRED: "Expired"
-}
+};
 
 surveyRoutes.get('/surveys', (req, res) => {
       const {userId} = req.session.user;

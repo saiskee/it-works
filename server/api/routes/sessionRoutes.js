@@ -12,7 +12,7 @@ sessionRoutes.post("", async (req, res) => {
     try {
       if (user && user.validatePassword(password)) {
         const sessionUser = sessionizeUser(user);
-        req.session.user = sessionUser
+        req.session.user = sessionUser;
         res.send({valid: true, ...sessionUser});
 
       } else {
