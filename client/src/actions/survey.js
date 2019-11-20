@@ -12,7 +12,7 @@ const getSurveyWithId = survey => ({
 const getCurrentUserSurveys = (surveys) => ({
   type: GET_CURRENT_USER_SURVEYS,
   surveys: surveys
-})
+});
 
 export const getSurvey = surveyId => async dispatch => {
   const response = await apiUtil.getSurvey(surveyId);
@@ -23,7 +23,7 @@ export const getSurvey = surveyId => async dispatch => {
     return dispatch(receiveErrors(data));
   }
 
-}
+};
 
 export const getSurveys = user => async dispatch => {
   const response = await apiUtil.getSurveys(user);

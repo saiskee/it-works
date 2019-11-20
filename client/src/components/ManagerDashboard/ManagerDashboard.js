@@ -1,22 +1,19 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {logout} from "../../actions/session";
-import {getSurveys} from "../../actions/survey";
+
+import {getManagerAuthoredSurveys} from "../../actions/analytics";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {withRouter} from 'react-router';
 import {Link} from 'react-router-dom';
 import {
-  AppBar,
   TableBody,
   TableCell,
   TableRow,
   TableHead,
   Table,
-  Button,
   Grid,
   Paper,
   Typography,
-  Toolbar,
   makeStyles
 } from "@material-ui/core";
 
@@ -30,15 +27,15 @@ const mapStateToProps = ({session, surveys}) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getSurveys: () => dispatch(getSurveys())
+  getManagerAuthoredSurveys: () => dispatch(getManagerAuthoredSurveys())
 });
 
 
 
-class Dashboard extends Component {
+class ManagerDashboard extends Component {
 
   componentDidMount() {
-    this.props.getSurveys();
+    this.props.getManagerAuthoredSurveys();
   }
 
   render() {
@@ -72,21 +69,21 @@ class Dashboard extends Component {
                   </TableHead>
                   <TableBody>
                     {surveys.surveys.map((survey_object) => (
-                        <TableRow key={survey_object.survey._id}>
+                        <TableRow key={survey_object._id}>
                           <TableCell>
-                            <Typography variant={'subtitle1'} >{survey_object.survey._id}</Typography>
+                            <Typography variant={'subtitle1'} >{survey_object._id}</Typography>
                           </TableCell>
                           <TableCell>
-                            <Link to={survey_object.survey_status === 'Unfinished'? '/survey/' + survey_object.survey._id : '/dashboard'}>{survey_object.survey.survey_template.title ? survey_object.survey.survey_template.title : "Survey"}</Link>
+                            <Link to={"/analytics/" + survey_object._id}>{survey_object.survey_template.title ? survey_object.survey_template.title : "Survey"}</Link>
                           </TableCell>
                           <TableCell>
-                            <Typography variant={'subtitle1'}>{survey_object.survey.creation_date}</Typography>
+                            <Typography variant={'subtitle1'}>{survey_object.creation_date}</Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography variant={'subtitle1'}>{survey_object.survey.expiry_date}</Typography>
+                            <Typography variant={'subtitle1'}>{survey_object.expiry_date}</Typography>
                           </TableCell>
                           <TableCell>
-                            <Typography variant={'subtitle1'}>{survey_object.survey_status}</Typography>
+                            {/*<Typography variant={'subtitle1'}>{survey_object.survey_status}</Typography>*/}
                           </TableCell>
                         </TableRow>
                     ))}
@@ -106,4 +103,4 @@ class Dashboard extends Component {
 export default connect(
     mapStateToProps, // This passes in our mapStateToProps function as a prop into our Dashboard component
     mapDispatchToProps
-)(withRouter(Dashboard));
+)(withRouter(ManagerDashboard));

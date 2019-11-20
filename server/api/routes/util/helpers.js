@@ -42,5 +42,21 @@ const parseExistingTemplateIntoQuestions = async (survey) => {
   return survey;
 }
 
+const parseExistingTemplateIntoQuestionsIncludeResponses = async (survey) => {
+  let pages = survey.survey_template.pages;
+  const new_pages = await Promise.all(pages.map(async (page) => {
+    const {elements} = page;
+    page.elements = await Promise.all(elements.map(async (element) => {
+      const savedQuestion = await Question.findOne({_id: element});
+      const toReturn = {question_id: element, ...savedQuestion.question_data, survey_responses: savedQuestion.survey_responses}
+      return toReturn;
+    }))
+    return page;
+  }));
 
-export {parseNewTemplateIntoQuestions, parseExistingTemplateIntoQuestions}
+  survey.survey_template.pages = new_pages;
+  return survey;
+}
+
+
+export {parseNewTemplateIntoQuestions, parseExistingTemplateIntoQuestions, parseExistingTemplateIntoQuestionsIncludeResponses}
