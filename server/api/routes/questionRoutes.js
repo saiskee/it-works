@@ -23,6 +23,18 @@ function summarizeMultiChoice(question) {
     }, {});
 }
 
+function summarizeRating(question) {
+    let current_summary = {};
+    var i;
+    for (i = 1; i <= question.question_data.rateMax; i++) {
+    current_summary[i.toString(10)]=0
+    }
+    var p;
+    for (p=0; p<question.survey_responses.length; p++){
+        current_summary[question.survey_responses[p][answer]]+=1;
+    }
+    return current_summary;
+}
 
 /* GET /:questionId
  * Will return the summarized info for this question.
@@ -44,6 +56,8 @@ questionRoutes.get('/:questionId', (req, res) => {
                 case 'checkbox':
                     res.send(summarizeMultiChoice(question));
                     return;
+                case 'rating':
+                    res.send(summarizeRating(question));
                 // TODO: Insert your question type here.
             }
         } catch(err) {
