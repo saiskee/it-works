@@ -13,14 +13,28 @@ function summarizeMultiChoice(question) {
         } else {
             current_summary[answer] = 1
         }
-        return current_summary;
+        return current_summary; 
     };
     return question.survey_responses.reduce((answer_sum, response) => {
-        // This is a double reduce.
+        // This is a double reduce. 
         // Collapse all the responses into one summary objects and sum over there
         // answer array.
        return response.answer.reduce(sumAnswer, answer_sum);
     }, {});
+}
+
+function summarizeOpenResponse(question){
+    let sumAnswer = (current_summary, answer) => {
+        if (answer in current_summary) {
+            current_summary[answer] += 1
+        } else {
+            current_summary[answer] = 1
+        }
+        return current_summary;
+    };
+    
+    return question.answer.reduce(answer_sum, response);
+
 }
 
 
