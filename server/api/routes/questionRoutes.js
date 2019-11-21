@@ -23,6 +23,18 @@ function summarizeMultiChoice(question) {
     }, {});
 }
 
+function summarizedFreeResponse(question){
+    let sumAnswer = (current_summary, answer) => {
+        if (answer in current_summary) {
+            current_summary[answer] += 1
+        } else {
+            current_summary[answer] = 1
+        }
+        return current_summary;
+    };
+    return question.surver_response.reduce(sumAnswer, {});
+}
+
 
 /* GET /:questionId
  * Will return the summarized info for this question.
