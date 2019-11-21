@@ -28,7 +28,6 @@ class SurveyBuilder extends Component{
     return (
 
         <div id={"surveyCreatorContainer"}/>
-
         )
   }
 }

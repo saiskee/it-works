@@ -22,5 +22,6 @@ const SurveySchema = new mongoose.Schema({
     ref: 'User'
   }
 });
+
 const Survey = mongoose.model('survey', SurveySchema);
 export default Survey;

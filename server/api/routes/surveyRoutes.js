@@ -15,6 +15,7 @@ const SurveyStatus = {
     EXPIRED: "Expired"
 };
 
+//Route for employee to get all surveys that are assigned to them
 surveyRoutes.get('/surveys', (req, res) => {
       const {userId} = req.session.user;
 
@@ -39,8 +40,9 @@ surveyRoutes.get('/surveys', (req, res) => {
         }
       })
     }
-)
+);
 
+// Route for employee to get survey data to take survey
 surveyRoutes.get('/:surveyId', async (req, res) => {
       const {userId} = req.session.user;
       const {surveyId} = req.params;
@@ -75,6 +77,7 @@ surveyRoutes.get('/:surveyId', async (req, res) => {
     }
 );
 
+// Route for Employee to send survey responses to
 surveyRoutes.post('/:surveyId', async(req, res) => {
   const {userId} = req.session.user;
   const user = await User.findOne({_id: userId});
@@ -92,23 +95,29 @@ surveyRoutes.post('/:surveyId', async(req, res) => {
       
     }
   }
-})
+});
 
+// Route for Manager to create a new survey
 surveyRoutes.post('', async (req, res) => {
   let surveyTemplate = req.body;
+  // Right now, the survey is assigned to the user who creates the survey
+  // TODO: Assign surveys to other users during survey creation
   const {userId} = req.session.user;
+
   surveyTemplate = await parseNewTemplateIntoQuestions(surveyTemplate, userId);
-  const newSurvey = new Survey({survey_template: surveyTemplate});
+  const newSurvey = new Survey({
+    survey_template: surveyTemplate,
+    author: mongoose.Types.ObjectId(userId)
+  });
+
   await newSurvey.save((err, survey) => {
     try{
-
       if (err) throw new Error(err);
 
       User.findOne({ _id: userId }, (err, user) => {
         user.surveys_assigned.push({survey_id: survey.id, survey_status: SurveyStatus.UNFINISHED});
         user.save();
       });
-
     }
 
     catch(err){
@@ -117,6 +126,8 @@ surveyRoutes.post('', async (req, res) => {
 
   })
 });
+
+
 
 
 export default surveyRoutes;

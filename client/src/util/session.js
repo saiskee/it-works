@@ -38,6 +38,19 @@ export const signup = user => (
     })
 );
 
+  export const getSurveyWithResponses = surveyId => (
+      fetch("/api/analytics/survey/"+surveyId, {
+        method: "GET",
+      })
+  )
+
+  export const getManagerAuthoredSurveys = () => (
+
+      fetch("/api/analytics/surveys", {
+        method: "GET",
+      })
+);
+
   export const checkLoggedIn = async (preloadedState) => {
     const response =  await fetch('/api/session');
     const { user } =  await response.json();
