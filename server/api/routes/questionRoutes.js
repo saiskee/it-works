@@ -23,7 +23,8 @@ function summarizeMultiChoice(question) {
     }, {});
 }
 
-function summarizeOpenResponse(question){
+<
+function summarizedFreeResponse(question){
     let sumAnswer = (current_summary, answer) => {
         if (answer in current_summary) {
             current_summary[answer] += 1
@@ -32,9 +33,7 @@ function summarizeOpenResponse(question){
         }
         return current_summary;
     };
-    
-    return question.answer.reduce(answer_sum, response);
-
+    return question.surver_response.reduce(sumAnswer, {});
 }
 
 
