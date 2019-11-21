@@ -70,6 +70,11 @@ questionRoutes.get('/:questionId', (req, res) => {
                     return;
                 case 'rating':
                     res.send(summarizeRating(question));
+                    return;
+                case 'text':
+                    res.send(summarizedFreeResponse(question));
+                    return;
+
                 // TODO: Insert your question type here.
             }
         } catch(err) {
