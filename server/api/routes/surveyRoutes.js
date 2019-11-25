@@ -15,7 +15,9 @@ const SurveyStatus = {
     EXPIRED: "Expired"
 };
 
-//Route for employee to get all surveys that are assigned to them
+/* GET /surveys
+ * Will return all surveys currently assigned to a user
+ */
 surveyRoutes.get('/surveys', (req, res) => {
       const {userId} = req.session.user;
 
@@ -42,7 +44,9 @@ surveyRoutes.get('/surveys', (req, res) => {
     }
 );
 
-// Route for employee to get survey data to take survey
+/* GET /:surveyId
+* Route for employee to get survey data to take survey
+ */
 surveyRoutes.get('/:surveyId', async (req, res) => {
       const {userId} = req.session.user;
       const {surveyId} = req.params;
@@ -77,7 +81,9 @@ surveyRoutes.get('/:surveyId', async (req, res) => {
     }
 );
 
-// Route for Employee to send survey responses to
+/* POST /:surveyId
+ * Route for Employee to send survey responses to
+ */
 surveyRoutes.post('/:surveyId', async(req, res) => {
   const {userId} = req.session.user;
   const user = await User.findOne({_id: userId});

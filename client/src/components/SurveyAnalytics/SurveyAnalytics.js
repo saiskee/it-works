@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {makeStyles} from '@material-ui/styles';
-import {Grid, Typography} from '@material-ui/core';
+import {Grid, Table, Typography, Card, TableHead, TableRow, TableBody, TableCell} from '@material-ui/core';
 import {connect} from "react-redux";
 import {getSurveyAndResponses} from "../../actions/analytics";
-import Card from "@material-ui/core/Card";
+import {Bar} from "react-chartjs-2";
 
 const mapStateToProps = ({session, survey}) => ({
   session,
@@ -20,10 +20,58 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const SurveyAnalytics = (props) => {
+const visualizeData = (question, currentSurveyId) => {
+  const {analytics} = question;
+  if (question.type == "text"){
+    return (
+        <>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                Responses
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {analytics[currentSurveyId].length > 0 && analytics[currentSurveyId].map(response => (
+                <TableRow>
+                  <TableCell>
+                    {response}
+                  </TableCell>
+                </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+          </>
+    )
+  }
+  if (question.type == "checkbox"){
 
+    let data = {
+      labels: Object.keys(question.analytics[currentSurveyId]),
+
+      datasets:[{
+        label: "Survey " + currentSurveyId,
+        data: Object.values(question.analytics[currentSurveyId])
+      }]
+
+    };
+
+    return (
+        <>
+          <Bar data={data} />
+        </>
+    );
+  }
+  if (question.type == "rating"){
+    // TODO
+  }
+}
+
+const SurveyAnalytics = (props) => {
+  const {surveyId} = props.match.params;
   useEffect(() => {
-    const {surveyId} = props.match.params;
     props.getSurvey(surveyId);
   },
       []);
@@ -48,7 +96,10 @@ const SurveyAnalytics = (props) => {
                     >
                     <Card className={classes.root}>
                       <Typography variant={'h1'}>{question.title ? question.title : question.name}</Typography>
-                      <Typography>{JSON.stringify(question.survey_responses)}</Typography>
+                      <Typography variant={'h5'} >{question.type}</Typography>
+                      {/*<Typography>{JSON.stringify(question.analytics)}</Typography>*/}
+                      { visualizeData(question, surveyId ) }
+                      {/*<Bar data = {{labels: ['January', 'Middle','February'], datasets:[{data: [5,6,7], label: 'January'}]}}/>*/}
                     </Card>
                     </Grid>
                 ))

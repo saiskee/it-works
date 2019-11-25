@@ -22,7 +22,6 @@ export const getSurvey = surveyId => async dispatch => {
   }else{
     return dispatch(receiveErrors(data));
   }
-
 };
 
 export const getSurveys = user => async dispatch => {

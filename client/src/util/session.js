@@ -1,4 +1,5 @@
 
+
 export const signup = user => (
     fetch("api/users", {
       method: "POST",
@@ -50,6 +51,12 @@ export const signup = user => (
         method: "GET",
       })
 );
+
+  export const getEmployees = async () => (
+    fetch("/api/employees", {
+      method: "GET",
+    })
+  )
 
   export const checkLoggedIn = async (preloadedState) => {
     const response =  await fetch('/api/session');

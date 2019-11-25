@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'user'
+    },
+    manager: {
+        type: mongoose.Types.ObjectId,
+        ref: 'user'
     }
 
 });

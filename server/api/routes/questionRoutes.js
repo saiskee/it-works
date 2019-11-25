@@ -24,7 +24,8 @@ function summarizeMultiChoice(question) {
 }
 
 function summarizedFreeResponse(question){
-    let sumAnswer = (current_summary, answer) => {
+    let sumAnswer = (current_summary, response) => {
+        const answer = response.answer;
         if (answer in current_summary) {
             current_summary[answer] += 1
         } else {
@@ -32,7 +33,8 @@ function summarizedFreeResponse(question){
         }
         return current_summary;
     };
-    return question.surver_response.reduce(sumAnswer, {});
+    console.log(question)
+    return question.survey_responses.reduce(sumAnswer, {});
 }
 
 function summarizeRating(question) {
@@ -54,16 +56,16 @@ function summarizeRating(question) {
  * User must OWN question to get a valid response back.
  */
 questionRoutes.get('/:questionId', (req, res) => {
-    const {userId} = req.session.user;
+    // const {userId} = req.session.user;
     const {questionId} = req.params;
     // Make sure this user exists and owns the question.
     Question.findOne({ _id: mongoose.Types.ObjectId(questionId)}, (err, question) => {
         try {
             if (err) throw new Error(err);
             if (question === undefined || question === null) throw new Error("Question does not exist");
-            if (!question.author.equals(mongoose.Types.ObjectId(userId))) {
-                res.status(401).send("Not authorized to view this question");
-            }
+            // if (!question.author.equals(mongoose.Types.ObjectId(userId))) {
+            //     res.status(401).send("Not authorized to view this question");
+            // }
             switch (question.question_data.type) {
                 case 'checkbox':
                     res.send(summarizeMultiChoice(question));
