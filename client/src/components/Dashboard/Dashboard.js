@@ -37,7 +37,9 @@ const mapDispatchToProps = dispatch => ({
 
 class Dashboard extends Component {
 
+
   componentDidMount() {
+    console.log("test")
     this.props.getSurveys();
   }
 
@@ -50,7 +52,7 @@ class Dashboard extends Component {
           <Grid container direction={'column'} alignItems={'center'} justify={'center'}>
             <Paper>
               <PerfectScrollbar>
-                <Table style={{minWidth: '90vw'}}>
+                <Table style={{minWidth: '95vw'}}>
                   <TableHead>
                     <TableRow>
                       <TableCell>

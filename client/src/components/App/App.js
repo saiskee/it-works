@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Route} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import {AuthRoute, ProtectedRoute} from "../../util/router";
 import Survey from "../Survey";
 import Login from "../Login";
@@ -20,7 +20,7 @@ class App extends Component {
     return (
         <div className="App">
           <CssBaseline />
-
+          <Switch>
           <AuthRoute path="/login" exact component={Login}/>
           <AuthRoute path="/register" exact component={Register}/>
           <ProtectedRoute path="/survey/:surveyId" component={Survey}/>
@@ -29,10 +29,11 @@ class App extends Component {
             <ProtectedRoute path="/dashboard" exact component={Dashboard}/>
             <ProtectedRoute path="/managerdashboard" component={ManagerDashboard}/>
             <ProtectedRoute path = "/analytics/:surveyId" component={SurveyAnalytics} />
+            <ProtectedRoute path="/builder" component={SurveyBuilder} />
           </MuiThemeProvider>
 
-          <Route path="/builder" component={SurveyBuilder} />
 
+          </Switch>
         </div>
     );
   }

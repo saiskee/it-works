@@ -8,9 +8,9 @@ export default {
   white,
   primary: {
     contrastText: white,
-    dark: colors.indigo[900],
-    main: colors.indigo[500],
-    light: colors.indigo[100]
+    dark: colors.green[900],
+    main: colors.green[500],
+    light: colors.green[100]
   },
   secondary: {
     contrastText: white,
