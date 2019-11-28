@@ -35,7 +35,6 @@ surveyRoutes.get('/surveys', (req, res) => {
                 let final_object = {survey: survey_object, survey_status: user_survey_object.survey_status};
                 return final_object;
             });
-            console.log(surveys_with_statuses);
             res.send({surveys: surveys_with_statuses});
           });
         } catch (err) {
@@ -117,7 +116,7 @@ surveyRoutes.post('', async (req, res) => {
     author: mongoose.Types.ObjectId(userId)
   });
 
-  await newSurvey.save((err, survey) => {
+  const survey = await newSurvey.save((err, survey) => {
     try{
       if (err) throw new Error(err);
 
@@ -132,6 +131,7 @@ surveyRoutes.post('', async (req, res) => {
     }
 
   })
+  res.send(survey._id);
 });
 
 

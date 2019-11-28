@@ -1,11 +1,9 @@
 import React from "react";
 import {connect} from "react-redux";
-import {AppBar, Button, Grid, Toolbar, Typography, makeStyles} from "@material-ui/core";
+import {AppBar, Toolbar, Typography, makeStyles, Menu, MenuItem} from "@material-ui/core";
 import {logout} from "../../actions/session";
 import {AccountCircle} from '@material-ui/icons';
 import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 import {withRouter} from "react-router";
 import {Link} from "react-router-dom";
 
@@ -31,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 
 
 const NavBar = (props) => {
-  const {logout} = props;
+  const {logout, session} = props;
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -58,6 +56,7 @@ const NavBar = (props) => {
           open={isMenuOpen}
           onClose={handleMenuClose}
       >
+        <MenuItem disabled={true}>Currently Logged in as {session.fullName}</MenuItem>
         <MenuItem onClick={switchView}> Switch to Employee View</MenuItem>
         <MenuItem onClick={logout}> Log Out</MenuItem>
       </Menu>
@@ -73,6 +72,7 @@ const NavBar = (props) => {
             <IconButton
                 edge="end"
                 color="inherit"
+                onClick={handleProfileMenuOpen}
             >
 
               <AccountCircle className={classes.profileIcon}/>

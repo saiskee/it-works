@@ -1,0 +1,161 @@
+/*
+
+-We should discuss adding an overflow ellipse in the .question-type componant 
+-Once I made the .question-type componant to have members of buttons instead of text
+ the 'border-bottom' attribute stopped showing up
+-Is my button creation within .question-type sufficient or do I need to more to map the buttons to variables?
+-I should order the componant attributes in a comnsistant way
+-How to insert Icons alongside const tools
+-How to import them more cleanly(folder?)
+-How to line up icons with their text(y direction)
+-Possibly move team icon to beneath toolbox
+
+*/
+
+.survey-builder {
+    display: flex;
+    flex-direction: row;
+    min-height: 80vh;
+    max-width: 100vw;
+}
+
+.question-title-view {
+    display: flex;
+    flex-direction: row;
+}
+
+.question-name {
+    font-size: 18px;
+    background: none;
+    margin: 19px 10px;
+    width: 200%;
+    border: none;
+}
+
+.toolbox-table {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    max-width: 25%;
+    /*margin-left: 20px;*/
+}
+
+.questions-display {
+    width: 50%;
+    max-width: 50%;
+    display: flex;
+}
+
+.table-header {
+    display: flex;
+    color: #6A6E70;
+    font-size: 24px;
+    font-weight: 500;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.questions {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5px;
+    margin-right: 30px;
+}
+
+.question-type {
+    flex-direction: row;
+    background-color: hsl(0, 0%, 96%); 
+    text-align: left;
+    font-size: 22px;
+    color: #6A6E70;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border: none;
+    border-bottom :1.5px solid #E8EAEC;
+    border-radius: 4px;
+    overflow: hidden; /* How to add ellipse instead of direct cut during overlow? */
+    white-space: nowrap;
+}
+
+.Icon-SA {
+    width: 15%;
+    margin-right: 20px;
+}
+
+.survey-builder-view {
+    display: flex;
+    background-color: #f4f4f4;
+    width: 100%;
+    margin-top: 100px;
+}
+
+
+.empty-count {
+    font-size: 24px;
+    align-self: center;
+    width: 100%;
+}
+
+.builder-questions-view {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 5px;
+}
+
+.question-number {
+    text-align: left;
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+.survey-question {
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+    background-color: #ffffff;
+    border: none;
+    width: 100%;
+}
+
+
+.question-upper-body {
+    display: flex;
+    flex: 10;
+    flex-direction: row;
+    width: 100%
+}
+
+.survey-question:nth-child(even) {
+    background-color: #f4f4f4;
+    border: 1px solid #e8eae8;
+}
+
+.delete-button {
+    background-color: Transparent;
+    border: none;
+    width: 35px;
+    margin-left: auto;
+    margin-right: 20px;
+    float: right;
+    padding: 10px 5px 5px 5px;
+}
+
+.delete-logo {
+    width: 100%;
+}
+
+.title-row {
+    display: flex;
+    width: 100%;
+}
+
+.question-bank-table{
+    width: 25%;
+}
+
+.toolbox-label {
+    line-height: 100%;
+}

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {makeStyles} from '@material-ui/styles';
 import {Grid, Table, Typography, Card, TableHead, TableRow, TableBody, TableCell} from '@material-ui/core';
 import {connect} from "react-redux";
@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 const visualizeData = (question, currentSurveyId) => {
   const {analytics} = question;
-  if (question.type == "text"){
+  if (question.type === "text"){
     return (
         <>
         <Table stickyHeader>
@@ -46,7 +46,7 @@ const visualizeData = (question, currentSurveyId) => {
           </>
     )
   }
-  if (question.type == "checkbox"){
+  if (question.type === "checkbox"){
 
     let data = {
       labels: Object.keys(question.analytics[currentSurveyId]),
@@ -64,7 +64,7 @@ const visualizeData = (question, currentSurveyId) => {
         </>
     );
   }
-  if (question.type == "rating"){
+  if (question.type === "rating"){
     // TODO
   }
 }

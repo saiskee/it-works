@@ -24,27 +24,28 @@ import {
  * This fn takes a piece of the main application "store" and passes it into the component
  * In this case, we just want state.session, so we are accessing just that
  */
-const mapStateToProps = ({session, surveys}) => ({
-  session, // this puts session as a prop
+const mapStateToProps = ({surveys}) => ({
   surveys
 });
 
 const mapDispatchToProps = dispatch => ({
-  getSurveys: () => dispatch(getSurveys())
+  getSurveys: (component) => dispatch(getSurveys(component))
 });
 
 
 
 class Dashboard extends Component {
 
+  constructor(props){
+    super(props);
+  }
 
-  componentDidMount() {
-    console.log("test")
+  componentDidMount = () => {
     this.props.getSurveys();
   }
 
   render() {
-    const {session, surveys} = this.props;
+    const {surveys} = this.props;
     return (
         <>
 
