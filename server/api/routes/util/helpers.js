@@ -5,13 +5,13 @@ import 'babel-polyfill';
 // Create new question entries in the database for each question in a survey template
 // Return survey template with question id's instead of question data
 const parseNewTemplateIntoQuestions = async (surveyTemplate, userId) => {
-  let {title, description, pages} = surveyTemplate;
+  let {pages} = surveyTemplate;
   const new_pages = await Promise.all(pages.map(async (page) => {
         const {elements} = page;
         if (elements != undefined) {
           page.elements = await Promise.all(elements.map(async (element) => {
             if (element.type === 'questionbankquestion'){
-              return element._id;
+              return mongoose.Types.ObjectId(element._id);
             }
 
             const question = new Question({
@@ -63,6 +63,25 @@ function groupBy(list, keyGetter) {
   return map;
 }
 
+function summarizeRadioGroup(question){
+  let sumAnswer = (current_summary, response) => {
+    const {answer} = response;
+    if (answer in current_summary) {
+      current_summary[answer] += 1
+    } else {
+      current_summary[answer] = 1
+    }
+    return current_summary;
+  };
+
+  const groupedBySurvey = groupBy(question.survey_responses, answer => answer.survey_id);
+  for (const survey in groupedBySurvey) {
+    console.log(JSON.stringify(groupedBySurvey[survey]))
+    groupedBySurvey[survey] = groupedBySurvey[survey].reduce(sumAnswer, {});
+  }
+  return groupedBySurvey;
+}
+
 function summarizeMultiChoice(question) {
   let sumAnswer = (current_summary, answer) => {
     if (answer in current_summary) {
@@ -77,7 +96,7 @@ function summarizeMultiChoice(question) {
   for (const survey in groupedBySurvey){
     groupedBySurvey[survey] = groupedBySurvey[survey].reduce((answer_sum, response) => {
       // This is a double reduce.
-      // Collapse all the responses into one summary objects and sum over there
+      // Collapse all the responses into one summary objects and sum over their
       // answer array.
       return response.answer.reduce(sumAnswer, answer_sum);
     }, {});
@@ -124,9 +143,11 @@ const parseExistingTemplateIntoQuestionsIncludeResponses = async (survey) => {
     const {elements} = page;
     page.elements = await Promise.all(elements.map(async (element) => {
       const savedQuestion = await Question.findOne({_id: element});
-
       let analytics;
       switch (savedQuestion.question_data.type) {
+        case 'radiogroup':
+          analytics = summarizeRadioGroup(savedQuestion);
+          break;
         case 'checkbox':
           analytics = summarizeMultiChoice(savedQuestion);
           break;
@@ -134,6 +155,7 @@ const parseExistingTemplateIntoQuestionsIncludeResponses = async (survey) => {
           analytics = summarizeRating(savedQuestion);
           break;
         case 'text':
+        case 'comment':
           analytics = summarizedFreeResponse(savedQuestion);
           break;
 

@@ -22,49 +22,51 @@ const useStyles = makeStyles(theme => ({
 
 const visualizeData = (question, currentSurveyId) => {
   const {analytics} = question;
-  if (question.type === "text"){
+  if (question.type === "text" || question.type === 'comment') {
     return (
         <>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                Responses
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {analytics[currentSurveyId].length > 0 && analytics[currentSurveyId].map(response => (
-                <TableRow>
-                  <TableCell>
-                    {response}
-                  </TableCell>
-                </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-          </>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  Responses
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {analytics[currentSurveyId].length > 0 && analytics[currentSurveyId].map(response => (
+                  <TableRow>
+                    <TableCell>
+                      {JSON.stringify(response)}
+                    </TableCell>
+                  </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
     )
   }
-  if (question.type === "checkbox"){
-
+  if (question.type === "checkbox" || question.type==='radiogroup') {
+    console.log(question.analytics);
     let data = {
       labels: Object.keys(question.analytics[currentSurveyId]),
-
-      datasets:[{
+      datasets: [{
         label: "Survey " + currentSurveyId,
         data: Object.values(question.analytics[currentSurveyId])
-      }]
-
+      }],
     };
-
+    let options = {
+      scales: {
+        yAxes: [{ticks: {beginAtZero: true}}]
+      }
+    }
     return (
         <>
-          <Bar data={data} />
+          <Bar data={data} options={options}/>
         </>
     );
   }
-  if (question.type === "rating"){
+  if (question.type === "rating") {
     // TODO
   }
 }
@@ -72,8 +74,8 @@ const visualizeData = (question, currentSurveyId) => {
 const SurveyAnalytics = (props) => {
   const {surveyId} = props.match.params;
   useEffect(() => {
-    props.getSurvey(surveyId);
-  },
+        props.getSurvey(surveyId);
+      },
       []);
 
   const classes = useStyles();
@@ -85,26 +87,25 @@ const SurveyAnalytics = (props) => {
             spacing={4}
         >
 
-            {survey.survey_template.pages && survey.survey_template.pages.map((page) => (
-                page.elements.map((question) => (
-                    <Grid
-                        item
-                        lg={6}
-                        md={12}
-                        xl={9}
-                        xs={12}
-                    >
+          {survey.survey_template.pages && survey.survey_template.pages.map((page) => (
+              page.elements.map((question) => (
+                  <Grid
+                      item
+                      lg={6}
+                      md={12}
+                      xl={9}
+                      xs={12}
+                  >
                     <Card className={classes.root}>
                       <Typography variant={'h1'}>{question.title ? question.title : question.name}</Typography>
-                      <Typography variant={'h5'} >{question.type}</Typography>
+                      <Typography variant={'h5'}>{question.type}</Typography>
                       {/*<Typography>{JSON.stringify(question.analytics)}</Typography>*/}
-                      { visualizeData(question, surveyId ) }
+                      {visualizeData(question, surveyId)}
                       {/*<Bar data = {{labels: ['January', 'Middle','February'], datasets:[{data: [5,6,7], label: 'January'}]}}/>*/}
                     </Card>
-                    </Grid>
-                ))
-            ))}
-
+                  </Grid>
+              ))
+          ))}
 
 
         </Grid>

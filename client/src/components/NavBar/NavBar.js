@@ -1,6 +1,6 @@
 import React from "react";
 import {connect} from "react-redux";
-import {AppBar, Toolbar, Typography, makeStyles, Menu, MenuItem} from "@material-ui/core";
+import {AppBar, Toolbar, Typography, makeStyles, Menu, MenuItem, Box} from "@material-ui/core";
 import {logout} from "../../actions/session";
 import {AccountCircle} from '@material-ui/icons';
 import IconButton from "@material-ui/core/IconButton";
@@ -67,6 +67,7 @@ const NavBar = (props) => {
         <AppBar color="primary" position={'static'}>
           <Toolbar>
             <Typography variant={'h3'} noWrap>It Works!</Typography>
+            <Link to={'/dashboard'}><Typography>Dashboard</Typography></Link>
             <div className={classes.root}/>
 
             <IconButton

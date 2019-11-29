@@ -1,23 +1,18 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {logout} from "../../actions/session";
 import {getSurveys} from "../../actions/survey";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {withRouter} from 'react-router';
 import {Link} from 'react-router-dom';
 import {
-  AppBar,
   TableBody,
   TableCell,
   TableRow,
   TableHead,
   Table,
-  Button,
   Grid,
   Paper,
   Typography,
-  Toolbar,
-  makeStyles
 } from "@material-ui/core";
 
 /**

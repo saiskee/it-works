@@ -37,7 +37,7 @@ class ManagerDashboard extends Component {
   }
 
   render() {
-    const {session, surveys} = this.props;
+    const {surveys} = this.props;
     return (
         <>
 
