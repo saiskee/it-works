@@ -7,17 +7,19 @@ import Question_Icon_TF from './TF.png';
 import Question_Icon_Dropdown from './Dropdown.png';
 import Question_Icon_Checkbox from './Checkbox.png';
 import delete_icon from './trash.png';
-import {getQuestions} from '../../actions/questions'
-import {connect} from "react-redux";
+import {Paper, Card, CardContent,  Typography, Box, Button} from "@material-ui/core";
+import {Add} from "@material-ui/icons"
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 
-const mapStateToProps = ({questions}) => ({
-  question_bank: questions
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  getQuestions: () => dispatch(getQuestions())
-});
+// const mapStateToProps = ({questions}) => ({
+//   question_bank: questions,
+//   question_bank_store: questions.slice()
+// });
+//
+// const mapDispatchToProps = (dispatch) => ({
+//   getQuestions: () => dispatch(getQuestions())
+// });
 
 class SurveyBuilder extends Component {
   constructor(props) {
@@ -27,13 +29,17 @@ class SurveyBuilder extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.getQuestions();
-  }
+  // componentDidMount() {
+  //   this.props.getQuestions();
+  // }
 
-  addQuestionFromQuestionBank(question_data){
-    console.log(question_data);
-    this.props.addQuestionFromQuestionBank(question_data);
+  // addQuestionFromQuestionBank(question, qb_index){
+  //   this.props.addQuestionFromQuestionBank(question, qb_index);
+  //
+  // }
+
+  removeQuestion(index) {
+    this.props.removeQuestion(index);
   }
 
   render() {
@@ -47,6 +53,7 @@ class SurveyBuilder extends Component {
     };
     return (
         <div className='survey-builder'>
+
           <table className="toolbox-table">
             <tbody className="table-header">
             <tr>
@@ -67,62 +74,58 @@ class SurveyBuilder extends Component {
             </tbody>
           </table>
           <div className='questions-display'>
-          {(this.props.questions.length !== 0) ?
-              <table className="survey-builder-view">
-                <tbody className="builder-questions-view">
-                {this.props.questions.map((type, index) =>
-                    <tr className="survey-question" key={index}>
-                      <td className="title-row">
-                        <p className="question-number"> {index + 1} . </p>
+            {(this.props.questions.length !== 0) ?
+                <table className="survey-builder-view">
+                  <tbody className="builder-questions-view">
+                  {this.props.questions.map((type, index) =>
+                      <tr className="survey-question" key={index}>
+                        <td className="title-row">
+                          <p className="question-number"> {index + 1} . </p>
 
-                        <div className="question-title-view">
-                          <form>
-                            <input
-                                type="text"
-                                value={this.props.questions[index].title}
-                                name="question-name"
-                                className="question-name"
-                                onChange={(event) => this.props.changeQuestionTitle(index, event)}
-                            />
-                          </form>
-                        </div>
+                          <div className="question-title-view">
+                            <form>
+                              <input
+                                  type="text"
+                                  value={this.props.questions[index].title}
+                                  name="question-name"
+                                  className="question-name"
+                                  onChange={(event) => this.props.changeQuestionTitle(index, event)}
+                              />
+                            </form>
+                          </div>
 
-                        <button className="delete-button" key={index} onClick={() => this.props.removeQuestion(index)}>
-                          <img className="delete-logo" alt="delete_icon" src={delete_icon}/>
-                        </button>
-                      </td>
-                      {type.question}
-                    </tr>
-                )}
-                </tbody>
-              </table>
-              :
-              <p className="empty-count">
-                Please add some questions using the button
-              </p>
-          }
+                          <button className="delete-button" key={index} onClick={() => this.removeQuestion(index)}>
+                            <img className="delete-logo" alt="delete_icon" src={delete_icon}/>
+                          </button>
+                        </td>
+                        {type.question}
+                      </tr>
+                  )}
+                  </tbody>
+                </table>
+                :
+                <p className="empty-count">
+                  Please add some questions using the button
+                </p>
+            }
           </div>
-          <table className='question-bank-table'>
-            <tbody className='table-header'>
-            <tr>
-              <td>QUESTION BANK</td>
-            </tr>
-            </tbody>
-            <tbody>
-            {/* This table is meant to be used for question bank*/}
-            {this.props.question_bank.map((question, question_index) =>
-                <tr key={question._id} onClick={this.addQuestionFromQuestionBank.bind(this, question.question_data)}>
-                  <td>
-                    <button
-                        className='question-type'>{/*question.question_data.title ? question.question_data.title : */question.name}</button>
-                  </td>
-                </tr>
+          <Paper className='question-bank-table'>
+            {this.props.question_bank.map((question, question_bank_index) =>
+
+                <Card className='question-bank-card' key={question._id}>
+                  <Button children={<Add/>} onClick={this.props.addQuestionFromQuestionBank.bind(this, question, question_bank_index)}className='question-bank-card-add'/>
+                  <CardContent>
+                  <Typography
+                      variant={'h5'} color={'primary'}> {question.question_data.title ? question.question_data.title : question.name}</Typography>
+                    <Typography component={'div'}><Box fontStyle='italic'>{question.question_data.type}</Box></Typography>
+                    <Typography>{JSON.stringify(question.question_data.choices)}</Typography>
+                  </CardContent>
+                </Card>
             )}
-            </tbody>
-          </table>
+          </Paper>
         </div>
     )
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SurveyBuilder);
+export default SurveyBuilder;

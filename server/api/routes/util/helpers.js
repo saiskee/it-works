@@ -2,12 +2,18 @@ import Question from '../../models/QuestionSchema';
 import mongoose from 'mongoose';
 import 'babel-polyfill';
 
+// Create new question entries in the database for each question in a survey template
+// Return survey template with question id's instead of question data
 const parseNewTemplateIntoQuestions = async (surveyTemplate, userId) => {
   let {title, description, pages} = surveyTemplate;
   const new_pages = await Promise.all(pages.map(async (page) => {
         const {elements} = page;
         if (elements != undefined) {
           page.elements = await Promise.all(elements.map(async (element) => {
+            if (element.type === 'questionbankquestion'){
+              return element._id;
+            }
+
             const question = new Question({
               question_data: element,
               name: element.name,

@@ -71,6 +71,7 @@ class EmployeeSelector extends Component{
     return(<>
       <ReactTags
           placeholder={"Add employees to receive this survey"}
+          minQueryLength={1}
           tags={this.state.tags}
           suggestions={this.state.suggestions}
           handleDelete={this.handleDelete.bind(this)}

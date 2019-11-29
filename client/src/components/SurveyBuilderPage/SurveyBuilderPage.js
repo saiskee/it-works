@@ -6,6 +6,17 @@ import Question from '../Question';
 import EmployeeSelector from "../EmployeeSelector/EmployeeSelector";
 import {Button, makeStyles} from '@material-ui/core';
 import $ from "jquery";
+import {connect} from 'react-redux';
+import {getQuestions} from "../../actions/questions";
+
+const mapStateToProps = ({questions}) => ({
+  question_bank: questions,
+  question_bank_store: questions.slice()
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  getQuestions: () => dispatch(getQuestions())
+});
 
 
 class SurveyBuilderPage extends Component {
@@ -13,6 +24,7 @@ class SurveyBuilderPage extends Component {
     super(props);
     this.state = {
       questions: [],
+      employees: {tags: [], suggestions: []}
     };
     this.addQuestion = this.addQuestion.bind(this);
     this.initDataForType = this.initDataForType.bind(this);
@@ -20,6 +32,11 @@ class SurveyBuilderPage extends Component {
     this.changeQuestionTitle = this.changeQuestionTitle.bind(this);
     this.updateData = this.updateData.bind(this);
     this.generateSurveyJSON = this.generateSurveyJSON.bind(this);
+    this.createSurvey = this.createSurvey.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.getQuestions();
   }
 
   initDataForType(type) {
@@ -49,7 +66,7 @@ class SurveyBuilderPage extends Component {
   }
 
   addQuestion(type) {
-    var initData = this.initDataForType(type);
+    const initData = this.initDataForType(type);
     this.setState((prevState) => {
       return {
         questions: [...prevState.questions, {
@@ -63,7 +80,9 @@ class SurveyBuilderPage extends Component {
     });
   }
 
-  addQuestionFromQuestionBank(question_data){
+  addQuestionFromQuestionBank(question, questionBankIndex){
+
+    const {question_data} = question;
     this.setState((prevState) => {
       return {
         questions: [...prevState.questions, {
@@ -72,24 +91,37 @@ class SurveyBuilderPage extends Component {
           question: <Question type={question_data.type} data={question_data.choices}
                               index={prevState.questions.length}
                               updateData={this.updateData} />,
-          type: question_data.type
+          type: question_data.type,
+          questionBankQuestion: true,
+          _id: question._id,
+          questionBankIndex
         }]
       }
-    })
+    });
+    this.props.question_bank.splice(questionBankIndex, 1);
   }
-
+  // TODO: Fix Removequestion to keep questionbank data
   removeQuestion(index) {
     this.setState((prevState) => {
-      var newQuestions = prevState.questions;
+      const newQuestions = prevState.questions;
+      const question_being_removed = newQuestions[index];
+      // If question being removed is from question bank, put it back into the question bank
+      if (question_being_removed.questionBankQuestion){
+        const {questionBankIndex} = question_being_removed;
+        this.props.question_bank.splice(questionBankIndex, 0, this.props.question_bank_store[questionBankIndex])
+      }
+      // Remove question from current list of questions
       newQuestions.splice(index, 1);
-      for (var i = index; i < prevState.questions.length; i++) {
-        var newQ = (newQuestions[i].question.props.type !== null) ?
+      // Modify all questions following question being removed
+      for (let i = index; i < prevState.questions.length; i++) {
+        const newQ = (newQuestions[i].question.props.type !== null) ?
             <Question type={newQuestions[i].question.props.type} data={newQuestions[i].data} index={i}
                       updateData={this.updateData}/> : null;
         newQuestions[i] = (newQ !== null) ? {
           data: newQuestions[i].data,
           title: newQuestions[i].title,
-          question: newQ
+          question: newQ,
+          ...newQuestions[i]
         } : prevState.questions[i + 1];
       }
       return {questions: newQuestions};
@@ -141,9 +173,13 @@ class SurveyBuilderPage extends Component {
   createSurvey() {
     const surveyJSON = this.generateSurveyJSON();
     const {employees} = this.state;
+    if (employees.tags.length < 1){
+      alert('Please select at least one employee to assign the survey to before submitting.');
+      return;
+    }
     const toServer = {
       employees,
-      survey: surveyJSON
+      surveyTemplate: surveyJSON
     }
     $.ajax('/api/survey', {
       method: 'POST',
@@ -163,13 +199,14 @@ class SurveyBuilderPage extends Component {
 
           <Builder
               questions={this.state.questions}
+              question_bank={this.props.question_bank}
               addQuestion={this.addQuestion.bind(this)}
               removeQuestion={this.removeQuestion.bind(this)}
               changeQuestionTitle={this.changeQuestionTitle.bind(this)}
               addQuestionFromQuestionBank={this.addQuestionFromQuestionBank.bind(this)}/>
 
-          <Button variant={'contained'} onClick={this.generateSurveyJSON}>Generate JSON</Button>
-          <Button variant={'contained'} color={'primary'} onClick={this.createSurvey}>Create Survey</Button>
+          <Button variant={'contained'} onClick={this.generateSurveyJSON} title='View Console Log to See Survey JSON (debugging purposes)'>Generate JSON</Button>
+          <Button variant={'contained'} color={'primary'} onClick={this.createSurvey} title={'Create Survey'}>Create Survey</Button>
 
           {/*<img src={logo} className="App-logo" alt="logo" />*/}
         </>
@@ -256,6 +293,11 @@ function DropdownToJS(questionName, question) {
 
 function toSurveyJS(questionName, question) {
   // Turns a question into a survey js object.
+
+  // if question is from the question bank
+  if (question.questionBankQuestion){
+    return {type: 'questionbankquestion', _id: question._id}
+  }
   // console.log(question);
   switch (question.type) {
     case "comment":
@@ -276,4 +318,4 @@ function toSurveyJS(questionName, question) {
   }
 }
 
-export default SurveyBuilderPage;
+export default connect(mapStateToProps, mapDispatchToProps)(SurveyBuilderPage);
