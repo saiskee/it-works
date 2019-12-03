@@ -25,7 +25,7 @@ class App extends Component {
           <Switch>
             <AuthRoute path="/login" exact component={Login}/>
             <AuthRoute path="/register" exact component={Register}/>
-            <ProtectedRoute path="/survey/:surveyId" component={Survey}/>
+            <ProtectedRoute path="/survey/:surveyId" exact component={Survey}/>
 
             <MuiThemeProvider theme={theme}>
               <NavBar/>

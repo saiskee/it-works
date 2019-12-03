@@ -1,11 +1,10 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {connect} from "react-redux";
 import {AppBar, Toolbar, Typography, makeStyles, Menu, MenuItem, Box} from "@material-ui/core";
 import {logout} from "../../actions/session";
 import {AccountCircle} from '@material-ui/icons';
 import IconButton from "@material-ui/core/IconButton";
-import {withRouter} from "react-router";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
 const mapStateToProps = ({session}) => ({
   session, // this puts session as a prop
@@ -33,7 +32,32 @@ const NavBar = (props) => {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [title, setTitle] = React.useState('It Works Employee Perception');
   const isMenuOpen = Boolean(anchorEl);
+
+
+  useEffect(()=>{
+    props.history.listen(() => {
+      console.log(window.location.pathname);
+      changeTitle(window.location.pathname);
+    })
+  }, [])
+
+  const changeTitle = (newTitle) => {
+    if (newTitle.startsWith('/analytics')){
+      setTitle('Survey Analytics');
+    }
+    else if (newTitle.startsWith('/managerdashboard')){
+      setTitle('Manager Insights Dashboard');
+    }
+    else if (newTitle.startsWith('/dashboard')) {
+      setTitle('Employee Dashboard')
+    }else if (newTitle.startsWith('/builder')){
+      setTitle('Survey Builder')
+    }else{
+      setTitle(newTitle);
+    }
+  }
 
   const switchView = () => {
     props.history.push('/dashboard');
@@ -57,8 +81,10 @@ const NavBar = (props) => {
           onClose={handleMenuClose}
       >
         <MenuItem disabled={true}>Currently Logged in as {session.fullName}</MenuItem>
-        <MenuItem onClick={switchView}> Switch to Employee View</MenuItem>
-        <MenuItem onClick={logout}> Log Out</MenuItem>
+        <MenuItem><Link to={'/builder'}>Survey Builder</Link></MenuItem>
+        <MenuItem><Link to={'/dashboard'}>Switch to Employee View</Link></MenuItem>
+        <MenuItem><Link to={'/managerdashboard'}>Switch To Manager View</Link></MenuItem>
+        <MenuItem onClick={logout} style={{color: 'red'}}>Log Out</MenuItem>
       </Menu>
   )
 
@@ -66,8 +92,9 @@ const NavBar = (props) => {
       <div className={classes.root}>
         <AppBar color="primary" position={'static'}>
           <Toolbar>
-            <Typography variant={'h3'} noWrap>It Works!</Typography>
-            <Link to={'/dashboard'}><Typography>Dashboard</Typography></Link>
+            <div>
+            <Typography variant={'h3'} noWrap>{title}</Typography>
+            </div>
             <div className={classes.root}/>
 
             <IconButton

@@ -6,11 +6,11 @@ import './styles.css';
 
 const mapStateToProps = ({employees}) => ({
   employees
-})
+});
 
 const mapDispatchToProps = dispatch => ({
   getEmployees: (component) => dispatch(getEmployees(component))
-})
+});
 
 class EmployeeSelector extends Component{
 
@@ -71,7 +71,7 @@ class EmployeeSelector extends Component{
     return(<>
       <ReactTags
           placeholder={"Add employees to receive this survey"}
-          minQueryLength={1}
+          minQueryLength={0}
           tags={this.state.tags}
           suggestions={this.state.suggestions}
           handleDelete={this.handleDelete.bind(this)}

@@ -2,8 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import {getSurveys} from "../../actions/survey";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import {withRouter} from 'react-router';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {
   TableBody,
   TableCell,
@@ -33,6 +32,13 @@ class Dashboard extends Component {
 
   constructor(props){
     super(props);
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log(prevProps.location)
+    if (this.props.location !== prevProps.location){
+      this.componentDidMount();
+    }
   }
 
   componentDidMount = () => {
@@ -88,6 +94,7 @@ class Dashboard extends Component {
                           </TableCell>
                         </TableRow>
                     ))}
+
                   </TableBody>
                 </Table>
               </PerfectScrollbar>

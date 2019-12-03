@@ -81,14 +81,15 @@ class SurveyBuilderPage extends Component {
   }
 
   addQuestionFromQuestionBank(question, questionBankIndex){
-
+    console.log(question);
     const {question_data} = question;
     this.setState((prevState) => {
       return {
         questions: [...prevState.questions, {
           data: question_data.choices,
           title: question_data.title,
-          question: <Question type={question_data.type} data={question_data.choices}
+          // TODO: Fix how rating (rateMax) is rendered, currently using a hacky solution
+          question: <Question type={question_data.type} data={question_data.choices ? question_data.choices : Array.from(Array(question_data.rateMax).keys())}
                               index={prevState.questions.length}
                               updateData={this.updateData} />,
           type: question_data.type,
@@ -98,9 +99,10 @@ class SurveyBuilderPage extends Component {
         }]
       }
     });
+    console.log("QUESTIONBANK:", this.props.question_bank[questionBankIndex]);
     this.props.question_bank.splice(questionBankIndex, 1);
   }
-  // TODO: Fix Removequestion to keep questionbank data
+  // TODO: Fix Remove question to keep questionbank data
   removeQuestion(index) {
     this.setState((prevState) => {
       const newQuestions = prevState.questions;
@@ -190,10 +192,10 @@ class SurveyBuilderPage extends Component {
   render() {
     return (
         <>
-          <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>
+          <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)} style={{zIndex: -100}}/>
           <div className="header">
             <p className="title">
-              Survey Name Placeholder
+              Sample Survey Title
             </p>
           </div>
 

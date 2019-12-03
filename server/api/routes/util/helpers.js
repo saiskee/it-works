@@ -76,7 +76,7 @@ function summarizeRadioGroup(question){
 
   const groupedBySurvey = groupBy(question.survey_responses, answer => answer.survey_id);
   for (const survey in groupedBySurvey) {
-    console.log(JSON.stringify(groupedBySurvey[survey]))
+    // console.log(JSON.stringify(groupedBySurvey[survey]))
     groupedBySurvey[survey] = groupedBySurvey[survey].reduce(sumAnswer, {});
   }
   return groupedBySurvey;

@@ -4,9 +4,9 @@ import {receiveErrors} from "./error";
 export const GET_MANAGER_AUTHORED_SURVEYS = "GET_MANAGER_AUTHORED_SURVEYS";
 export const GET_SURVEY_WITH_RESPONSES = "GET_SURVEY_WITH_RESPONSES";
 
-const getAuthoredSurveys = (surveys) => ({
+const getAuthoredSurveys = (authoredSurveys) => ({
   type: GET_MANAGER_AUTHORED_SURVEYS,
-  surveys: surveys
+  authoredSurveys: authoredSurveys
 });
 
 const getSurveyWithResponses = survey => ({

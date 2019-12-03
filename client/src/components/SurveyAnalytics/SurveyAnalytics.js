@@ -4,6 +4,7 @@ import {Grid, Table, Typography, Card, TableHead, TableRow, TableBody, TableCell
 import {connect} from "react-redux";
 import {getSurveyAndResponses} from "../../actions/analytics";
 import {Bar} from "react-chartjs-2";
+import {withRouter} from "react-router-dom";
 
 const mapStateToProps = ({session, survey}) => ({
   session,
@@ -22,9 +23,10 @@ const useStyles = makeStyles(theme => ({
 
 const visualizeData = (question, currentSurveyId) => {
   const {analytics} = question;
+  console.log(question, currentSurveyId);
   if (question.type === "text" || question.type === 'comment') {
     return (
-        <>
+
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -43,11 +45,10 @@ const visualizeData = (question, currentSurveyId) => {
               ))}
             </TableBody>
           </Table>
-        </>
+        
     )
   }
   if (question.type === "checkbox" || question.type==='radiogroup') {
-    console.log(question.analytics);
     let data = {
       labels: Object.keys(question.analytics[currentSurveyId]),
       datasets: [{
@@ -67,7 +68,23 @@ const visualizeData = (question, currentSurveyId) => {
     );
   }
   if (question.type === "rating") {
-    // TODO
+    let data = {
+      labels: Object.keys(question.analytics[currentSurveyId]),
+      datasets: [{
+        label: "Survey " + currentSurveyId,
+        data: Object.values(question.analytics[currentSurveyId])
+      }],
+    };
+    let options = {
+      scales: {
+        yAxes: [{ticks: {beginAtZero: true}}]
+      }
+    }
+    return (
+        <>
+          <Bar data={data} options={options}/>
+        </>
+    );
   }
 }
 
@@ -118,4 +135,4 @@ const SurveyAnalytics = (props) => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SurveyAnalytics);
+)(withRouter(SurveyAnalytics));

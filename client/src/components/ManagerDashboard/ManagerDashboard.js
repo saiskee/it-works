@@ -3,8 +3,7 @@ import {connect} from "react-redux";
 
 import {getManagerAuthoredSurveys} from "../../actions/analytics";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import {withRouter} from 'react-router';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {
   TableBody,
   TableCell,
@@ -13,19 +12,22 @@ import {
   Table,
   Grid,
   Paper,
-  Typography,
+  Typography, Button,
 } from "@material-ui/core";
+import {getEmployees} from "../../actions/employee";
 
 /**
  * This fn takes a piece of the main application "store" and passes it into the component
  * In this case, we just want state.session, so we are accessing just that
  */
-const mapStateToProps = ({ surveys}) => ({
-  surveys
+const mapStateToProps = ({ authoredSurveys, employees}) => ({
+  authoredSurveys,
+  employees
 });
 
 const mapDispatchToProps = dispatch => ({
-  getManagerAuthoredSurveys: () => dispatch(getManagerAuthoredSurveys())
+  getManagerAuthoredSurveys: () => dispatch(getManagerAuthoredSurveys()),
+  getEmployees: () => dispatch(getEmployees())
 });
 
 
@@ -34,17 +36,18 @@ class ManagerDashboard extends Component {
 
   componentDidMount() {
     this.props.getManagerAuthoredSurveys();
+    this.props.getEmployees();
   }
 
   render() {
-    const {surveys} = this.props;
+    const {authoredSurveys} = this.props;
     return (
         <>
 
 
           <Grid container direction={'column'} alignItems={'center'} justify={'center'}>
             <Paper>
-              <PerfectScrollbar>
+              {/*<PerfectScrollbar>*/}
                 <Table style={{minWidth: '90vw'}}>
                   <TableHead>
                     <TableRow>
@@ -66,7 +69,7 @@ class ManagerDashboard extends Component {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {surveys.surveys.map((survey_object) => (
+                    {authoredSurveys.surveys.map((survey_object) => (
                         <TableRow key={survey_object._id}>
                           <TableCell>
                             <Typography variant={'subtitle1'} >{survey_object._id}</Typography>
@@ -81,13 +84,35 @@ class ManagerDashboard extends Component {
                             <Typography variant={'subtitle1'}>{survey_object.expiry_date}</Typography>
                           </TableCell>
                           <TableCell>
+                            {Math.floor(Math.random() * 100)}%
                             {/*<Typography variant={'subtitle1'}>{survey_object.survey_status}</Typography>*/}
                           </TableCell>
                         </TableRow>
                     ))}
                   </TableBody>
                 </Table>
-              </PerfectScrollbar>
+            </Paper>
+                <div style={{paddingTop: '5vh', paddingBottom: '10px', alignSelf:'start'}}><Typography variant={'h2'}>Employees</Typography></div>
+            <Paper>
+                <Table style={{minWidth: '90vw'}}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>
+                        Employee Name
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {this.props.employees.map((employee) => (
+                        <TableRow key={employee.empId}>
+                          <TableCell>
+                            <Typography>{employee.fullName}</Typography>
+                          </TableCell>
+                        </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              {/*</PerfectScrollbar>*/}
             </Paper>
           </Grid>
         </>

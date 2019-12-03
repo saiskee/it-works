@@ -4,7 +4,8 @@ import errors from './errors/errors';
 import surveys from './surveys/surveys';
 import survey from './surveys/survey';
 import employees from './employees/employees';
-import questions from './questions/questions'
+import questions from './questions/questions';
+import authoredSurveys from "./surveys/authoredSurveys";
 
 export default combineReducers({
     session, 
@@ -12,5 +13,6 @@ export default combineReducers({
     surveys,
     survey,
     employees,
-    questions
+    questions,
+    authoredSurveys
 });
