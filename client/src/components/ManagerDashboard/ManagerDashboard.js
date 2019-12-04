@@ -166,7 +166,7 @@ class ManagerDashboard extends Component {
                       Survey Expiry Date
                     </TableCell>
                     <TableCell>
-                      Status
+                      Completion
                     </TableCell>
                   </TableRow>
                 </TableHead>
