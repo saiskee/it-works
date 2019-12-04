@@ -17,25 +17,24 @@
 }
 
 .mc-grid {
-  display: inline-block;
-  flex-direction: column;
+    display: inline-block;
+    flex-direction: column;
 }
 
 .MC-table {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
 .mc-question {
-  background-color: transparent;
-  display: block;
-  position: relative;
-  cursor: pointer;
-  margin: 20px;
-  margin-left: 0px;
-  text-align: left;
-  font-size: 18px;
-  border: none;
+    background-color: transparent;
+    display: block;
+    position: relative;
+    cursor: pointer;
+    /*margin: 20px 20px 20px 0px;*/
+    text-align: left;
+    font-size: 18px;
+    border: none;
 }
 
 .sa-question {
@@ -45,6 +44,17 @@
     border-radius: 4px;
     min-height: 150px;
     border: 2px solid #ccc;
+}
+
+.checkbox-question {
+    background-color: transparent;
+    display: block;
+    position: relative;
+    cursor: pointer;
+    text-align: left;
+    font-size: 18px;
+    border: none;
+    margin-left: 5%;
 }
 
 .container {
@@ -61,43 +71,44 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-  }
+}
 
-  .checkbox {
+.checkbox-div {
     display: flex;
     flex-direction: row;
-    margin-top: -10px;
-  }
+    margin-left: 4%;
+    margin-bottom: 3%
+}
 
-  .checkbox-input {
+.checkbox-input {
     margin-left: 26px;
     margin-top: 26px;
     margin-right: 18px;
-  }
+}
 
-  .checkmark {
+.checkmark {
     margin-right: 100px;
-  }
+}
 
-  .choose-button {
+.choose-button {
     display: flex;
     margin-left: 24px;
-    background-color: white; 
+    background-color: white;
     text-align: left;
     font-size: 18px;
     margin-bottom: 24px;
     padding-bottom: 5px;
     padding-top: 5px;
     border-radius: 4px;
-  }
+}
 
-  .dropdownbox {
+.dropdownbox {
     display: flex;
     flex-direction: row;
     margin-top: -10px;
-  }
+}
 
-  .dropdown-question {
+.dropdown-question {
     background-color: transparent;
     display: block;
     position: relative;
@@ -107,19 +118,19 @@
     text-align: left;
     font-size: 18px;
     border: none;
-  }
-  
-  /* Hide the browser's default radio button */
-  .container .radio-button {
+}
+
+/* Hide the browser's default radio button */
+.container .radio-button {
     position: absolute;
     opacity: 0;
     cursor: pointer;
     height: 0;
     width: 0;
-  }
-  
-  /* Create a custom radio button */
-  .checkmark {
+}
+
+/* Create a custom radio button */
+.checkmark {
     position: absolute;
     top: 0;
     left: 0;
@@ -128,32 +139,32 @@
     width: 18px;
     background-color: #ccc;
     border-radius: 50%;
-  }
-  
-  /* On mouse-over, add a grey background color */
-  .container:hover input ~ .checkmark {
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
     background-color: #a9a9a9;
-  }
-  
-  /* When the radio button is checked, add a blue background */
-  .container input:checked ~ .checkmark {
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
     background-color: #2196F3;
-  }
-  
-  /* Create the indicator (the dot/circle - hidden when not checked) */
-  .checkmark:after {
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
     content: "";
     position: absolute;
     display: none;
-  }
-  
-  /* Show the indicator (dot/circle) when checked */
-  .container .radio-button:checked ~ .checkmark:after {
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container .radio-button:checked ~ .checkmark:after {
     display: block;
-  }
-  
-  /* Style the indicator (dot/circle) */
-  .container .checkmark:after {
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
     background: none;
-  }
+}
   

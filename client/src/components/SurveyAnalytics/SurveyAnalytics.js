@@ -12,7 +12,9 @@ const mapStateToProps = ({session, survey}) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getSurvey: (surveyId) => dispatch(getSurveyAndResponses(surveyId))
+  getSurvey: (surveyId) => dispatch(getSurveyAndResponses(surveyId)),
+  //TODO: Clear store for survey / analytics
+
 });
 
 const useStyles = makeStyles(theme => ({
@@ -45,10 +47,10 @@ const visualizeData = (question, currentSurveyId) => {
               ))}
             </TableBody>
           </Table>
-        
+
     )
   }
-  if (question.type === "checkbox" || question.type==='radiogroup') {
+  if (['checkbox', 'radiogroup', 'dropdown'].includes(question.type)) {
     let data = {
       labels: Object.keys(question.analytics[currentSurveyId]),
       datasets: [{
@@ -94,6 +96,14 @@ const SurveyAnalytics = (props) => {
         props.getSurvey(surveyId);
       },
       []);
+
+  useEffect(function() {
+
+    return function cleanup() {
+      //TODO: Clear store for survey / analytics
+
+    }
+  }, []);
 
   const classes = useStyles();
   const {survey} = props.survey

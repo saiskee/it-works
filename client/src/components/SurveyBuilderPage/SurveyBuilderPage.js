@@ -71,7 +71,7 @@ class SurveyBuilderPage extends Component {
       return {
         questions: [...prevState.questions, {
           data: initData,
-          title: "Enter your question here",
+          title: "",
           question: <Question type={type} data={initData} index={prevState.questions.length}
                               updateData={this.updateData}/>,
           type: type
@@ -80,7 +80,7 @@ class SurveyBuilderPage extends Component {
     });
   }
 
-  addQuestionFromQuestionBank(question, questionBankIndex){
+  addQuestionFromQuestionBank(question, questionBankIndex) {
     console.log(question);
     const {question_data} = question;
     this.setState((prevState) => {
@@ -89,9 +89,10 @@ class SurveyBuilderPage extends Component {
           data: question_data.choices,
           title: question_data.title,
           // TODO: Fix how rating (rateMax) is rendered, currently using a hacky solution
-          question: <Question type={question_data.type} data={question_data.choices ? question_data.choices : Array.from(Array(question_data.rateMax).keys())}
+          question: <Question type={question_data.type}
+                              data={question_data.choices ? question_data.choices : Array.from(Array(question_data.rateMax).keys())}
                               index={prevState.questions.length}
-                              updateData={this.updateData} />,
+                              updateData={this.updateData}/>,
           type: question_data.type,
           questionBankQuestion: true,
           _id: question._id,
@@ -102,13 +103,14 @@ class SurveyBuilderPage extends Component {
     console.log("QUESTIONBANK:", this.props.question_bank[questionBankIndex]);
     this.props.question_bank.splice(questionBankIndex, 1);
   }
+
   // TODO: Fix Remove question to keep questionbank data
   removeQuestion(index) {
     this.setState((prevState) => {
       const newQuestions = prevState.questions;
       const question_being_removed = newQuestions[index];
       // If question being removed is from question bank, put it back into the question bank
-      if (question_being_removed.questionBankQuestion){
+      if (question_being_removed.questionBankQuestion) {
         const {questionBankIndex} = question_being_removed;
         this.props.question_bank.splice(questionBankIndex, 0, this.props.question_bank_store[questionBankIndex])
       }
@@ -135,6 +137,15 @@ class SurveyBuilderPage extends Component {
     this.setState((prevState) => {
       const newQ = prevState.questions;
       newQ[index].title = newTitle;
+      return {questions: newQ};
+    });
+  }
+
+  handleIsRequiredChange(index, value) {
+    let newIsRequired = value;
+    this.setState((prevState) => {
+      const newQ = prevState.questions;
+      newQ[index].isRequired = newIsRequired;
       return {questions: newQ};
     });
   }
@@ -175,7 +186,7 @@ class SurveyBuilderPage extends Component {
   createSurvey() {
     const surveyJSON = this.generateSurveyJSON();
     const {employees} = this.state;
-    if (employees.tags.length < 1){
+    if (employees.tags.length < 1) {
       alert('Please select at least one employee to assign the survey to before submitting.');
       return;
     }
@@ -189,6 +200,7 @@ class SurveyBuilderPage extends Component {
       contentType: 'application/json'
     })
   }
+
   render() {
     return (
         <>
@@ -205,10 +217,13 @@ class SurveyBuilderPage extends Component {
               addQuestion={this.addQuestion.bind(this)}
               removeQuestion={this.removeQuestion.bind(this)}
               changeQuestionTitle={this.changeQuestionTitle.bind(this)}
-              addQuestionFromQuestionBank={this.addQuestionFromQuestionBank.bind(this)}/>
+              addQuestionFromQuestionBank={this.addQuestionFromQuestionBank.bind(this)}
+              handleIsRequiredChange={this.handleIsRequiredChange.bind(this)}/>
 
-          <Button variant={'contained'} onClick={this.generateSurveyJSON} title='View Console Log to See Survey JSON (debugging purposes)'>Generate JSON</Button>
-          <Button variant={'contained'} color={'primary'} onClick={this.createSurvey} title={'Create Survey'}>Create Survey</Button>
+          <Button variant={'contained'} onClick={this.generateSurveyJSON}
+                  title='View Console Log to See Survey JSON (debugging purposes)'>Generate JSON</Button>
+          <Button variant={'contained'} color={'primary'} onClick={this.createSurvey} title={'Create Survey'}>Create
+            Survey</Button>
 
           {/*<img src={logo} className="App-logo" alt="logo" />*/}
         </>
@@ -241,7 +256,8 @@ function ShortAnswerToJS(questionName, question) {
   return {
     type: "comment",
     name: questionName,
-    title: question.title
+    title: question.title,
+    isRequired: question.isRequired
   };
 }
 
@@ -253,7 +269,8 @@ function TrueFalseToJS(questionName, question) {
     choices: [
       "True",
       "False"
-    ]
+    ],
+    isRequired: question.isRequired
   };
 }
 
@@ -262,7 +279,8 @@ function RatingToJS(questionName, question) {
     type: "rating",
     name: questionName,
     title: question.title,
-    rateMax: question.data.reduce((x, y) => Math.max(x, y), 0)
+    rateMax: question.data.reduce((x, y) => Math.max(x, y), 0),
+    isRequired: question.isRequired
   };
 }
 
@@ -271,7 +289,8 @@ function MultipleChoiceToJS(questionName, question) {
     type: "radiogroup",
     name: questionName,
     title: question.title,
-    choices: question.data
+    choices: question.data,
+    isRequired: question.isRequired
   };
 }
 
@@ -280,7 +299,8 @@ function CheckboxToJS(questionName, question) {
     type: "checkbox",
     name: questionName,
     title: question.title,
-    choices: question.data
+    choices: question.data,
+    isRequired: question.isRequired
   }
 }
 
@@ -289,7 +309,8 @@ function DropdownToJS(questionName, question) {
     type: "dropdown",
     name: questionName,
     title: question.title,
-    choices: question.data
+    choices: question.data,
+    isRequired: question.isRequired
   };
 }
 
@@ -297,7 +318,7 @@ function toSurveyJS(questionName, question) {
   // Turns a question into a survey js object.
 
   // if question is from the question bank
-  if (question.questionBankQuestion){
+  if (question.questionBankQuestion) {
     return {type: 'questionbankquestion', _id: question._id}
   }
   // console.log(question);

@@ -145,6 +145,7 @@ const parseExistingTemplateIntoQuestionsIncludeResponses = async (survey) => {
       const savedQuestion = await Question.findOne({_id: element});
       let analytics;
       switch (savedQuestion.question_data.type) {
+        case 'dropdown':
         case 'radiogroup':
           analytics = summarizeRadioGroup(savedQuestion);
           break;

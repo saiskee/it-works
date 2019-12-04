@@ -181,17 +181,18 @@ function Checkbox(props) {
     return (
         <div className="mc-grid">
             {props.data.map((value, index) =>
-                <div className="checkbox" key={index}>
+                <div className="checkbox-div" key={index}>
                     <label>
-                        <input className="checkbox-input" type="checkbox" value={value} key={index} />
+                        <input className="checkbox-input" disabled type="checkbox" value={value} key={index} />
                     </label>
+
                     <input
                         type="text"
                         key={index}
                         value={value}
-                        className="mc-question"
+                        className="checkbox-question"
                         onChange={(event) => props.changeData(event, index)}
-                    /> 
+                    />
                 </div>
             )}
         </div>

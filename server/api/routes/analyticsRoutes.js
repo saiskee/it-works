@@ -11,6 +11,7 @@ import {parseExistingTemplateIntoQuestionsIncludeResponses} from "./util/helpers
 const analyticsRoutes = express.Router();
 
 // Route for manager to get all surveys that they authored
+// TODO: Survey completion status
 analyticsRoutes.get('/surveys', async (req, res) => {
       const {userId} = req.session.user;
 

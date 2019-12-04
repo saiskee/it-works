@@ -24,6 +24,7 @@
     flex-direction: row;
 }
 
+
 .question-name {
     font-size: 18px;
     background: none;
@@ -81,6 +82,10 @@
     white-space: nowrap;
 }
 
+.question-type:hover {
+    cursor: pointer;
+}
+
 .Icon-SA {
     width: 15%;
     margin-right: 20px;
@@ -90,7 +95,7 @@
     display: flex;
     background-color: #f4f4f4;
     width: 100%;
-    margin-top: 100px;
+    margin-top: 5%;
 }
 
 
@@ -104,7 +109,6 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin: 5px;
 }
 
 .question-number {
@@ -139,14 +143,22 @@
     background-color: Transparent;
     border: none;
     width: 35px;
-    margin-left: auto;
     margin-right: 20px;
     float: right;
-    padding: 10px 5px 5px 5px;
 }
 
 .delete-logo {
     width: 100%;
+}
+
+/*.toggle-button {*/
+/*    padding-top: 17px;*/
+/*}*/
+
+.toggle-button-label {
+    margin-left: auto;
+    margin-right: 5px;
+    padding-top: 1%;
 }
 
 .title-row {

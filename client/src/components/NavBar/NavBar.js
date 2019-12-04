@@ -5,6 +5,7 @@ import {logout} from "../../actions/session";
 import {AccountCircle} from '@material-ui/icons';
 import IconButton from "@material-ui/core/IconButton";
 import {Link, withRouter} from "react-router-dom";
+import logo from './it-works-logo.png'
 
 const mapStateToProps = ({session}) => ({
   session, // this puts session as a prop
@@ -36,7 +37,7 @@ const NavBar = (props) => {
   const isMenuOpen = Boolean(anchorEl);
 
 
-  useEffect(()=>{
+  useEffect(() => {
     props.history.listen(() => {
       console.log(window.location.pathname);
       changeTitle(window.location.pathname);
@@ -44,17 +45,15 @@ const NavBar = (props) => {
   }, [])
 
   const changeTitle = (newTitle) => {
-    if (newTitle.startsWith('/analytics')){
+    if (newTitle.startsWith('/analytics')) {
       setTitle('Survey Analytics');
-    }
-    else if (newTitle.startsWith('/managerdashboard')){
+    } else if (newTitle.startsWith('/managerdashboard')) {
       setTitle('Manager Insights Dashboard');
-    }
-    else if (newTitle.startsWith('/dashboard')) {
+    } else if (newTitle.startsWith('/dashboard')) {
       setTitle('Employee Dashboard')
-    }else if (newTitle.startsWith('/builder')){
+    } else if (newTitle.startsWith('/builder')) {
       setTitle('Survey Builder')
-    }else{
+    } else {
       setTitle(newTitle);
     }
   }
@@ -89,12 +88,11 @@ const NavBar = (props) => {
   )
 
   return (
-      <div className={classes.root}>
-        <AppBar color="primary" position={'static'}>
+      <div className={classes.root} style={{marginBottom: '5%'}}>
+        <AppBar color="primary" position={'fixed'}>
           <Toolbar>
-            <div>
-            <Typography variant={'h3'} noWrap>{title}</Typography>
-            </div>
+            <img src={logo} width={'8%'}/>
+              <Typography variant={'h4'} style={{marginLeft: '1%'}}>{title}</Typography>
             <div className={classes.root}/>
 
             <IconButton

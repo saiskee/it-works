@@ -7,36 +7,16 @@ import Question_Icon_TF from './TF.png';
 import Question_Icon_Dropdown from './Dropdown.png';
 import Question_Icon_Checkbox from './Checkbox.png';
 import delete_icon from './trash.png';
-import {Paper, Card, CardContent,  Typography, Box, Button} from "@material-ui/core";
+import {Paper, Card, CardContent,  Typography, Box, Button, Switch, Input, TextField} from "@material-ui/core";
 import {Add} from "@material-ui/icons"
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 
-// const mapStateToProps = ({questions}) => ({
-//   question_bank: questions,
-//   question_bank_store: questions.slice()
-// });
-//
-// const mapDispatchToProps = (dispatch) => ({
-//   getQuestions: () => dispatch(getQuestions())
-// });
 
 class SurveyBuilder extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      questions: this.props.questions
-    }
   }
-
-  // componentDidMount() {
-  //   this.props.getQuestions();
-  // }
-
-  // addQuestionFromQuestionBank(question, qb_index){
-  //   this.props.addQuestionFromQuestionBank(question, qb_index);
-  //
-  // }
 
   removeQuestion(index) {
     this.props.removeQuestion(index);
@@ -53,7 +33,6 @@ class SurveyBuilder extends Component {
     };
     return (
         <div className='survey-builder'>
-
           <table className="toolbox-table">
             <tbody className="table-header">
             <tr>
@@ -64,15 +43,16 @@ class SurveyBuilder extends Component {
             <tr>
               <td>
                 {Object.keys(questionType).map((key) =>
-                    <button className="question-type" key={key} onClick={() => this.props.addQuestion(key)}>
+                    <Paper className="question-type" key={key} onClick={() => this.props.addQuestion(key)}>
                       <img className="Icon-SA" alt="logo" src={questionType[key]}/>
                       {key}
-                    </button>
+                    </Paper>
                 )}
               </td>
             </tr>
             </tbody>
           </table>
+
           <div className='questions-display'>
             {(this.props.questions.length !== 0) ?
                 <table className="survey-builder-view">
@@ -80,20 +60,32 @@ class SurveyBuilder extends Component {
                   {this.props.questions.map((type, index) =>
                       <tr className="survey-question" key={index}>
                         <td className="title-row">
-                          <p className="question-number"> {index + 1} . </p>
+                          <Typography className="question-number"> {index + 1} . </Typography>
 
                           <div className="question-title-view">
                             <form>
-                              <input
-                                  type="text"
+                              <Input
+                                  style={{marginTop: '0px'}}
+                                  className="question-title-input"
+                                  placeholder='Enter your question here'
                                   value={this.props.questions[index].title}
-                                  name="question-name"
-                                  className="question-name"
+                                  className='question-name'
+                                  name='question-name'
                                   onChange={(event) => this.props.changeQuestionTitle(index, event)}
                               />
                             </form>
                           </div>
-
+                          <div className="toggle-button-label">
+                            Required:
+                          </div>
+                          <div className="toggle-button">
+                            <Switch
+                                checked={this.props.questions[index].isRequired}
+                                onChange={(event) => {
+                                  this.props.handleIsRequiredChange(index, event.target.checked);
+                                }}
+                            />
+                          </div>
                           <button className="delete-button" key={index} onClick={() => this.removeQuestion(index)}>
                             <img className="delete-logo" alt="delete_icon" src={delete_icon}/>
                           </button>
