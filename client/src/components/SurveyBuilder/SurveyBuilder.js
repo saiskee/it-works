@@ -9,9 +9,6 @@ import Question_Icon_Checkbox from './Checkbox.png';
 import delete_icon from './trash.png';
 import {Paper, Card, CardContent,  Typography, Box, Button, Switch, Input, TextField} from "@material-ui/core";
 import {Add} from "@material-ui/icons"
-import PerfectScrollbar from 'react-perfect-scrollbar';
-
-
 
 class SurveyBuilder extends Component {
   constructor(props) {

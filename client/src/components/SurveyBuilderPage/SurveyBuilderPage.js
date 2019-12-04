@@ -190,6 +190,7 @@ class SurveyBuilderPage extends Component {
       alert('Please select at least one employee to assign the survey to before submitting.');
       return;
     }
+
     const toServer = {
       employees,
       surveyTemplate: surveyJSON

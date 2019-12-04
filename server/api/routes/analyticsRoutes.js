@@ -20,6 +20,9 @@ analyticsRoutes.get('/surveys', async (req, res) => {
       }, (err, surveys) => {
         try {
           if (err) throw new Error(err);
+
+
+
           res.send({surveys: surveys});
         } catch (err) {
           res.status(400).send(parseError(err));
