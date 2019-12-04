@@ -35,7 +35,6 @@ surveyRoutes.get('/surveys', (req, res) => {
                 let final_object = {survey: survey_object, survey_status: user_survey_object.survey_status};
                 return final_object;
             });
-            console.log(surveys_with_statuses);
             res.send({surveys: surveys_with_statuses});
           });
         } catch (err) {
@@ -87,26 +86,35 @@ surveyRoutes.get('/:surveyId', async (req, res) => {
  */
 surveyRoutes.post('/:surveyId', async(req, res) => {
   const {userId} = req.session.user;
+  const {surveyId} = req.params;
+  // Get User that submitted the survey responses
   const user = await User.findOne({_id: userId});
-  const surveyId = req.params.surveyId;
   const answers = req.body;
+  // Update Survey Status for that survey in the User's record
   const survey_entry = user.surveys_assigned.find((entry) => entry.survey_id.equals(mongoose.Types.ObjectId(surveyId)));
   if(survey_entry !== undefined && survey_entry.survey_status === SurveyStatus.UNFINISHED) {
     for (const answer_id in answers){
       survey_entry.survey_status = SurveyStatus.FINISHED;
       user.save();
+      // Add survey response to the question's survey responses
       const question = await Question.findOne({_id: answer_id});
       const answerObj = {question_id: answer_id, answer: answers[answer_id], survey_id: surveyId};
       question.survey_responses.push(answerObj);
-      let question1 = await question.save();
-      
+      question.save();
     }
   }
+  // Update Survey Completion Status on Survey Record
+  const survey = await Survey.findOne({_id: surveyId});
+  const emp_status = survey.assigned_to.find((obj) => obj.employee.equals(userId));
+  emp_status.completion_status = SurveyStatus.FINISHED;
+  survey.save();
 });
 
 // Route for Manager to create a new survey
 surveyRoutes.post('', async (req, res) => {
-  let surveyTemplate = req.body;
+  let {employees, surveyTemplate} = req.body;
+  // console.log(employees);
+  // console.log(surveyTemplate);
   // Right now, the survey is assigned to the user who creates the survey
   // TODO: Assign surveys to other users during survey creation
   const {userId} = req.session.user;
@@ -114,24 +122,35 @@ surveyRoutes.post('', async (req, res) => {
   surveyTemplate = await parseNewTemplateIntoQuestions(surveyTemplate, userId);
   const newSurvey = new Survey({
     survey_template: surveyTemplate,
-    author: mongoose.Types.ObjectId(userId)
+    author: mongoose.Types.ObjectId(userId),
+    assigned_to: employees.tags.map(emp => ({employee: emp.id, status: 'Unfinished'})),
   });
 
-  await newSurvey.save((err, survey) => {
+  newSurvey.save((err, survey) => {
     try{
       if (err) throw new Error(err);
+      User.find({ _id: {$in: employees.tags.map(employee => employee.id)} }, (err, users) => {
+        try{
+          if (err) throw new Error(err);
+          users.forEach(user => {
+            user.surveys_assigned.push({survey_id: mongoose.Types.ObjectId(survey.id), survey_status: SurveyStatus.UNFINISHED});
+            user.save();
+          })
 
-      User.findOne({ _id: userId }, (err, user) => {
-        user.surveys_assigned.push({survey_id: survey.id, survey_status: SurveyStatus.UNFINISHED});
-        user.save();
+        }catch (err){
+          console.log("ERROR:", err);
+          res.status(400).send(parseError(err));
+        }
+        res.send(survey._id);
       });
     }
-
     catch(err){
+      console.log("ERROR1:", err);
       res.status(400).send(parseError(err));
     }
 
-  })
+  });
+
 });
 
 

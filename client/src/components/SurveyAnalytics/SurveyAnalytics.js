@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {makeStyles} from '@material-ui/styles';
 import {Grid, Table, Typography, Card, TableHead, TableRow, TableBody, TableCell} from '@material-ui/core';
 import {connect} from "react-redux";
 import {getSurveyAndResponses} from "../../actions/analytics";
 import {Bar} from "react-chartjs-2";
+import {withRouter} from "react-router-dom";
 
 const mapStateToProps = ({session, survey}) => ({
   session,
@@ -11,7 +12,9 @@ const mapStateToProps = ({session, survey}) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getSurvey: (surveyId) => dispatch(getSurveyAndResponses(surveyId))
+  getSurvey: (surveyId) => dispatch(getSurveyAndResponses(surveyId)),
+  //TODO: Clear store for survey / analytics
+
 });
 
 const useStyles = makeStyles(theme => ({
@@ -22,59 +25,85 @@ const useStyles = makeStyles(theme => ({
 
 const visualizeData = (question, currentSurveyId) => {
   const {analytics} = question;
-  if (question.type == "text"){
+  console.log(question, currentSurveyId);
+  if (question.type === "text" || question.type === 'comment') {
     return (
-        <>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                Responses
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {analytics[currentSurveyId].length > 0 && analytics[currentSurveyId].map(response => (
-                <TableRow>
-                  <TableCell>
-                    {response}
-                  </TableCell>
-                </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-          </>
+
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  Responses
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {analytics[currentSurveyId].length > 0 && analytics[currentSurveyId].map(response => (
+                  <TableRow>
+                    <TableCell>
+                      {JSON.stringify(response)}
+                    </TableCell>
+                  </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+
     )
   }
-  if (question.type == "checkbox"){
-
+  if (['checkbox', 'radiogroup', 'dropdown'].includes(question.type)) {
     let data = {
       labels: Object.keys(question.analytics[currentSurveyId]),
-
-      datasets:[{
+      datasets: [{
         label: "Survey " + currentSurveyId,
         data: Object.values(question.analytics[currentSurveyId])
-      }]
-
+      }],
     };
-
+    let options = {
+      scales: {
+        yAxes: [{ticks: {beginAtZero: true}}]
+      }
+    }
     return (
         <>
-          <Bar data={data} />
+          <Bar data={data} options={options}/>
         </>
     );
   }
-  if (question.type == "rating"){
-    // TODO
+  if (question.type === "rating") {
+    let data = {
+      labels: Object.keys(question.analytics[currentSurveyId]),
+      datasets: [{
+        label: "Survey " + currentSurveyId,
+        data: Object.values(question.analytics[currentSurveyId])
+      }],
+    };
+    let options = {
+      scales: {
+        yAxes: [{ticks: {beginAtZero: true}}]
+      }
+    }
+    return (
+        <>
+          <Bar data={data} options={options}/>
+        </>
+    );
   }
 }
 
 const SurveyAnalytics = (props) => {
   const {surveyId} = props.match.params;
   useEffect(() => {
-    props.getSurvey(surveyId);
-  },
+        props.getSurvey(surveyId);
+      },
       []);
+
+  useEffect(function() {
+
+    return function cleanup() {
+      //TODO: Clear store for survey / analytics
+
+    }
+  }, []);
 
   const classes = useStyles();
   const {survey} = props.survey
@@ -85,26 +114,25 @@ const SurveyAnalytics = (props) => {
             spacing={4}
         >
 
-            {survey.survey_template.pages && survey.survey_template.pages.map((page) => (
-                page.elements.map((question) => (
-                    <Grid
-                        item
-                        lg={6}
-                        md={12}
-                        xl={9}
-                        xs={12}
-                    >
+          {survey.survey_template.pages && survey.survey_template.pages.map((page) => (
+              page.elements.map((question) => (
+                  <Grid
+                      item
+                      lg={6}
+                      md={12}
+                      xl={9}
+                      xs={12}
+                  >
                     <Card className={classes.root}>
                       <Typography variant={'h1'}>{question.title ? question.title : question.name}</Typography>
-                      <Typography variant={'h5'} >{question.type}</Typography>
+                      <Typography variant={'h5'}>{question.type}</Typography>
                       {/*<Typography>{JSON.stringify(question.analytics)}</Typography>*/}
-                      { visualizeData(question, surveyId ) }
+                      {visualizeData(question, surveyId)}
                       {/*<Bar data = {{labels: ['January', 'Middle','February'], datasets:[{data: [5,6,7], label: 'January'}]}}/>*/}
                     </Card>
-                    </Grid>
-                ))
-            ))}
-
+                  </Grid>
+              ))
+          ))}
 
 
         </Grid>
@@ -117,4 +145,4 @@ const SurveyAnalytics = (props) => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SurveyAnalytics);
+)(withRouter(SurveyAnalytics));

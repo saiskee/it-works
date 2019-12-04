@@ -1,0 +1,40 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  bottom: 0;
+  align-self: flex-end;
+  width: 200px;
+  height: 100%;
+  position: sticky;
+}
+
+.header {
+  flex-direction: row;
+  max-height: 40px;
+  margin-top: 2vh;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  position: relative;
+  font-weight: 600;
+  font-size: 48px;
+  color: #6A6E70;
+}
+
+.App-background {
+  background-color: hsl(0, 0%, 96%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-size: calc(10px + 2vmin);
+  color: black;
+}
+
+.App-link {
+  color: #09d3ac;
+}

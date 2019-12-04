@@ -1,0 +1,170 @@
+.question-view {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.rating-grid {
+    display: inline-block;
+}
+
+.rating-question {
+    border: 1px solid #ccc;
+    font-size: 18px;
+    margin: 20px 5px;
+    max-width: 100px;
+    background-color: #f4f4f4;
+}
+
+.mc-grid {
+    display: inline-block;
+    flex-direction: column;
+}
+
+.MC-table {
+    display: flex;
+    flex-direction: row;
+}
+
+.mc-question {
+    background-color: transparent;
+    display: block;
+    position: relative;
+    cursor: pointer;
+    /*margin: 20px 20px 20px 0px;*/
+    text-align: left;
+    font-size: 18px;
+    border: none;
+}
+
+.sa-question {
+    font-size: 18px;
+    background-color: #ffffff;
+    margin: 10px;
+    border-radius: 4px;
+    min-height: 150px;
+    border: 2px solid #ccc;
+}
+
+.checkbox-question {
+    background-color: transparent;
+    display: block;
+    position: relative;
+    cursor: pointer;
+    text-align: left;
+    font-size: 18px;
+    border: none;
+    margin-left: 5%;
+}
+
+.container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    margin-left: 21px;
+    margin-bottom: 21px;
+    margin-top: 21px;
+    text-align: left;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.checkbox-div {
+    display: flex;
+    flex-direction: row;
+    margin-left: 4%;
+    margin-bottom: 3%
+}
+
+.checkbox-input {
+    margin-left: 26px;
+    margin-top: 26px;
+    margin-right: 18px;
+}
+
+.checkmark {
+    margin-right: 100px;
+}
+
+.choose-button {
+    display: flex;
+    margin-left: 24px;
+    background-color: white;
+    text-align: left;
+    font-size: 18px;
+    margin-bottom: 24px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    border-radius: 4px;
+}
+
+.dropdownbox {
+    display: flex;
+    flex-direction: row;
+    margin-top: -10px;
+}
+
+.dropdown-question {
+    background-color: transparent;
+    display: block;
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 18px;
+    margin-left: 24px;
+    text-align: left;
+    font-size: 18px;
+    border: none;
+}
+
+/* Hide the browser's default radio button */
+.container .radio-button {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    margin: 2px;
+    width: 18px;
+    background-color: #ccc;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+    background-color: #a9a9a9;
+}
+
+/* When the radio button is checked, add a blue background */
+.container input:checked ~ .checkmark {
+    background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container .radio-button:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.container .checkmark:after {
+    background: none;
+}
+  

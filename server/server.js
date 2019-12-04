@@ -49,7 +49,7 @@ app.use('/api', apiRouter);
 apiRouter.use('/survey', surveyRoutes);
 apiRouter.use('/users', userRoutes);
 apiRouter.use('/session', sessionRoutes);
-apiRouter.use('/question', questionRoutes);
+apiRouter.use('/questions', questionRoutes);
 apiRouter.use('/analytics', analyticsRoutes);
 apiRouter.use('/employees', employeeRoutes)
 

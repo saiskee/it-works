@@ -1,50 +1,52 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {logout} from "../../actions/session";
 import {getSurveys} from "../../actions/survey";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import {withRouter} from 'react-router';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {
-  AppBar,
   TableBody,
   TableCell,
   TableRow,
   TableHead,
   Table,
-  Button,
   Grid,
   Paper,
   Typography,
-  Toolbar,
-  makeStyles
 } from "@material-ui/core";
 
 /**
  * This fn takes a piece of the main application "store" and passes it into the component
  * In this case, we just want state.session, so we are accessing just that
  */
-const mapStateToProps = ({session, surveys}) => ({
-  session, // this puts session as a prop
+const mapStateToProps = ({surveys}) => ({
   surveys
 });
 
 const mapDispatchToProps = dispatch => ({
-  getSurveys: () => dispatch(getSurveys())
+  getSurveys: (component) => dispatch(getSurveys(component))
 });
 
 
 
 class Dashboard extends Component {
 
+  constructor(props){
+    super(props);
+  }
 
-  componentDidMount() {
-    console.log("test")
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log(prevProps.location)
+    if (this.props.location !== prevProps.location){
+      this.componentDidMount();
+    }
+  }
+
+  componentDidMount = () => {
     this.props.getSurveys();
   }
 
   render() {
-    const {session, surveys} = this.props;
+    const {surveys} = this.props;
     return (
         <>
 
@@ -92,6 +94,7 @@ class Dashboard extends Component {
                           </TableCell>
                         </TableRow>
                     ))}
+
                   </TableBody>
                 </Table>
               </PerfectScrollbar>

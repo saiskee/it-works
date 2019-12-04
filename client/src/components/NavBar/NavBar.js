@@ -1,13 +1,11 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {connect} from "react-redux";
-import {AppBar, Button, Grid, Toolbar, Typography, makeStyles} from "@material-ui/core";
+import {AppBar, Toolbar, Typography, makeStyles, Menu, MenuItem, Box} from "@material-ui/core";
 import {logout} from "../../actions/session";
 import {AccountCircle} from '@material-ui/icons';
 import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import {withRouter} from "react-router";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
+import logo from './it-works-logo.png'
 
 const mapStateToProps = ({session}) => ({
   session, // this puts session as a prop
@@ -31,11 +29,34 @@ const useStyles = makeStyles(theme => ({
 
 
 const NavBar = (props) => {
-  const {logout} = props;
+  const {logout, session} = props;
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [title, setTitle] = React.useState('It Works Employee Perception');
   const isMenuOpen = Boolean(anchorEl);
+
+
+  useEffect(() => {
+    props.history.listen(() => {
+      console.log(window.location.pathname);
+      changeTitle(window.location.pathname);
+    })
+  }, [])
+
+  const changeTitle = (newTitle) => {
+    if (newTitle.startsWith('/analytics')) {
+      setTitle('Survey Analytics');
+    } else if (newTitle.startsWith('/managerdashboard')) {
+      setTitle('Manager Insights Dashboard');
+    } else if (newTitle.startsWith('/dashboard')) {
+      setTitle('Employee Dashboard')
+    } else if (newTitle.startsWith('/builder')) {
+      setTitle('Survey Builder')
+    } else {
+      setTitle(newTitle);
+    }
+  }
 
   const switchView = () => {
     props.history.push('/dashboard');
@@ -58,21 +79,26 @@ const NavBar = (props) => {
           open={isMenuOpen}
           onClose={handleMenuClose}
       >
-        <MenuItem onClick={switchView}> Switch to Employee View</MenuItem>
-        <MenuItem onClick={logout}> Log Out</MenuItem>
+        <MenuItem disabled={true}>Currently Logged in as {session.fullName}</MenuItem>
+        <MenuItem><Link to={'/builder'}>Survey Builder</Link></MenuItem>
+        <MenuItem><Link to={'/dashboard'}>Switch to Employee View</Link></MenuItem>
+        <MenuItem><Link to={'/managerdashboard'}>Switch To Manager View</Link></MenuItem>
+        <MenuItem onClick={logout} style={{color: 'red'}}>Log Out</MenuItem>
       </Menu>
   )
 
   return (
-      <div className={classes.root}>
-        <AppBar color="primary" position={'static'}>
+      <div className={classes.root} style={{marginBottom: '5%'}}>
+        <AppBar color="primary" position={'fixed'}>
           <Toolbar>
-            <Typography variant={'h3'} noWrap>It Works!</Typography>
+            <img src={logo} width={'8%'}/>
+              <Typography variant={'h4'} style={{marginLeft: '1%'}}>{title}</Typography>
             <div className={classes.root}/>
 
             <IconButton
                 edge="end"
                 color="inherit"
+                onClick={handleProfileMenuOpen}
             >
 
               <AccountCircle className={classes.profileIcon}/>

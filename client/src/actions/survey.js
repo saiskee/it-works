@@ -24,10 +24,9 @@ export const getSurvey = surveyId => async dispatch => {
   }
 };
 
-export const getSurveys = user => async dispatch => {
-  const response = await apiUtil.getSurveys(user);
+export const getSurveys = () => async dispatch => {
+  const response = await apiUtil.getSurveys();
   const data = await response.json();
-
   if (response.ok){
     return dispatch(getCurrentUserSurveys(data));
   }

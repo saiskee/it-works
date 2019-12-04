@@ -11,6 +11,7 @@ import {parseExistingTemplateIntoQuestionsIncludeResponses} from "./util/helpers
 const analyticsRoutes = express.Router();
 
 // Route for manager to get all surveys that they authored
+// TODO: Survey completion status
 analyticsRoutes.get('/surveys', async (req, res) => {
       const {userId} = req.session.user;
 
@@ -19,6 +20,9 @@ analyticsRoutes.get('/surveys', async (req, res) => {
       }, (err, surveys) => {
         try {
           if (err) throw new Error(err);
+
+
+
           res.send({surveys: surveys});
         } catch (err) {
           res.status(400).send(parseError(err));
@@ -40,6 +44,7 @@ analyticsRoutes.get('/survey/:surveyId', async (req, res) => {
           if (survey.author != userId) throw new Error('This Survey was not created by you');
           survey = await parseExistingTemplateIntoQuestionsIncludeResponses(survey);
           res.send({survey: survey});
+          console.log(JSON.stringify(survey));
         } catch (err) {
           res.status(400).send(parseError(err));
         }

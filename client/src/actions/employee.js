@@ -8,10 +8,10 @@ const getManagerEmployees = employees => ({
   employees: employees
 });
 
-export const getEmployees = () => async dispatch => {
+export const getEmployees = (component) => async dispatch => {
   const response = await apiUtil.getEmployees();
   const data = await response.json();
-  console.log(data);
+
   if (response.ok){
     return dispatch(getManagerEmployees(data));
   }
