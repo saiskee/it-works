@@ -21,7 +21,6 @@ class App extends Component {
 
     return (
         <div className="App">
-          {/*<CssBaseline/>*/}
           <Switch>
             <AuthRoute path="/login" exact component={Login}/>
             <AuthRoute path="/register" exact component={Register}/>

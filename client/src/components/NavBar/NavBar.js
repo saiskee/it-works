@@ -4,8 +4,9 @@ import {AppBar, Toolbar, Typography, makeStyles, Menu, MenuItem, Box} from "@mat
 import {logout} from "../../actions/session";
 import {AccountCircle} from '@material-ui/icons';
 import IconButton from "@material-ui/core/IconButton";
-import {Link, withRouter} from "react-router-dom";
-import logo from './it-works-logo.png'
+import {withRouter} from "react-router-dom";
+import logo from './it-works-logo.png';
+import {green, red} from "@material-ui/core/colors";
 
 const mapStateToProps = ({session}) => ({
   session, // this puts session as a prop
@@ -24,46 +25,60 @@ const useStyles = makeStyles(theme => ({
   },
   profileIcon: {
     transform: 'scale(1.8)'
+  },
+  menuLabel: {
+    color: green[900]
+  },
+  menuItem: {
+    '&:hover' : {
+      backgroundColor: theme.palette.primary.light,
+    }
+  },
+  logoutButton: {
+    color: 'red',
+    '&:hover' : {
+      backgroundColor: '#ff8a80',
+      color: 'white'
+    }
   }
 }));
 
+const processWindowName = (newTitle) => {
+  if (newTitle.startsWith('/analytics')) {
+    return ('Survey Analytics');
+  } else if (newTitle.startsWith('/managerdashboard')) {
+    return ('Manager Insights Dashboard');
+  } else if (newTitle.startsWith('/dashboard')) {
+    return ('Employee Dashboard')
+  } else if (newTitle.startsWith('/builder')) {
+    return ('Survey Builder')
+  } else {
+    return (newTitle);
+  }
+};
 
 const NavBar = (props) => {
   const {logout, session} = props;
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [title, setTitle] = React.useState('It Works Employee Perception');
+  const [title, setTitle] = React.useState(processWindowName(window.location.pathname));
   const isMenuOpen = Boolean(anchorEl);
 
 
   useEffect(() => {
     props.history.listen(() => {
-      console.log(window.location.pathname);
-      changeTitle(window.location.pathname);
+      setTitle(processWindowName(window.location.pathname));
     })
-  }, [])
-
-  const changeTitle = (newTitle) => {
-    if (newTitle.startsWith('/analytics')) {
-      setTitle('Survey Analytics');
-    } else if (newTitle.startsWith('/managerdashboard')) {
-      setTitle('Manager Insights Dashboard');
-    } else if (newTitle.startsWith('/dashboard')) {
-      setTitle('Employee Dashboard')
-    } else if (newTitle.startsWith('/builder')) {
-      setTitle('Survey Builder')
-    } else {
-      setTitle(newTitle);
-    }
-  }
-
-  const switchView = () => {
-    props.history.push('/dashboard');
-  }
+  }, []);
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
+  }
+
+  const menuCloseAndRedirect = (redirectTo) => {
+    setAnchorEl(null);
+    props.history.push(redirectTo);
   }
 
   const handleMenuClose = () => {
@@ -72,6 +87,7 @@ const NavBar = (props) => {
 
   const renderMenu = (
       <Menu
+
           anchorEl={anchorEl}
           anchorOrigin={{vertical: 'top', horizontal: 'right'}}
           keepMounted
@@ -79,20 +95,20 @@ const NavBar = (props) => {
           open={isMenuOpen}
           onClose={handleMenuClose}
       >
-        <MenuItem disabled={true}>Currently Logged in as {session.fullName}</MenuItem>
-        <MenuItem><Link to={'/builder'}>Survey Builder</Link></MenuItem>
-        <MenuItem><Link to={'/dashboard'}>Switch to Employee View</Link></MenuItem>
-        <MenuItem><Link to={'/managerdashboard'}>Switch To Manager View</Link></MenuItem>
-        <MenuItem onClick={logout} style={{color: 'red'}}>Log Out</MenuItem>
+        <MenuItem className={classes.menuLabel} disabled={true}>Currently Logged in as {session.fullName}</MenuItem>
+        <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/builder')}}>Survey Builder</MenuItem>
+        <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/dashboard')}}>Switch to Employee View</MenuItem>
+        <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/managerdashboard')}}>Switch To Manager View</MenuItem>
+        <MenuItem className={classes.logoutButton} onClick={logout}>Log Out</MenuItem>
       </Menu>
-  )
+  );
 
   return (
       <div className={classes.root} style={{marginBottom: '5%'}}>
-        <AppBar color="primary" position={'fixed'}>
+        <AppBar color="secondary" position={'fixed'}>
           <Toolbar>
             <img src={logo} width={'8%'}/>
-              <Typography variant={'h4'} style={{marginLeft: '1%'}}>{title}</Typography>
+              <Typography variant={'h4'} color="primary" style={{marginLeft: '1%'}}>{title}</Typography>
             <div className={classes.root}/>
 
             <IconButton
@@ -101,7 +117,7 @@ const NavBar = (props) => {
                 onClick={handleProfileMenuOpen}
             >
 
-              <AccountCircle className={classes.profileIcon}/>
+              <AccountCircle color={'primary'} className={classes.profileIcon}/>
             </IconButton>
 
 

@@ -14,9 +14,9 @@ export default {
   },
   secondary: {
     contrastText: white,
-    dark: colors.blue[900],
-    main: colors.blue['A400'],
-    light: colors.blue['A400']
+    dark: colors.grey[900],
+    main: colors.grey[100],
+    light: colors.grey[100]
   },
   success: {
     contrastText: white,
@@ -45,12 +45,12 @@ export default {
   text: {
     primary: colors.blueGrey[900],
     secondary: colors.blueGrey[600],
-    link: colors.blue[600]
+    link: colors.green[600]
   },
   background: {
     default: '#F4F6F8',
     paper: white
   },
   icon: colors.blueGrey[600],
-  divider: colors.grey[200]
+  divider: colors.grey[200],
 };
