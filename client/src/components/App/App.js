@@ -31,15 +31,15 @@ class App extends Component {
             </MuiThemeProvider>
           </Switch>
 
-
+          <Switch>
           <MuiThemeProvider theme={theme}>
             <ProtectedRoute path="/builder" exact component={SurveyBuilderPage}/>
             <ProtectedRoute path="/dashboard" exact component={Dashboard}/>
             <ProtectedRoute path="/managerdashboard" exact component={ManagerDashboard}/>
             <ProtectedRoute path="/analytics/:surveyId" exact component={SurveyAnalytics}/>
           </MuiThemeProvider>
+          </Switch>
           <Route path="/oldBuilder" component = {SurveyBuilder} />
-          <Route path="/selector" component={EmployeeSelector}/>
 
 
         </div>

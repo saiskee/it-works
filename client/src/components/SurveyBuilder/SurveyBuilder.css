@@ -1,6 +1,6 @@
 /*
 
--We should discuss adding an overflow ellipse in the .question-type componant 
+-We should discuss adding an overflow ellipse in the .question-type componant
 -Once I made the .question-type componant to have members of buttons instead of text
  the 'border-bottom' attribute stopped showing up
 -Is my button creation within .question-type sufficient or do I need to more to map the buttons to variables?
@@ -31,6 +31,7 @@
     margin: 19px 10px;
     width: 200%;
     border: none;
+    caret-color: green;
 }
 
 .toolbox-table {
@@ -67,7 +68,7 @@
 
 .question-type {
     flex-direction: row;
-    background-color: hsl(0, 0%, 96%); 
+    background-color: hsl(0, 0%, 96%);
     text-align: left;
     font-size: 22px;
     color: #6A6E70;

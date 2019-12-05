@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {Component, useEffect} from 'react';
 import {makeStyles} from '@material-ui/styles';
 import {Grid, Table, Typography, Card, TableHead, TableRow, TableBody, TableCell} from '@material-ui/core';
 import {connect} from "react-redux";
@@ -17,15 +17,15 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    padding: theme.spacing(4)
-  }
-}));
+// const useStyles = makeStyles(theme => ({
+//   root: {
+//     padding: theme.spacing(4)
+//   }
+// }));
 
 const visualizeData = (question, currentSurveyId) => {
   const {analytics} = question;
-  console.log(question, currentSurveyId);
+  // console.log(question, currentSurveyId);
   if (question.type === "text" || question.type === 'comment') {
     return (
 
@@ -38,8 +38,8 @@ const visualizeData = (question, currentSurveyId) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {analytics[currentSurveyId].length > 0 && analytics[currentSurveyId].map(response => (
-                  <TableRow>
+              {analytics.hasOwnProperty(currentSurveyId) && analytics[currentSurveyId].length > 0 && analytics[currentSurveyId].map((response, idx) => (
+                  <TableRow key={idx}>
                     <TableCell>
                       {JSON.stringify(response)}
                     </TableCell>
@@ -90,54 +90,60 @@ const visualizeData = (question, currentSurveyId) => {
   }
 }
 
-const SurveyAnalytics = (props) => {
-  const {surveyId} = props.match.params;
-  useEffect(() => {
-        props.getSurvey(surveyId);
-      },
-      []);
-
-  useEffect(function() {
-
-    return function cleanup() {
-      //TODO: Clear store for survey / analytics
-
+class SurveyAnalytics extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      surveyId : props.match.params.surveyId
     }
-  }, []);
+  }
 
-  const classes = useStyles();
-  const {survey} = props.survey
-  return (
-      <div className={classes.root}>
-        <Grid
-            container
-            spacing={4}
-        >
+  componentDidMount(){
+    console.log("Survey Analytics for Survey "+this.state.surveyId+" Mounted");
+    this.props.getSurvey(this.state.surveyId);
+  }
 
-          {survey.survey_template.pages && survey.survey_template.pages.map((page) => (
-              page.elements.map((question) => (
-                  <Grid
-                      item
-                      lg={6}
-                      md={12}
-                      xl={9}
-                      xs={12}
-                  >
-                    <Card className={classes.root}>
-                      <Typography variant={'h1'}>{question.title ? question.title : question.name}</Typography>
-                      <Typography variant={'h5'}>{question.type}</Typography>
-                      {/*<Typography>{JSON.stringify(question.analytics)}</Typography>*/}
-                      {visualizeData(question, surveyId)}
-                      {/*<Bar data = {{labels: ['January', 'Middle','February'], datasets:[{data: [5,6,7], label: 'January'}]}}/>*/}
-                    </Card>
-                  </Grid>
-              ))
-          ))}
+  componentWillUnmount() {
+  }
+
+  render() {
+    const {survey} = this.props.survey
+    const classes = {
+      root: {
+        padding: '4%'
+      }
+    }
+    return (
+        <div style={classes.root} >
+          <Grid
+              container
+              spacing={4}
+          >
+
+            {survey.survey_template.pages && survey.survey_template.pages.map((page) => (
+                page.elements.map((question) => (
+                    <Grid
+                        item
+                        lg={6}
+                        md={12}
+                        xl={9}
+                        xs={12}
+                        key={question.question_id}
+                    >
+                      <Card style={classes.root}>
+                        <Typography variant={'h1'}>{question.title ? question.title : question.name}</Typography>
+                        <Typography variant={'h5'}>{question.type}</Typography>
+                        {visualizeData(question, this.state.surveyId)}
+                      </Card>
+                    </Grid>
+                ))
+            ))}
 
 
-        </Grid>
-      </div>
-  );
+          </Grid>
+        </div>
+    );
+  }
 
 
 };

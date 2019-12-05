@@ -8,6 +8,7 @@ import {Button, makeStyles} from '@material-ui/core';
 import $ from "jquery";
 import {connect} from 'react-redux';
 import {getQuestions} from "../../actions/questions";
+import moment from 'moment';
 
 const mapStateToProps = ({questions}) => ({
   question_bank: questions,
@@ -24,7 +25,9 @@ class SurveyBuilderPage extends Component {
     super(props);
     this.state = {
       questions: [],
-      employees: {tags: [], suggestions: []}
+      employees: {tags: [], suggestions: []},
+      surveyOpenDate: parseInt(moment().format('x')),
+      surveyCloseDate: parseInt(moment().add('1', 'days').format('x'))
     };
     this.addQuestion = this.addQuestion.bind(this);
     this.initDataForType = this.initDataForType.bind(this);
@@ -36,6 +39,7 @@ class SurveyBuilderPage extends Component {
   }
 
   componentDidMount() {
+    console.log("Survey Builder Page Mounted");
     this.props.getQuestions();
   }
 
@@ -81,7 +85,6 @@ class SurveyBuilderPage extends Component {
   }
 
   addQuestionFromQuestionBank(question, questionBankIndex) {
-    console.log(question);
     const {question_data} = question;
     this.setState((prevState) => {
       return {
@@ -100,7 +103,7 @@ class SurveyBuilderPage extends Component {
         }]
       }
     });
-    console.log("QUESTIONBANK:", this.props.question_bank[questionBankIndex]);
+    // console.log("QUESTIONBANK:", this.props.question_bank[questionBankIndex]);
     this.props.question_bank.splice(questionBankIndex, 1);
   }
 
@@ -150,6 +153,34 @@ class SurveyBuilderPage extends Component {
     });
   }
 
+  handleSurveyOpenDate(event){
+    let closeDate = this.state.surveyCloseDate;
+    let openDate = parseInt(moment(event.target.value).format('x'));
+    if (closeDate < openDate){
+      this.setState({expiryDateInvalid: true})
+    }else{
+      this.setState({expiryDateInvalid: false})
+    }
+    if (openDate < Date.now()){
+      this.setState({openDateInvalid: true})
+    }else{
+      this.setState({openDateInvalid: false})
+    }
+    this.setState({surveyOpenDate: parseInt(moment(event.target.value).format('x'))});
+  }
+
+  handleSurveyCloseDate(event){
+    let closeDate = parseInt(moment(event.target.value).format('x'));
+    let openDate = this.state.surveyOpenDate;
+    if (closeDate < openDate){
+      this.setState({expiryDateInvalid: true})
+    }else{
+      this.setState({expiryDateInvalid: false})
+    }
+    this.setState({surveyCloseDate: parseInt(moment(event.target.value).format('x'))})
+  }
+
+
   updateData(index, data) {
     var newData = data;
     this.setState((prevState) => {
@@ -190,10 +221,19 @@ class SurveyBuilderPage extends Component {
       alert('Please select at least one employee to assign the survey to before submitting.');
       return;
     }
+    if (this.state.expiryDateInvalid){
+      alert('Survey close date can not be before open date');
+      return;
+    }
+    if (this.state.openDateInvalid){
+      alert('Survey open date can not be before survey creation');
+    }
 
     const toServer = {
       employees,
-      surveyTemplate: surveyJSON
+      surveyTemplate: surveyJSON,
+      openDate: this.state.surveyOpenDate,
+      expiryDate: this.state.surveyCloseDate
     }
     $.ajax('/api/survey', {
       method: 'POST',
@@ -219,14 +259,20 @@ class SurveyBuilderPage extends Component {
               removeQuestion={this.removeQuestion.bind(this)}
               changeQuestionTitle={this.changeQuestionTitle.bind(this)}
               addQuestionFromQuestionBank={this.addQuestionFromQuestionBank.bind(this)}
-              handleIsRequiredChange={this.handleIsRequiredChange.bind(this)}/>
+              handleIsRequiredChange={this.handleIsRequiredChange.bind(this)}
+              surveyOpenDate={this.state.surveyOpenDate}
+              handleSurveyOpenDate={this.handleSurveyOpenDate.bind(this)}
+              surveyCloseDate={this.state.surveyCloseDate}
+              handleSurveyCloseDate={this.handleSurveyCloseDate.bind(this)}
+              expiryDateInvalid = {this.state.expiryDateInvalid}
+              openDateInvalid = {this.state.openDateInvalid}
+          />
 
           <Button variant={'contained'} onClick={this.generateSurveyJSON}
                   title='View Console Log to See Survey JSON (debugging purposes)'>Generate JSON</Button>
           <Button variant={'contained'} color={'primary'} onClick={this.createSurvey} title={'Create Survey'}>Create
             Survey</Button>
 
-          {/*<img src={logo} className="App-logo" alt="logo" />*/}
         </>
     );
   }

@@ -27,32 +27,33 @@ class EmployeeSelector extends Component{
   }
 
     handleDelete (i){
-      const tags = this.state.tags.slice(0)
-      tags.splice(i, 1)
-      this.setState({ tags })
+      const tags = this.state.tags.slice(0);
+      tags.splice(i, 1);
+      this.setState({ tags });
       this.props.handleEmployeeChange({tags});
     }
 
     handleAddition(tag){
-      const tags = [].concat(this.state.tags, tag)
-      this.setState({ tags })
+      const tags = [].concat(this.state.tags, tag);
+      this.setState({ tags });
       this.props.handleEmployeeChange({tags});
     }
 
   componentDidMount(){
+    console.log("Employee Selector Mounted");
     this.props.getEmployees();
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const oldEmployees = prevProps.employees;
     const {employees} = this.props;
     // Find any employees that were not there in the previous render
     const newEmployees = employees.filter(newEmployee => (
-        !oldEmployees.find(oldEmployee => (
-          newEmployee.empId === oldEmployee.empId
+        !this.state.suggestions.concat(this.state.tags).find(emp => (
+          newEmployee.empId === emp.id
       ))
     ));
     // add new employees to tags
+
     if (newEmployees.length > 0) {
       this.employeePropsToTags(newEmployees);
     }

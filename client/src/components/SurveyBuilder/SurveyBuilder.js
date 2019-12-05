@@ -9,10 +9,13 @@ import Question_Icon_Checkbox from './Checkbox.png';
 import delete_icon from './trash.png';
 import {Paper, Card, CardContent,  Typography, Box, Button, Switch, Input, TextField} from "@material-ui/core";
 import {Add} from "@material-ui/icons"
+import moment from "moment";
 
 class SurveyBuilder extends Component {
   constructor(props) {
     super(props);
+    this.defaultSurveyOpenDate = moment(this.props.surveyOpenDate).format('YYYY-MM-DD[T]HH:mm');
+    this.defaultSurveyCloseDate = moment(this.props.surveyCloseDate).format('YYYY-MM-DD[T]HH:mm');
   }
 
   removeQuestion(index) {
@@ -28,6 +31,7 @@ class SurveyBuilder extends Component {
       "checkbox": Question_Icon_Checkbox,
       "dropdown": Question_Icon_Dropdown
     };
+
     return (
         <div className='survey-builder'>
           <table className="toolbox-table">
@@ -47,6 +51,32 @@ class SurveyBuilder extends Component {
                 )}
               </td>
             </tr>
+            <tr>
+              <td>
+                <TextField
+                    onChange = {this.props.handleSurveyOpenDate}
+                    id="datetime-local"
+                    label="Survey Open Time"
+                    type="datetime-local"
+                    defaultValue={this.defaultSurveyOpenDate}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={this.props.openDateInvalid}
+                />
+                <TextField
+                    onChange = {this.props.handleSurveyCloseDate}
+                    id="datetime-local"
+                    label="Survey Expiry Time"
+                    type="datetime-local"
+                    defaultValue={this.defaultSurveyCloseDate}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={this.props.expiryDateInvalid}
+                />
+              </td>
+            </tr>
             </tbody>
           </table>
 
@@ -63,7 +93,6 @@ class SurveyBuilder extends Component {
                             <form>
                               <Input
                                   style={{marginTop: '0px'}}
-                                  className="question-title-input"
                                   placeholder='Enter your question here'
                                   value={this.props.questions[index].title}
                                   className='question-name'
