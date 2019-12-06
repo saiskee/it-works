@@ -45,7 +45,7 @@ class Dashboard extends Component {
   renderProfileCard = () => {
     let styles = {
       profileCard : {
-        padding: '2%',
+        padding: '50px',
       },
       logo:{
         width: '100px',
@@ -75,15 +75,16 @@ class Dashboard extends Component {
     return (
         <>
           <Grid container direction={'row'}  justify={'space-around'}>
+            <Grid item lg={3} md={3} xl={9} xs={12}>
             {this.renderProfileCard()}
+            </Grid>
+            <Grid item lg={8} md={8} xl={9} xs={12}>
             <Paper>
 
               <Table style={{minWidth: '50vw'}}>
                 <TableHead>
                   <TableRow>
-                    <TableCell>
-                      Survey ID
-                    </TableCell>
+
                     <TableCell>
                       Survey Name
                     </TableCell>
@@ -101,16 +102,15 @@ class Dashboard extends Component {
                 <TableBody>
                   {surveys.surveys.map((survey_object) => (
                       <TableRow key={survey_object.survey._id}>
-                        <TableCell>
-                          <Typography variant={'subtitle1'}>{survey_object.survey._id}</Typography>
-                        </TableCell>
+
                         <TableCell>
                           <Link
-                              to={survey_object.survey_status === 'Unfinished' ? '/survey/' + survey_object.survey._id : '/dashboard'}>{survey_object.survey.survey_template.title ? survey_object.survey.survey_template.title : "Survey"}</Link>
+                              to={survey_object.survey_status === 'Unfinished' ? '/survey/' + survey_object.survey._id : '/dashboard'}
+                              color={'primary'}
+                          >{survey_object.survey.survey_template.title ? survey_object.survey.survey_template.title : "Survey"}</Link>
                         </TableCell>
                         <TableCell>
-                          <Typography
-                              variant={'subtitle1'}>{moment(survey_object.survey.start_date).format('MM/DD/YYYY hh:mm a')}</Typography>
+                          <Typography variant={'subtitle1'}>{moment(survey_object.survey.start_date).format('MM/DD/YYYY hh:mm a')}</Typography>
                         </TableCell>
                         <TableCell>
                           <Typography
@@ -132,6 +132,7 @@ class Dashboard extends Component {
 
 
             </Paper>
+            </Grid>
           </Grid>
         </>
 

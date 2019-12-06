@@ -11,13 +11,13 @@ import {
   Table,
   Grid,
   Paper,
-  Typography, Card, ExpansionPanel, ExpansionPanelDetails,
+  Typography, Card, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary
 } from "@material-ui/core";
 import {getEmployees} from "../../actions/employee";
 import {Doughnut} from "react-chartjs-2";
 import moment from 'moment';
 import logo from "../Dashboard/logo512.jpeg";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import {ExpandMore, ExpandMoreRounded} from "@material-ui/icons";
 
 /**
  * This fn takes a piece of the main application "store" and passes it into the component
@@ -151,12 +151,15 @@ class ManagerDashboard extends Component {
   renderProfileCard = () => {
     let styles = {
       profileCard : {
-        padding: '2%',
+        padding: '10%',
       },
       logo:{
         width: '100px',
         height: '100px',
         marginBottom: '10%'
+      },
+      employeesTable: {
+        marginTop: '2%'
       }
 
     };
@@ -172,16 +175,41 @@ class ManagerDashboard extends Component {
           <Typography variant={'h2'}>{fullName}</Typography>
           <Typography variant={'subtitle2'}>{companyName}, {positionTitle}</Typography>
           <Typography variant={'body2'}>You've been with {companyName} for {calculateLoyalty(startDate)} days!</Typography>
-
+          <ExpansionPanel style={styles.employeesTable}>
+            <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
+              <Typography variant={'h6'}>Employees</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Table>
+                <TableBody>
+                { this.props.employees.map(employee =>
+                <TableRow key={employee.empId}>
+                  <TableCell>
+                    <Typography>
+                      {employee.fullName}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                )
+                }
+                </TableBody>
+              </Table>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
         </Card>
     );
-  }
+  };
+
+
   render() {
     const {authoredSurveys} = this.props;
     return (
         <>
           <Grid container direction={'row'} justify={'space-around'}>
+            <Grid item lg={3} md={3} xl={9} xs={12}>
             {this.renderProfileCard()}
+            </Grid>
+            <Grid item lg={8} md={8} xl={9} xs={12}>
             <Paper>
               <Table>
                 <TableHead>
@@ -227,7 +255,7 @@ class ManagerDashboard extends Component {
                 </TableBody>
               </Table>
             </Paper>
-
+            </Grid>
 
           </Grid>
         </>

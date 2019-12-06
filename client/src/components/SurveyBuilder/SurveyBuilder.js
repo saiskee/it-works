@@ -44,10 +44,10 @@ class SurveyBuilder extends Component {
             <tr>
               <td>
                 {Object.keys(questionType).map((key) =>
-                    <Paper className="question-type" key={key} onClick={() => this.props.addQuestion(key)}>
+                    <div className="question-type" key={key} onClick={() => this.props.addQuestion(key)}>
                       <img className="Icon-SA" alt="logo" src={questionType[key]}/>
                       {key}
-                    </Paper>
+                    </div>
                 )}
               </td>
             </tr>
@@ -64,6 +64,10 @@ class SurveyBuilder extends Component {
                     }}
                     error={this.props.openDateInvalid}
                 />
+              </td>
+            </tr>
+            <tr>
+              <td>
                 <TextField
                     onChange = {this.props.handleSurveyCloseDate}
                     id="datetime-local"
@@ -98,18 +102,20 @@ class SurveyBuilder extends Component {
                                   className='question-name'
                                   name='question-name'
                                   onChange={(event) => this.props.changeQuestionTitle(index, event)}
+                                  color={'primary'}
                               />
                             </form>
                           </div>
                           <div className="toggle-button-label">
                             Required:
                           </div>
-                          <div className="toggle-button">
+                          <div>
                             <Switch
                                 checked={this.props.questions[index].isRequired}
                                 onChange={(event) => {
                                   this.props.handleIsRequiredChange(index, event.target.checked);
                                 }}
+                                color={'primary'}
                             />
                           </div>
                           <button className="delete-button" key={index} onClick={() => this.removeQuestion(index)}>

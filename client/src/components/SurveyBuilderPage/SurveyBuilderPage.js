@@ -107,7 +107,6 @@ class SurveyBuilderPage extends Component {
     this.props.question_bank.splice(questionBankIndex, 1);
   }
 
-  // TODO: Fix Remove question to keep questionbank data
   removeQuestion(index) {
     this.setState((prevState) => {
       const newQuestions = prevState.questions;

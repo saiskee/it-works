@@ -30,7 +30,7 @@ const Register = ({history, errors, signup}) => {
   return (
     <div id="register-page">
       <div className="register">
-        <img src={Logo} alt="It Works Logo" l/>
+        <img src={Logo} alt="It Works Logo" />
         <form onSubmit = {handleSubmit} className="form-register">
         <label htmlFor="name"> Full Name</label>
           <div className="input-email">
@@ -51,7 +51,6 @@ const Register = ({history, errors, signup}) => {
           <p id="register_result"></p>
           <button type="submit" id="register_submit">Register</button>
           <Link to={'/login'}>Already have an account?</Link>
-        {/*<a href="" onClick={e => history.push('/login')}>Already have an account?</a>*/}
         </form>
       </div>
       <div className="background">

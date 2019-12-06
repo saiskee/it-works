@@ -68,23 +68,21 @@
 
 .question-type {
     flex-direction: row;
-    background-color: hsl(0, 0%, 96%);
     text-align: left;
     font-size: 22px;
     color: #6A6E70;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    padding-bottom: 5px;
-    padding-top: 5px;
     border: none;
-    border-bottom :1.5px solid #E8EAEC;
-    border-radius: 4px;
+    padding-top: 2%;
+    padding-bottom: 1%;
+    border-bottom :1px solid #6A6E70;
     overflow: hidden; /* How to add ellipse instead of direct cut during overlow? */
     white-space: nowrap;
+    transition: all 0.1s
 }
 
 .question-type:hover {
     cursor: pointer;
+    background-color: #C8E6C9
 }
 
 .Icon-SA {
@@ -135,6 +133,8 @@
     width: 100%
 }
 
+
+
 .survey-question:nth-child(even) {
     background-color: #f4f4f4;
     border: 1px solid #e8eae8;
@@ -152,9 +152,7 @@
     width: 100%;
 }
 
-/*.toggle-button {*/
-/*    padding-top: 17px;*/
-/*}*/
+
 
 .toggle-button-label {
     margin-left: auto;

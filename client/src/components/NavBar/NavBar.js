@@ -1,9 +1,8 @@
 import React, {useEffect} from "react";
 import {connect} from "react-redux";
-import {AppBar, Toolbar, Typography, makeStyles, Menu, MenuItem, Box} from "@material-ui/core";
+import {AppBar, Toolbar, Typography, makeStyles, Menu, MenuItem, IconButton, Button} from "@material-ui/core";
 import {logout} from "../../actions/session";
-import {AccountCircle} from '@material-ui/icons';
-import IconButton from "@material-ui/core/IconButton";
+import {AccountCircle, Create} from '@material-ui/icons';
 import {withRouter} from "react-router-dom";
 import logo from './it-works-logo.png';
 import {green, red} from "@material-ui/core/colors";
@@ -110,7 +109,9 @@ const NavBar = (props) => {
             <img src={logo} width={'8%'}/>
               <Typography variant={'h4'} color="primary" style={{marginLeft: '1%'}}>{title}</Typography>
             <div className={classes.root}/>
-
+            <Button edge='end' color={'primary'} onClick={() => {menuCloseAndRedirect('/builder')}}>
+              New Survey
+            </Button>
             <IconButton
                 edge="end"
                 color="inherit"

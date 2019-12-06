@@ -69,7 +69,7 @@ class EmployeeSelector extends Component{
   }
 
   render(){
-    return(<>
+    return(<div>
       <ReactTags
           placeholder={"Add employees to receive this survey"}
           minQueryLength={0}
@@ -77,7 +77,7 @@ class EmployeeSelector extends Component{
           suggestions={this.state.suggestions}
           handleDelete={this.handleDelete.bind(this)}
           handleAddition={this.handleAddition.bind(this)} />
-    </>);
+    </div>);
   }
 }
 
