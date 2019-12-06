@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch => ({
 //   }
 // }));
 
-const visualizeData = (question, currentSurveyId) => {
+const visualizeCurrentData = (question, currentSurveyId) => {
   const {analytics} = question;
   // console.log(question, currentSurveyId);
   if (question.type === "text" || question.type === 'comment') {
@@ -55,7 +55,8 @@ const visualizeData = (question, currentSurveyId) => {
       labels: Object.keys(question.analytics[currentSurveyId]),
       datasets: [{
         label: "Survey " + currentSurveyId,
-        data: Object.values(question.analytics[currentSurveyId])
+        data: Object.values(question.analytics[currentSurveyId]),
+        backgroundColor: ['#389E3CCA','#388E3CCA','#387E3CCA','#386E3CCA','#385E3CCA','#384E3CCA']
       }],
     };
     let options = {
@@ -133,7 +134,7 @@ class SurveyAnalytics extends Component {
                       <Card style={classes.root}>
                         <Typography variant={'h1'}>{question.title ? question.title : question.name}</Typography>
                         <Typography variant={'h5'}>{question.type}</Typography>
-                        {visualizeData(question, this.state.surveyId)}
+                        {visualizeCurrentData(question, this.state.surveyId)}
                       </Card>
                     </Grid>
                 ))

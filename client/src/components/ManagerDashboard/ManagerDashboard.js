@@ -58,7 +58,6 @@ class ManagerDashboard extends Component {
       datasets: [{
         data: [users_finished, users_unfinished],
         backgroundColor: ["#4caf50", "#af584c"],
-        borderWidth: 0.5,
       }],
       labels: ['Finished', 'Unfinished']
     };

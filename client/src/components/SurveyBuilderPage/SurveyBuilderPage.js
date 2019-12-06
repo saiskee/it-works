@@ -112,10 +112,11 @@ class SurveyBuilderPage extends Component {
     this.setState((prevState) => {
       const newQuestions = prevState.questions;
       const question_being_removed = newQuestions[index];
+      console.log(question_being_removed);
       // If question being removed is from question bank, put it back into the question bank
       if (question_being_removed.questionBankQuestion) {
-        const {questionBankIndex} = question_being_removed;
-        this.props.question_bank.splice(questionBankIndex, 0, this.props.question_bank_store[questionBankIndex])
+        const original_question_bank_index = this.props.question_bank_store.findIndex((question) => question._id === question_being_removed._id);
+        this.props.question_bank.splice(0, 0, this.props.question_bank_store[original_question_bank_index])
       }
       // Remove question from current list of questions
       newQuestions.splice(index, 1);
@@ -366,7 +367,7 @@ function toSurveyJS(questionName, question) {
 
   // if question is from the question bank
   if (question.questionBankQuestion) {
-    return {type: 'questionbankquestion', _id: question._id}
+    return {type: 'questionbankquestion', _id: question._id, name: questionName}
   }
   // console.log(question);
   switch (question.type) {
