@@ -114,7 +114,7 @@ const NavBar = (props) => {
             </Button>
             <IconButton
                 edge="end"
-                color="inherit"
+                color="primary"
                 onClick={handleProfileMenuOpen}
             >
 

@@ -78,7 +78,7 @@ function summarizeRadioGroup(question){
   const groupedBySurvey = groupBy(question.survey_responses, answer => answer.survey_id);
   for (const survey in groupedBySurvey) {
     // console.log(JSON.stringify(groupedBySurvey[survey]))
-    groupedBySurvey[survey] = groupedBySurvey[survey].reduce(sumAnswer, {});
+    groupedBySurvey[survey] = {answers: groupedBySurvey[survey].reduce(sumAnswer, {}), expiry: groupedBySurvey[survey][0].survey_expiry};
   }
   return groupedBySurvey;
 }
@@ -95,12 +95,13 @@ function summarizeMultiChoice(question) {
 
   const groupedBySurvey = groupBy(question.survey_responses, answer => answer.survey_id);
   for (const survey in groupedBySurvey){
-    groupedBySurvey[survey] = groupedBySurvey[survey].reduce((answer_sum, response) => {
+    const answers =  groupedBySurvey[survey].reduce((answer_sum, response) => {
       // This is a double reduce.
       // Collapse all the responses into one summary objects and sum over their
       // answer array.
       return response.answer.reduce(sumAnswer, answer_sum);
     }, {});
+    groupedBySurvey[survey] = {answers, expiry: groupedBySurvey[survey][0].survey_expiry}
   }
   return groupedBySurvey;
 }
@@ -119,7 +120,7 @@ function summarizedFreeResponse(question){
 
   const groupedBySurvey = groupBy(question.survey_responses, answer => answer.survey_id);
   for (const survey in groupedBySurvey) {
-    groupedBySurvey[survey] = groupedBySurvey[survey].reduce(sumAnswer, []);
+    groupedBySurvey[survey] = {answers: groupedBySurvey[survey].reduce(sumAnswer, []), expiry:groupedBySurvey[survey][0].survey_expiry};
   }
   return groupedBySurvey;
 }
@@ -132,7 +133,7 @@ function summarizeRating(question) {
       current_summary[i.toString(10)] = 0
     }
     groupedBySurvey[survey].forEach(response => { current_summary[response.answer] += 1})
-    groupedBySurvey[survey] = current_summary;
+    groupedBySurvey[survey] = {answers: current_summary, expiry:groupedBySurvey[survey][0].survey_expiry};
   }
 
   return groupedBySurvey;

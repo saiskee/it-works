@@ -21,7 +21,7 @@ class App extends Component {
     return (
         <div className="App">
           <Switch>
-            <Route path="/" exact component={Login} />
+            <AuthRoute path="/" exact component={Login} />
             <AuthRoute path="/login" exact component={Login}/>
             <AuthRoute path="/register" exact component={Register}/>
             <ProtectedRoute path="/survey/:surveyId" exact component={Survey}/>

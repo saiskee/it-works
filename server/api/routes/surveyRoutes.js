@@ -104,6 +104,7 @@ surveyRoutes.get('/:surveyId', async (req, res) => {
 surveyRoutes.post('/:surveyId', async (req, res) => {
   const {userId} = req.session.user;
   const {surveyId} = req.params;
+  const surveySubmitted = await Survey.findOne({_id: surveyId})
   // Get User that submitted the survey responses
   const user = await User.findOne({_id: userId});
   const answers = req.body;
@@ -113,9 +114,10 @@ surveyRoutes.post('/:surveyId', async (req, res) => {
     for (const answer_id in answers) {
       survey_entry.survey_status = SurveyStatus.FINISHED;
       user.save();
+      console.log(surveySubmitted);
       // Add survey response to the question's survey responses
       const question = await Question.findOne({_id: answer_id});
-      const answerObj = {question_id: answer_id, answer: answers[answer_id], survey_id: surveyId};
+      const answerObj = {question_id: answer_id, answer: answers[answer_id], survey_id: surveyId, survey_expiry: surveySubmitted.expiry_date};
       question.survey_responses.push(answerObj);
       question.save();
     }
