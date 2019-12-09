@@ -11,18 +11,22 @@ import {
   Table,
   Grid,
   Paper,
-  Typography,
+  Typography, Card, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary
 } from "@material-ui/core";
 import {getEmployees} from "../../actions/employee";
 import {Doughnut} from "react-chartjs-2";
+import moment from 'moment';
+import logo from "../Dashboard/logo512.jpeg";
+import {ExpandMore, ExpandMoreRounded} from "@material-ui/icons";
 
 /**
  * This fn takes a piece of the main application "store" and passes it into the component
  * In this case, we just want state.session, so we are accessing just that
  */
-const mapStateToProps = ({authoredSurveys, employees}) => ({
+const mapStateToProps = ({authoredSurveys, employees, session}) => ({
   authoredSurveys,
-  employees
+  employees,
+  session
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -34,6 +38,7 @@ const mapDispatchToProps = dispatch => ({
 class ManagerDashboard extends Component {
 
   componentDidMount() {
+    console.log("Manager Dashboard Mounted");
     this.props.getManagerAuthoredSurveys();
     this.props.getEmployees();
   }
@@ -53,7 +58,6 @@ class ManagerDashboard extends Component {
       datasets: [{
         data: [users_finished, users_unfinished],
         backgroundColor: ["#4caf50", "#af584c"],
-        borderWidth: 0.5,
       }],
       labels: ['Finished', 'Unfinished']
     };
@@ -144,13 +148,70 @@ class ManagerDashboard extends Component {
     return <Doughnut  data={data} options={options}/>;
   }
 
+  renderProfileCard = () => {
+    let styles = {
+      profileCard : {
+        padding: '10%',
+      },
+      logo:{
+        width: '100px',
+        height: '100px',
+        marginBottom: '10%'
+      },
+      employeesTable: {
+        marginTop: '2%'
+      }
+
+    };
+    function calculateLoyalty(startDate){
+      return Math.floor(moment.duration(moment().diff(moment(startDate))).as('days'));
+    }
+    const {fullName, positionTitle, companyName, startDate} = this.props.session;
+
+    return(
+
+        <Card style={styles.profileCard}>
+          <img style={styles.logo} src={logo}/>
+          <Typography variant={'h2'}>{fullName}</Typography>
+          <Typography variant={'subtitle2'}>{companyName}, {positionTitle}</Typography>
+          <Typography variant={'body2'}>You've been with {companyName} for {calculateLoyalty(startDate)} days!</Typography>
+          <ExpansionPanel style={styles.employeesTable}>
+            <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
+              <Typography variant={'h6'}>Employees</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <Table>
+                <TableBody>
+                { this.props.employees.map(employee =>
+                <TableRow key={employee.empId}>
+                  <TableCell>
+                    <Typography>
+                      {employee.fullName}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+                )
+                }
+                </TableBody>
+              </Table>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </Card>
+    );
+  };
+
+
   render() {
     const {authoredSurveys} = this.props;
     return (
         <>
-          <Grid container direction={'column'} alignItems={'center'} justify={'center'}>
+          <Grid container direction={'row'} justify={'space-around'}>
+            <Grid item lg={3} md={3} xl={9} xs={12}>
+            {this.renderProfileCard()}
+            </Grid>
+            <Grid item lg={8} md={8} xl={9} xs={12}>
             <Paper>
-              <Table style={{minWidth: '90vw'}}>
+              <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell>
@@ -160,7 +221,7 @@ class ManagerDashboard extends Component {
                       Survey Name
                     </TableCell>
                     <TableCell>
-                      Survey Creation Date
+                      Survey Start Date
                     </TableCell>
                     <TableCell>
                       Survey Expiry Date
@@ -181,10 +242,10 @@ class ManagerDashboard extends Component {
                               to={"/analytics/" + survey_object._id}>{survey_object.survey_template.title ? survey_object.survey_template.title : "Survey"}</Link>
                         </TableCell>
                         <TableCell>
-                          <Typography variant={'subtitle1'}>{survey_object.creation_date}</Typography>
+                          <Typography variant={'subtitle1'}>{moment(survey_object.start_date).format('MM/DD/YYYY hh:mm a')}</Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography variant={'subtitle1'}>{survey_object.expiry_date}</Typography>
+                          <Typography variant={'subtitle1'}>{moment(survey_object.expiry_date).format('MM/DD/YYYY hh:mm a')}</Typography>
                         </TableCell>
                         <TableCell style={{maxWidth: '50px', maxHeight: '50px'}}>
                           {this.surveyCompletionPercentage(survey_object)}
@@ -194,29 +255,8 @@ class ManagerDashboard extends Component {
                 </TableBody>
               </Table>
             </Paper>
-            <div style={{paddingTop: '5vh', paddingBottom: '10px', alignSelf: 'start'}}><Typography
-                variant={'h2'}>Employees</Typography></div>
-            <Paper>
-              <Table style={{minWidth: '90vw'}}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>
-                      Employee Name
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {this.props.employees.map((employee) => (
-                      <TableRow key={employee.empId}>
-                        <TableCell>
-                          <Typography>{employee.fullName}</Typography>
-                        </TableCell>
-                      </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              {/*</PerfectScrollbar>*/}
-            </Paper>
+            </Grid>
+
           </Grid>
         </>
 

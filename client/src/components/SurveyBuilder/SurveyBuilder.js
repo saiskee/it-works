@@ -9,10 +9,13 @@ import Question_Icon_Checkbox from './Checkbox.png';
 import delete_icon from './trash.png';
 import {Paper, Card, CardContent,  Typography, Box, Button, Switch, Input, TextField} from "@material-ui/core";
 import {Add} from "@material-ui/icons"
+import moment from "moment";
 
 class SurveyBuilder extends Component {
   constructor(props) {
     super(props);
+    this.defaultSurveyOpenDate = moment(this.props.surveyOpenDate).format('YYYY-MM-DD[T]HH:mm');
+    this.defaultSurveyCloseDate = moment(this.props.surveyCloseDate).format('YYYY-MM-DD[T]HH:mm');
   }
 
   removeQuestion(index) {
@@ -28,6 +31,7 @@ class SurveyBuilder extends Component {
       "checkbox": Question_Icon_Checkbox,
       "dropdown": Question_Icon_Dropdown
     };
+
     return (
         <div className='survey-builder'>
           <table className="toolbox-table">
@@ -40,11 +44,41 @@ class SurveyBuilder extends Component {
             <tr>
               <td>
                 {Object.keys(questionType).map((key) =>
-                    <Paper className="question-type" key={key} onClick={() => this.props.addQuestion(key)}>
+                    <div className="question-type" key={key} onClick={() => this.props.addQuestion(key)}>
                       <img className="Icon-SA" alt="logo" src={questionType[key]}/>
                       {key}
-                    </Paper>
+                    </div>
                 )}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <TextField
+                    onChange = {this.props.handleSurveyOpenDate}
+                    id="datetime-local"
+                    label="Survey Open Time"
+                    type="datetime-local"
+                    defaultValue={this.defaultSurveyOpenDate}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={this.props.openDateInvalid}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <TextField
+                    onChange = {this.props.handleSurveyCloseDate}
+                    id="datetime-local"
+                    label="Survey Expiry Time"
+                    type="datetime-local"
+                    defaultValue={this.defaultSurveyCloseDate}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={this.props.expiryDateInvalid}
+                />
               </td>
             </tr>
             </tbody>
@@ -63,24 +97,25 @@ class SurveyBuilder extends Component {
                             <form>
                               <Input
                                   style={{marginTop: '0px'}}
-                                  className="question-title-input"
                                   placeholder='Enter your question here'
                                   value={this.props.questions[index].title}
                                   className='question-name'
                                   name='question-name'
                                   onChange={(event) => this.props.changeQuestionTitle(index, event)}
+                                  color={'primary'}
                               />
                             </form>
                           </div>
                           <div className="toggle-button-label">
                             Required:
                           </div>
-                          <div className="toggle-button">
+                          <div>
                             <Switch
                                 checked={this.props.questions[index].isRequired}
                                 onChange={(event) => {
                                   this.props.handleIsRequiredChange(index, event.target.checked);
                                 }}
+                                color={'primary'}
                             />
                           </div>
                           <button className="delete-button" key={index} onClick={() => this.removeQuestion(index)}>

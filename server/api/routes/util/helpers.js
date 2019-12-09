@@ -11,7 +11,7 @@ const parseNewTemplateIntoQuestions = async (surveyTemplate, userId) => {
         if (elements != undefined) {
           page.elements = await Promise.all(elements.map(async (element) => {
             if (element.type === 'questionbankquestion'){
-              return mongoose.Types.ObjectId(element._id);
+              return {name: element.name, _id:mongoose.Types.ObjectId(element._id)};
             }
 
             const question = new Question({
@@ -21,7 +21,7 @@ const parseNewTemplateIntoQuestions = async (surveyTemplate, userId) => {
             });
 
             const savedQuestion = await question.save(); //This gives us back the question that we just saved in the database
-            return mongoose.Types.ObjectId(savedQuestion._id);
+            return {name: element.name, _id:mongoose.Types.ObjectId(savedQuestion._id)};
           }));
         } else {
             page.elements = [];
@@ -38,8 +38,9 @@ const parseExistingTemplateIntoQuestions = async (survey) => {
   const new_pages = await Promise.all(pages.map(async (page) => {
     const {elements} = page;
     page.elements = await Promise.all(elements.map(async (element) => {
-      const savedQuestion = await Question.findOne({_id: element});
-      return {question_id: element, ...savedQuestion.question_data};
+      const savedQuestion = await Question.findOne({_id: element._id});
+      savedQuestion.question_data.name = element.name;
+      return {question_id: element._id, ...savedQuestion.question_data};
     }))
   return page;
   }));
@@ -77,7 +78,7 @@ function summarizeRadioGroup(question){
   const groupedBySurvey = groupBy(question.survey_responses, answer => answer.survey_id);
   for (const survey in groupedBySurvey) {
     // console.log(JSON.stringify(groupedBySurvey[survey]))
-    groupedBySurvey[survey] = groupedBySurvey[survey].reduce(sumAnswer, {});
+    groupedBySurvey[survey] = {answers: groupedBySurvey[survey].reduce(sumAnswer, {}), expiry: groupedBySurvey[survey][0].survey_expiry};
   }
   return groupedBySurvey;
 }
@@ -94,12 +95,13 @@ function summarizeMultiChoice(question) {
 
   const groupedBySurvey = groupBy(question.survey_responses, answer => answer.survey_id);
   for (const survey in groupedBySurvey){
-    groupedBySurvey[survey] = groupedBySurvey[survey].reduce((answer_sum, response) => {
+    const answers =  groupedBySurvey[survey].reduce((answer_sum, response) => {
       // This is a double reduce.
       // Collapse all the responses into one summary objects and sum over their
       // answer array.
       return response.answer.reduce(sumAnswer, answer_sum);
     }, {});
+    groupedBySurvey[survey] = {answers, expiry: groupedBySurvey[survey][0].survey_expiry}
   }
   return groupedBySurvey;
 }
@@ -118,7 +120,7 @@ function summarizedFreeResponse(question){
 
   const groupedBySurvey = groupBy(question.survey_responses, answer => answer.survey_id);
   for (const survey in groupedBySurvey) {
-    groupedBySurvey[survey] = groupedBySurvey[survey].reduce(sumAnswer, []);
+    groupedBySurvey[survey] = {answers: groupedBySurvey[survey].reduce(sumAnswer, []), expiry:groupedBySurvey[survey][0].survey_expiry};
   }
   return groupedBySurvey;
 }
@@ -131,7 +133,7 @@ function summarizeRating(question) {
       current_summary[i.toString(10)] = 0
     }
     groupedBySurvey[survey].forEach(response => { current_summary[response.answer] += 1})
-    groupedBySurvey[survey] = current_summary;
+    groupedBySurvey[survey] = {answers: current_summary, expiry:groupedBySurvey[survey][0].survey_expiry};
   }
 
   return groupedBySurvey;

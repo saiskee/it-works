@@ -31,7 +31,7 @@ const Login = ({errors, login}) => {
   return (
     <div id="login-page">
       <div className="login">
-        <img src={Logo} alt="It Works Logo" class="logo"  />
+        <img src={Logo} alt="It Works Logo" className="logo"  />
         <form onSubmit = {handleSubmit} className="form-login">
           <label> E-mail</label>
           <div className="input-email">
