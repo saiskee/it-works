@@ -3,7 +3,7 @@ import './SurveyBuilderPage.css';
 import Builder from '../SurveyBuilder';
 import Question from '../Question';
 import EmployeeSelector from "../EmployeeSelector/EmployeeSelector";
-import { Button } from '@material-ui/core';
+import { Button, Input } from '@material-ui/core';
 import $ from "jquery";
 import {connect} from 'react-redux';
 import {getQuestions} from "../../actions/questions";
@@ -33,6 +33,7 @@ class SurveyBuilderPage extends Component {
     this.initDataForType = this.initDataForType.bind(this);
     this.removeQuestion = this.removeQuestion.bind(this);
     this.changeQuestionTitle = this.changeQuestionTitle.bind(this);
+    this.changeTitle = this.changeTitle.bind(this);
     this.updateData = this.updateData.bind(this);
     this.generateSurveyJSON = this.generateSurveyJSON.bind(this);
     this.createSurvey = this.createSurvey.bind(this);
@@ -136,7 +137,7 @@ class SurveyBuilderPage extends Component {
   }
 
   changeQuestionTitle(index, event) {
-    var newTitle = event.target.value;
+    const newTitle = event.target.value;
     this.setState((prevState) => {
       const newQ = prevState.questions;
       newQ[index].title = newTitle;
@@ -145,8 +146,9 @@ class SurveyBuilderPage extends Component {
   }
 
   changeTitle(event) {
+    const newTitle = event.target.value;
     this.setState(() => {
-      return {title: event.target.value}
+      return {title: newTitle}
     });
   }
 
@@ -188,7 +190,7 @@ class SurveyBuilderPage extends Component {
 
 
   updateData(index, data) {
-    var newData = data;
+    const newData = data;
     this.setState((prevState) => {
       const newQ = prevState.questions;
       newQ[index].data = newData;
@@ -253,7 +255,7 @@ class SurveyBuilderPage extends Component {
         <>
           <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)} style={{zIndex: -100}}/>
           <div className="header">
-            <Input placeholder='Enter your title here' value={this.state.title} className="title" onChange={(event) => this.changeTitle(event)}/>
+            <Input color={'primary'} placeholder='Enter your title here' value={this.state.title} className="title" onChange={(event) => this.changeTitle(event)}/>
           </div>
 
           <Builder
