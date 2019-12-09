@@ -25,6 +25,7 @@ class SurveyBuilderPage extends Component {
     this.state = {
       questions: [],
       employees: {tags: [], suggestions: []},
+      title: "Enter your title here",
       surveyOpenDate: parseInt(moment().format('x')),
       surveyCloseDate: parseInt(moment().add('1', 'days').format('x'))
     };
@@ -143,6 +144,12 @@ class SurveyBuilderPage extends Component {
     });
   }
 
+  changeTitle(event) {
+    this.setState(() => {
+      return {title: event.target.value}
+    });
+  }
+
   handleIsRequiredChange(index, value) {
     let newIsRequired = value;
     this.setState((prevState) => {
@@ -199,7 +206,7 @@ class SurveyBuilderPage extends Component {
   generateSurveyJSON() {
     // TODO: Once we can edit survey title we should change this.
     let survey = {
-      title: "Generic Survey Title",
+      title: this.state.title,
       pages: []
     };
     let questionIndex = 0;
@@ -246,9 +253,7 @@ class SurveyBuilderPage extends Component {
         <>
           <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)} style={{zIndex: -100}}/>
           <div className="header">
-            <p className="title">
-              Sample Survey Title
-            </p>
+            <Input placeholder='Enter your title here' value={this.state.title} className="title" onChange={(event) => this.changeTitle(event)}/>
           </div>
 
           <Builder
