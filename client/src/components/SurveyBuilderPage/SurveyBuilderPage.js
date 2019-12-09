@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import logo from '../SurveyBuilder/logo.png';
 import './SurveyBuilderPage.css';
 import Builder from '../SurveyBuilder';
 import Question from '../Question';
 import EmployeeSelector from "../EmployeeSelector/EmployeeSelector";
-import {Button, makeStyles} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import $ from "jquery";
 import {connect} from 'react-redux';
 import {getQuestions} from "../../actions/questions";
@@ -61,7 +60,7 @@ class SurveyBuilderPage extends Component {
         return ["Choice 1", "Choice 2", "Choice 3", "Choice 4"];
 
       case "dropdown":
-        return ["Item1", "Item2", "Item3", "Item4", "Item5"];
+        return ["Choice ", "Choice 2", "Choice 3", "Choice 4", "Choice 5"];
 
       default:
         return [];

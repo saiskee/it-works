@@ -58,7 +58,8 @@
 }
 
 .container {
-    display: block;
+    display: flex;
+    flex-direction: row;
     position: relative;
     padding-left: 35px;
     cursor: pointer;
