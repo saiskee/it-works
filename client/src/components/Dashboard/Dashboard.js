@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
 import {getSurveys} from "../../actions/survey";
-import PerfectScrollbar from "react-perfect-scrollbar";
 import {Link, withRouter} from 'react-router-dom';
 import moment from 'moment';
 import logo from './logo512.jpeg';
@@ -14,9 +13,9 @@ import {
   Grid,
   Paper,
   Typography,
-  Card
+  Card, makeStyles
 } from "@material-ui/core";
-import {Image} from "@material-ui/icons";
+import withStyles from "@material-ui/core/styles/withStyles";
 
 /**
  * This fn takes a piece of the main application "store" and passes it into the component
@@ -31,6 +30,17 @@ const mapDispatchToProps = dispatch => ({
   getSurveys: (component) => dispatch(getSurveys(component))
 });
 
+const styles = theme => ({
+  profileCard : {
+    padding: '50px',
+    backgroundColor: theme.palette.background
+  },
+  logo:{
+    width: '100px',
+    height: '100px',
+    marginBottom: '10%'
+  }
+})
 
 class Dashboard extends Component {
 
@@ -43,17 +53,7 @@ class Dashboard extends Component {
   }
 
   renderProfileCard = () => {
-    let styles = {
-      profileCard : {
-        padding: '50px',
-      },
-      logo:{
-        width: '100px',
-        height: '100px',
-        marginBottom: '10%'
-      }
-
-    };
+    const {classes} = this.props;
     function calculateLoyalty(startDate){
       return Math.floor(moment.duration(moment().diff(moment(startDate))).as('days'));
     }
@@ -61,8 +61,8 @@ class Dashboard extends Component {
 
     return(
 
-    <Card style={styles.profileCard}>
-      <img style={styles.logo} src={logo}/>
+    <Card className={classes.profileCard}>
+      <img className={classes.logo} src={logo}/>
       <Typography variant={'h2'}>{fullName}</Typography>
       <Typography variant={'subtitle2'}>{companyName}, {positionTitle}</Typography>
       <Typography variant={'body2'}>You've been with {companyName} for {calculateLoyalty(startDate)} days!</Typography>
@@ -89,10 +89,10 @@ class Dashboard extends Component {
                       Survey Name
                     </TableCell>
                     <TableCell>
-                      Survey Creation Date
+                      Survey Open Date
                     </TableCell>
                     <TableCell>
-                      Survey Expiry Date
+                      Survey Close Date
                     </TableCell>
                     <TableCell>
                       Status
@@ -145,4 +145,4 @@ class Dashboard extends Component {
 export default connect(
     mapStateToProps, // This passes in our mapStateToProps function as a prop into our Dashboard component
     mapDispatchToProps
-)(withRouter(Dashboard));
+)(withStyles(styles)(withRouter(Dashboard)));

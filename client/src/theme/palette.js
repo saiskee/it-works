@@ -4,6 +4,7 @@ const white = '#FFFFFF';
 const black = '#000000';
 
 export default {
+  type: 'dark',
   black,
   white,
   primary: {
@@ -44,12 +45,12 @@ export default {
   },
   text: {
     primary: colors.blueGrey[900],
-    secondary: colors.blueGrey[600],
+    secondary: colors.green[600],
     link: colors.green[600]
   },
   background: {
     default: '#F4F6F8',
-    paper: white
+    paper: white,
   },
   icon: colors.blueGrey[600],
   divider: colors.grey[200],

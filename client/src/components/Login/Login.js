@@ -25,6 +25,7 @@ const Login = ({errors, login}) => {
 
   const handleSubmit= (event) => {
     event.preventDefault();
+    console.log("THIS IS A TEST");
     login({username: email, password: password});
   }
 
