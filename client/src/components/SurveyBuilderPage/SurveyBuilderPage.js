@@ -50,7 +50,7 @@ class SurveyBuilderPage extends Component {
         return "Enter your response here";
 
       case "rating":
-        return ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+        return 11;
 
       case "True/False":
         return true;
@@ -332,7 +332,7 @@ function RatingToJS(questionName, question) {
     type: "rating",
     name: questionName,
     title: question.title,
-    rateMax: question.data.reduce((x, y) => Math.max(x, y), 0),
+    rateMax: question.data,
     isRequired: question.isRequired
   };
 }
