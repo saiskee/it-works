@@ -114,7 +114,6 @@ surveyRoutes.post('/:surveyId', async (req, res) => {
     for (const answer_id in answers) {
       survey_entry.survey_status = SurveyStatus.FINISHED;
       user.save();
-      console.log(surveySubmitted);
       // Add survey response to the question's survey responses
       const question = await Question.findOne({_id: answer_id});
       const answerObj = {question_id: answer_id, answer: answers[answer_id], survey_id: surveyId, survey_expiry: surveySubmitted.expiry_date};
@@ -160,13 +159,11 @@ surveyRoutes.post('', async (req, res) => {
           })
 
         } catch (err) {
-          console.log("ERROR:", err);
           res.status(400).send(parseError(err));
         }
         res.send(survey._id);
       });
     } catch (err) {
-      console.log("ERROR1:", err);
       res.status(400).send(parseError(err));
     }
 

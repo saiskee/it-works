@@ -41,7 +41,6 @@ analyticsRoutes.get('/survey/:surveyId', async (req, res) => {
           if (survey.author != userId) throw new Error('This Survey was not created by you');
           survey = await parseExistingTemplateIntoQuestionsIncludeResponses(survey);
           res.send({survey: survey});
-          console.log(JSON.stringify(survey));
         } catch (err) {
           res.status(400).send(parseError(err));
         }

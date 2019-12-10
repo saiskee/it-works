@@ -6,6 +6,7 @@ import {AccountCircle, Create} from '@material-ui/icons';
 import {withRouter} from "react-router-dom";
 import logo from './it-works-logo.png';
 import {green, red} from "@material-ui/core/colors";
+import {withStyles} from "@material-ui/core";
 
 const mapStateToProps = ({session}) => ({
   session, // this puts session as a prop
@@ -23,23 +24,31 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   profileIcon: {
-    transform: 'scale(1.8)'
+    transform: 'scale(1.8)',
+  },
+  logo: {
+    '&:hover': {
+      cursor: 'pointer',
+    }
   },
   menuLabel: {
-    color: green[900]
+    color: theme.palette.primary.dark,
   },
   menuItem: {
     '&:hover' : {
       backgroundColor: theme.palette.primary.light,
-    }
+    },
+    backgroundColor: theme.palette.background
   },
+
   logoutButton: {
     color: 'red',
     '&:hover' : {
       backgroundColor: '#ff8a80',
       color: 'white'
     }
-  }
+  },
+
 }));
 
 const processWindowName = (newTitle) => {
@@ -86,7 +95,6 @@ const NavBar = (props) => {
 
   const renderMenu = (
       <Menu
-
           anchorEl={anchorEl}
           anchorOrigin={{vertical: 'top', horizontal: 'right'}}
           keepMounted
@@ -106,7 +114,7 @@ const NavBar = (props) => {
       <div className={classes.root} style={{marginBottom: '5%'}}>
         <AppBar color="secondary" position={'fixed'}>
           <Toolbar>
-            <img src={logo} width={'8%'}/>
+            <img className={classes.logo} src={logo} width={'8%'} onClick={()=>{props.history.push('/dashboard')}}/>
               <Typography variant={'h4'} color="primary" style={{marginLeft: '1%'}}>{title}</Typography>
             <div className={classes.root}/>
             <Button edge='end' color={'primary'} onClick={() => {menuCloseAndRedirect('/builder')}}>
@@ -120,8 +128,6 @@ const NavBar = (props) => {
 
               <AccountCircle color={'primary'} className={classes.profileIcon}/>
             </IconButton>
-
-
           </Toolbar>
         </AppBar>
         {renderMenu}

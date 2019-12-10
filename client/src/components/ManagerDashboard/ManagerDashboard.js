@@ -17,7 +17,8 @@ import {getEmployees} from "../../actions/employee";
 import {Doughnut} from "react-chartjs-2";
 import moment from 'moment';
 import logo from "../Dashboard/logo512.jpeg";
-import {ExpandMore, ExpandMoreRounded} from "@material-ui/icons";
+import {ExpandMore} from "@material-ui/icons";
+import Button from "@material-ui/core/Button";
 
 /**
  * This fn takes a piece of the main application "store" and passes it into the component
@@ -50,7 +51,7 @@ class ManagerDashboard extends Component {
     assigned_to.forEach(obj => {
       if (obj.completion_status === 'Finished') {
         users_finished++
-      }else{
+      } else {
         users_unfinished++;
       }
     });
@@ -72,7 +73,7 @@ class ManagerDashboard extends Component {
         // Disable the on-canvas tooltip
         enabled: false,
 
-        custom: function(tooltipModel) {
+        custom: function (tooltipModel) {
           // Tooltip Element
           var tooltipEl = document.getElementById('chartjs-tooltip');
 
@@ -109,12 +110,12 @@ class ManagerDashboard extends Component {
 
             var innerHtml = '<thead>';
 
-            titleLines.forEach(function(title) {
+            titleLines.forEach(function (title) {
               innerHtml += '<tr><th>' + title + '</th></tr>';
             });
             innerHtml += '</thead><tbody>';
 
-            bodyLines.forEach(function(body, i) {
+            bodyLines.forEach(function (body, i) {
               var colors = tooltipModel.labelColors[i];
               var style = 'background:' + colors.backgroundColor;
               style += '; border-color:' + colors.borderColor;
@@ -145,15 +146,25 @@ class ManagerDashboard extends Component {
       }
     }
 
-    return <Doughnut  data={data} options={options}/>;
+    return <Doughnut data={data} options={options}/>;
+  }
+
+  surveyStatus(start_date, expiry_date) {
+    if (moment().isBefore(moment(start_date))) {
+      return "Not Yet Started";
+    } else if (moment().isBetween(moment(start_date), moment(expiry_date))) {
+      return "In Progress";
+    } else if (moment().isAfter(moment(expiry_date))) {
+      return "Ended";
+    }
   }
 
   renderProfileCard = () => {
     let styles = {
-      profileCard : {
+      profileCard: {
         padding: '10%',
       },
-      logo:{
+      logo: {
         width: '100px',
         height: '100px',
         marginBottom: '10%'
@@ -163,18 +174,22 @@ class ManagerDashboard extends Component {
       }
 
     };
-    function calculateLoyalty(startDate){
+
+    function calculateLoyalty(startDate) {
       return Math.floor(moment.duration(moment().diff(moment(startDate))).as('days'));
     }
+
+
     const {fullName, positionTitle, companyName, startDate} = this.props.session;
 
-    return(
+    return (
 
         <Card style={styles.profileCard}>
           <img style={styles.logo} src={logo}/>
           <Typography variant={'h2'}>{fullName}</Typography>
           <Typography variant={'subtitle2'}>{companyName}, {positionTitle}</Typography>
-          <Typography variant={'body2'}>You've been with {companyName} for {calculateLoyalty(startDate)} days!</Typography>
+          <Typography variant={'body2'}>You've been
+            with {companyName} for {calculateLoyalty(startDate)} days!</Typography>
           <ExpansionPanel style={styles.employeesTable}>
             <ExpansionPanelSummary expandIcon={<ExpandMore/>}>
               <Typography variant={'h6'}>Employees</Typography>
@@ -182,16 +197,16 @@ class ManagerDashboard extends Component {
             <ExpansionPanelDetails>
               <Table>
                 <TableBody>
-                { this.props.employees.map(employee =>
-                <TableRow key={employee.empId}>
-                  <TableCell>
-                    <Typography>
-                      {employee.fullName}
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-                )
-                }
+                  {this.props.employees.map(employee =>
+                      <TableRow key={employee.empId}>
+                        <TableCell>
+                          <Typography>
+                            {employee.fullName}
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                  )
+                  }
                 </TableBody>
               </Table>
             </ExpansionPanelDetails>
@@ -207,54 +222,66 @@ class ManagerDashboard extends Component {
         <>
           <Grid container direction={'row'} justify={'space-around'}>
             <Grid item lg={3} md={3} xl={9} xs={12}>
-            {this.renderProfileCard()}
+              {this.renderProfileCard()}
             </Grid>
             <Grid item lg={8} md={8} xl={9} xs={12}>
-            <Paper>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>
-                      Survey ID
-                    </TableCell>
-                    <TableCell>
-                      Survey Name
-                    </TableCell>
-                    <TableCell>
-                      Survey Start Date
-                    </TableCell>
-                    <TableCell>
-                      Survey Expiry Date
-                    </TableCell>
-                    <TableCell>
-                      Completion
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {authoredSurveys.surveys.map((survey_object) => (
-                      <TableRow key={survey_object._id}>
-                        <TableCell>
-                          <Typography variant={'subtitle1'}>{survey_object._id}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Link
-                              to={"/analytics/" + survey_object._id}>{survey_object.survey_template.title ? survey_object.survey_template.title : "Survey"}</Link>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant={'subtitle1'}>{moment(survey_object.start_date).format('MM/DD/YYYY hh:mm a')}</Typography>
-                        </TableCell>
-                        <TableCell>
-                          <Typography variant={'subtitle1'}>{moment(survey_object.expiry_date).format('MM/DD/YYYY hh:mm a')}</Typography>
-                        </TableCell>
-                        <TableCell style={{maxWidth: '50px', maxHeight: '50px'}}>
-                          {this.surveyCompletionPercentage(survey_object)}
-                        </TableCell>
-                      </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Paper>
+              {authoredSurveys.surveys.length > 0 &&
+              <Paper>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>
+                        Survey Name
+                      </TableCell>
+                      <TableCell title={'Starting Date of Survey'}>
+                        Survey Start Date
+                      </TableCell>
+                      <TableCell title={'Closing Date of Survey'}>
+                        Survey Expiry Date
+                      </TableCell>
+                      <TableCell title={'Current Survey Participation Progress'}>
+                        Progress
+                      </TableCell>
+                      <TableCell>
+                        Survey Status
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {authoredSurveys.surveys.map((survey_object) => (
+                        <TableRow key={survey_object._id}>
+                          <TableCell>
+                            <Link
+                                to={"/analytics/" + survey_object._id}><Typography
+                                variant={'subtitle1'}>{survey_object.survey_template.title ? survey_object.survey_template.title : "Survey"}</Typography>
+                            </Link>
+                          </TableCell>
+                          <TableCell>
+                            <Typography
+                                variant={'subtitle1'}>{moment(survey_object.start_date).format('MM/DD/YYYY hh:mm a')}</Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography
+                                variant={'subtitle1'}>{moment(survey_object.expiry_date).format('MM/DD/YYYY hh:mm a')}</Typography>
+                          </TableCell>
+                          <TableCell style={{maxWidth: '50px', maxHeight: '50px'}}>
+                            {this.surveyCompletionPercentage(survey_object)}
+                          </TableCell>
+                          <TableCell>
+                            {this.surveyStatus(survey_object.start_date, survey_object.expiry_date)}
+                          </TableCell>
+                        </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Paper>}
+              {authoredSurveys.surveys.length === 0 &&
+                  <>
+              <Typography style={{marginTop: '10%'}} variant={'h3'}>You don't have any surveys! Create one:</Typography>
+                    <Button style={{marginTop: '1%'}} color={'primary'} variant={'outlined'} onClick={()=>this.props.history.push('/builder')}>
+                      Create New Survey
+                    </Button>
+              </>}
             </Grid>
 
           </Grid>
@@ -262,6 +289,7 @@ class ManagerDashboard extends Component {
 
     );
   }
+
 
 }
 

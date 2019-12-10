@@ -4,13 +4,21 @@
     flex-direction: column;
 }
 
+.rating-question-container {
+    display: flex;
+    flex-direction: column;
+}
+
 .rating-grid {
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
 }
 
 .rating-question {
     border: 1px solid #ccc;
     font-size: 18px;
+    display: flex;
+    flex-direction: row;
     margin: 20px 5px;
     max-width: 100px;
     background-color: #f4f4f4;
@@ -58,7 +66,8 @@
 }
 
 .container {
-    display: block;
+    display: flex;
+    flex-direction: row;
     position: relative;
     padding-left: 35px;
     cursor: pointer;

@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {getSurveyAndResponses} from "../../actions/analytics";
 import {withRouter} from "react-router-dom";
 import {visualizeCurrentData, visualizeTrendData} from "./visualizers";
+import moment from "moment";
 
 const mapStateToProps = ({session, survey}) => ({
   session,
@@ -41,6 +42,12 @@ class SurveyAnalytics extends Component {
   componentWillUnmount() {
   }
 
+  surveyCompletionStatus(survey){
+    const {assigned_to} = survey;
+    const completion_number = assigned_to.reduce((acc, obj) => {if (obj.completion_status === 'Finished') {return acc +1}}, 0);
+    return String(Math.floor(completion_number * 100/assigned_to.length)) + "% (" + String(assigned_to.length - completion_number) + " incomplete)";
+  }
+
   handleTrendShowChange(question, index) {
     const question_id = question.question_id._id;
     this.setState((prevState) => {
@@ -65,7 +72,44 @@ class SurveyAnalytics extends Component {
               container
               spacing={4}
           >
+          <Grid item sm={12} md={12} lg={12}>
 
+              {survey.survey_template.title &&
+              <Card style={classes.root}>
+              <Typography variant={'h2'}>{survey.survey_template.title}</Typography>
+                <Table style={{marginTop: '5px'}}>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>
+                        Start Date
+                      </TableCell>
+                      <TableCell>
+                        Expiry Date
+                      </TableCell>
+                      <TableCell>
+                        Survey Participation
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell>
+                        {moment(survey.start_date).format('MM/DD/YYYY hh:mm a')}
+                      </TableCell>
+                      <TableCell>
+                        {moment(survey.expiry_date).format('MM/DD/YYYY hh:mm a')}
+                      </TableCell>
+                      <TableCell>
+                        {this.surveyCompletionStatus(survey)}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </Card>
+              }
+
+
+          </Grid>
             {survey.survey_template.pages && survey.survey_template.pages.map((page, p_index) => (
                 page.elements.map((question, index) => (
                     <Grid
