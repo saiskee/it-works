@@ -34,7 +34,17 @@ class Question extends Component {
 
     addOption() {
         this.setState(prevState => {
-            const newEntry = (prevState.type === "rating") ? ("" + (prevState.data.length + 1)) : ("Choice " + (prevState.data.length + 1));
+            if(prevState.type === "rating") {
+                const newMax = prevState.data + 1;
+                this.props.updateData(this.props.index, newMax);
+                return {
+                    data: newMax,
+                    type: prevState.type,
+                    isRequired: prevState.isRequired,
+                }
+            }
+            else {
+            const newEntry =  ("Choice " + (prevState.data.length + 1));
             const newData =  [...prevState.data, newEntry];
             this.props.updateData(this.props.index, newData);
             return {
@@ -42,18 +52,30 @@ class Question extends Component {
                 type: prevState.type,
                 isRequired: prevState.isRequired
             }
+            }
         });
     }
 
     removeOption(index) {
         this.setState(prevState => {
-            const newData = prevState.data;
-            newData.splice(index, 1);
-            this.props.updateData(this.props.index, newData);
-            return {
-                data: newData,
-                type: prevState.type,
-                isRequired: prevState.isRequired
+            if(prevState.type === "rating") {
+                const newMax = prevState.data - 1;
+                this.props.updateData(this.props.index, newMax);
+                return {
+                    data: newMax,
+                    type: prevState.type,
+                    isRequired: prevState.isRequired,
+                }
+            }
+            else {
+                const newData = prevState.data;
+                newData.splice(index, 1);
+                this.props.updateData(this.props.index, newData);
+                return {
+                    data: newData,
+                    type: prevState.type,
+                    isRequired: prevState.isRequired
+                }
             }
         });
     }
@@ -67,7 +89,7 @@ class Question extends Component {
                 return <MultipleChoice data={this.props.data} changeData={this.changeData} addOption={this.addOption} removeOption={this.removeOption} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
 
             case "rating":
-                return <Rating data={this.props.data} changeData={this.changeData} addOption={this.addOption} removeOption={this.removeOption} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
+                return <Rating data={this.props.data} addOption={this.addOption} removeOption={this.removeOption} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
 
             case "True/False":
                 return <TrueFalse data={this.props.data} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
@@ -141,26 +163,26 @@ function MultipleChoice(props) {
 }
 
 function Rating(props) {
+    const data = [];
+    for(let i = 1; i < props.data; i++) {
+        data[i] = i;
+    }
     return (
-        <div className="rating-grid">
-            <label className="container">
-                {props.data.map((value, index) =>
-                    <div>
-                        <input
-                            type="text" 
-                            key={index}
-                            value={value}
-                            className="rating-question"
-                            onChange={(event) => props.changeData(event, index)}
-                        />
-                        <button onClick={() => props.removeOption(index)}>X</button>
+            <div className="rating-question-container">
+                <div className="rating-grid">
+                {data.map((value, index) =>
+                    <div key={index}>
+                        <label className="rating-question" key={index}>
+                            { value }
+                            <button onClick={() => props.removeOption(index)}>X</button>
+                        </label>
                     </div>
                     )}
-                </label>
+                </div>
                 <div>
                     <button onClick={() => props.addOption()}>+</button>
                 </div>
-        </div>
+            </div>
     )
 }
 
