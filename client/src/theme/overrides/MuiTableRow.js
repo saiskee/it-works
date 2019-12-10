@@ -1,4 +1,4 @@
-import palette from '../palette';
+import palette from '../light-palette';
 
 export default {
   root: {

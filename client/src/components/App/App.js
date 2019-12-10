@@ -12,6 +12,7 @@ import theme from '../../theme';
 import SurveyAnalytics from "../SurveyAnalytics/SurveyAnalytics";
 import NavBar from "../NavBar/NavBar";
 import SurveyBuilderPage from "../SurveyBuilderPage/SurveyBuilderPage";
+import Paper from "@material-ui/core/Paper";
 
 
 class App extends Component {
@@ -19,7 +20,7 @@ class App extends Component {
   render() {
 
     return (
-        <div className="App">
+        <Paper className="App" style={{border: 'none', boxShadow: 'none'}}>
           <Switch>
             <AuthRoute path="/" exact component={Login} />
             <AuthRoute path="/login" exact component={Login}/>
@@ -42,7 +43,7 @@ class App extends Component {
           <Route path="/oldBuilder" component = {SurveyBuilder} />
 
 
-        </div>
+        </Paper>
     );
   }
 }

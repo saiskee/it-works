@@ -1,4 +1,4 @@
-import palette from '../palette';
+import palette from '../light-palette';
 import typography from '../typography';
 
 export default {

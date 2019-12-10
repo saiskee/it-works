@@ -24,7 +24,12 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   profileIcon: {
-    transform: 'scale(1.8)'
+    transform: 'scale(1.8)',
+  },
+  logo: {
+    '&:hover': {
+      cursor: 'pointer',
+    }
   },
   menuLabel: {
     color: theme.palette.primary.dark,
@@ -109,7 +114,7 @@ const NavBar = (props) => {
       <div className={classes.root} style={{marginBottom: '5%'}}>
         <AppBar color="secondary" position={'fixed'}>
           <Toolbar>
-            <img src={logo} width={'8%'}/>
+            <img className={classes.logo} src={logo} width={'8%'} onClick={()=>{props.history.push('/dashboard')}}/>
               <Typography variant={'h4'} color="primary" style={{marginLeft: '1%'}}>{title}</Typography>
             <div className={classes.root}/>
             <Button edge='end' color={'primary'} onClick={() => {menuCloseAndRedirect('/builder')}}>
