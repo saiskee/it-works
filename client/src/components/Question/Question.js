@@ -11,6 +11,8 @@ class Question extends Component {
             isRequired: false,
         }
        this.changeData = this.changeData.bind(this);
+       this.addOption = this.addOption.bind(this);
+       this.removeOption = this.removeOption.bind(this);
     }
 
     changeData(event, index) {
@@ -30,25 +32,51 @@ class Question extends Component {
         });
     }
 
+    addOption() {
+        this.setState(prevState => {
+            const newEntry = (prevState.type === "rating") ? ("" + (prevState.data.length + 1)) : ("Choice " + (prevState.data.length + 1));
+            const newData =  [...prevState.data, newEntry];
+            this.props.updateData(this.props.index, newData);
+            return {
+                data: newData,
+                type: prevState.type,
+                isRequired: prevState.isRequired
+            }
+        });
+    }
+
+    removeOption(index) {
+        this.setState(prevState => {
+            const newData = prevState.data;
+            newData.splice(index, 1);
+            this.props.updateData(this.props.index, newData);
+            return {
+                data: newData,
+                type: prevState.type,
+                isRequired: prevState.isRequired
+            }
+        });
+    }
+
     questionPicker() {
         switch(this.props.type) {
             case "comment":
                 return <ShortAnswer data={this.props.data} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
 
             case "radiogroup":
-                return <MultipleChoice data={this.props.data} changeData={this.changeData} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
+                return <MultipleChoice data={this.props.data} changeData={this.changeData} addOption={this.addOption} removeOption={this.removeOption} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
 
             case "rating":
-                return <Rating data={this.props.data} changeData={this.changeData} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
+                return <Rating data={this.props.data} changeData={this.changeData} addOption={this.addOption} removeOption={this.removeOption} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
 
             case "True/False":
                 return <TrueFalse data={this.props.data} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
 
             case "dropdown":
-                return <Dropdown data={this.props.data} changeData={this.changeData} />; //TODO: Finish
+                return <Dropdown data={this.props.data} changeData={this.changeData} addOption={this.addOption} removeOption={this.removeOption}/>; //TODO: Finish
 
             case "checkbox":
-                return <Checkbox data={this.props.data} changeData={this.changeData}/>;
+                return <Checkbox data={this.props.data} changeData={this.changeData} addOption={this.addOption} removeOption={this.removeOption} />;
 
             default:
                 alert("Error Bad Argument");
@@ -102,8 +130,12 @@ function MultipleChoice(props) {
                 className="mc-question"
                 onChange={(event) => props.changeData(event, index)}
             />
+            <button onClick={() => props.removeOption(index)}>X</button>
         </label>
         )}
+        <div>
+            <button onClick={() => props.addOption()}>+</button>
+        </div>
         </div>
     )
 }
@@ -113,15 +145,21 @@ function Rating(props) {
         <div className="rating-grid">
             <label className="container">
                 {props.data.map((value, index) =>
-                    <input
-                        type="text" 
-                        key={index}
-                        value={value}
-                        className="rating-question"
-                        onChange={(event) => props.changeData(event, index)}
-                    />
-                )}
-            </label>
+                    <div>
+                        <input
+                            type="text" 
+                            key={index}
+                            value={value}
+                            className="rating-question"
+                            onChange={(event) => props.changeData(event, index)}
+                        />
+                        <button onClick={() => props.removeOption(index)}>X</button>
+                    </div>
+                    )}
+                </label>
+                <div>
+                    <button onClick={() => props.addOption()}>+</button>
+                </div>
         </div>
     )
 }
@@ -171,8 +209,12 @@ function Dropdown(props) {
                         className="dropdown-question"
                         onChange={(event) => props.changeData(event, index)}
                     /> 
+                <button onClick={() => props.removeOption(index)}>X</button>
                 </div>
-            )}
+                )}
+                <div>
+                    <button onClick={() => props.addOption()}>+</button>
+                </div>
     </div>
     )
 }
@@ -193,8 +235,12 @@ function Checkbox(props) {
                         className="checkbox-question"
                         onChange={(event) => props.changeData(event, index)}
                     />
+                <button onClick={() => props.removeOption(index)}>X</button>
                 </div>
-            )}
+        )}
+        <div>
+            <button onClick={() => props.addOption()}>+</button>
+        </div>
         </div>
     )
 }

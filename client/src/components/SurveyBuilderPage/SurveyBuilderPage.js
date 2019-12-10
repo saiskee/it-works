@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import logo from '../SurveyBuilder/logo.png';
 import './SurveyBuilderPage.css';
 import Builder from '../SurveyBuilder';
 import Question from '../Question';
 import EmployeeSelector from "../EmployeeSelector/EmployeeSelector";
-import {Button, makeStyles} from '@material-ui/core';
+import { Button, Input } from '@material-ui/core';
 import $ from "jquery";
 import {connect} from 'react-redux';
 import {getQuestions} from "../../actions/questions";
@@ -26,6 +25,7 @@ class SurveyBuilderPage extends Component {
     this.state = {
       questions: [],
       employees: {tags: [], suggestions: []},
+      title: "Enter your title here",
       surveyOpenDate: parseInt(moment().format('x')),
       surveyCloseDate: parseInt(moment().add('1', 'days').format('x'))
     };
@@ -33,6 +33,7 @@ class SurveyBuilderPage extends Component {
     this.initDataForType = this.initDataForType.bind(this);
     this.removeQuestion = this.removeQuestion.bind(this);
     this.changeQuestionTitle = this.changeQuestionTitle.bind(this);
+    this.changeTitle = this.changeTitle.bind(this);
     this.updateData = this.updateData.bind(this);
     this.generateSurveyJSON = this.generateSurveyJSON.bind(this);
     this.createSurvey = this.createSurvey.bind(this);
@@ -61,7 +62,7 @@ class SurveyBuilderPage extends Component {
         return ["Choice 1", "Choice 2", "Choice 3", "Choice 4"];
 
       case "dropdown":
-        return ["Item1", "Item2", "Item3", "Item4", "Item5"];
+        return ["Choice ", "Choice 2", "Choice 3", "Choice 4", "Choice 5"];
 
       default:
         return [];
@@ -136,11 +137,18 @@ class SurveyBuilderPage extends Component {
   }
 
   changeQuestionTitle(index, event) {
-    var newTitle = event.target.value;
+    const newTitle = event.target.value;
     this.setState((prevState) => {
       const newQ = prevState.questions;
       newQ[index].title = newTitle;
       return {questions: newQ};
+    });
+  }
+
+  changeTitle(event) {
+    const newTitle = event.target.value;
+    this.setState(() => {
+      return {title: newTitle}
     });
   }
 
@@ -182,7 +190,7 @@ class SurveyBuilderPage extends Component {
 
 
   updateData(index, data) {
-    var newData = data;
+    const newData = data;
     this.setState((prevState) => {
       const newQ = prevState.questions;
       newQ[index].data = newData;
@@ -200,7 +208,7 @@ class SurveyBuilderPage extends Component {
   generateSurveyJSON() {
     // TODO: Once we can edit survey title we should change this.
     let survey = {
-      title: "Generic Survey Title",
+      title: this.state.title,
       pages: []
     };
     let questionIndex = 0;
@@ -247,9 +255,7 @@ class SurveyBuilderPage extends Component {
         <>
           <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)} style={{zIndex: -100}}/>
           <div className="header">
-            <p className="title">
-              Sample Survey Title
-            </p>
+            <Input color={'primary'} placeholder='Enter your title here' value={this.state.title} className="title" onChange={(event) => this.changeTitle(event)}/>
           </div>
 
           <Builder
