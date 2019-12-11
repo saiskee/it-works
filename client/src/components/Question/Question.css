@@ -12,17 +12,11 @@
 .rating-grid {
     display: flex;
     flex-direction: row;
+    margin-left: 2%;
+    margin-top: 3%;
+    margin-bottom: 5%;
 }
 
-.rating-question {
-    border: 1px solid #ccc;
-    font-size: 18px;
-    display: flex;
-    flex-direction: row;
-    margin: 20px 5px;
-    max-width: 100px;
-    background-color: #f4f4f4;
-}
 
 .mc-grid {
     display: inline-block;
@@ -45,6 +39,10 @@
     border: none;
 }
 
+.add-choice-label{
+
+}
+
 .sa-question {
     font-size: 18px;
     background-color: #ffffff;
@@ -54,26 +52,20 @@
     border: 2px solid #ccc;
 }
 
-.checkbox-question {
+.checkbox-choice {
     background-color: transparent;
     display: block;
-    position: relative;
     cursor: pointer;
     text-align: left;
     font-size: 18px;
     border: none;
-    margin-left: 5%;
 }
 
-.container {
+.question-container {
     display: flex;
     flex-direction: row;
     position: relative;
-    padding-left: 35px;
     cursor: pointer;
-    margin-left: 21px;
-    margin-bottom: 21px;
-    margin-top: 21px;
     text-align: left;
     font-size: 18px;
     -webkit-user-select: none;
@@ -85,8 +77,6 @@
 .checkbox-div {
     display: flex;
     flex-direction: row;
-    margin-left: 4%;
-    margin-bottom: 3%
 }
 
 .checkbox-input {
@@ -129,14 +119,7 @@
     border: none;
 }
 
-/* Hide the browser's default radio button */
-.container .radio-button {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-}
+
 
 /* Create a custom radio button */
 .checkmark {

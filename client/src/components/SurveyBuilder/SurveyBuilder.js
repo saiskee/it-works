@@ -1,15 +1,31 @@
 import React, {Component} from 'react'
 import './SurveyBuilder.css';
-import Question_Icon_SA from './SA.png';
-import Question_Icon_MC from './MC.png';
-import Question_Icon_Rating from './Rating.png';
-import Question_Icon_TF from './TF.png';
-import Question_Icon_Dropdown from './Dropdown.png';
-import Question_Icon_Checkbox from './Checkbox.png';
-import delete_icon from './trash.png';
-import {Paper, Card, CardContent,  Typography, Box, Button, Switch, Input, TextField} from "@material-ui/core";
-import {Add} from "@material-ui/icons"
+import logo from './it-works-logo.png';
+import {
+  Paper,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Button,
+  Switch,
+  Input,
+  TextField,
+  CardHeader
+} from "@material-ui/core";
+import {
+  Add,
+  Delete,
+  ChatBubbleOutlined,
+  ThumbsUpDownOutlined,
+  StarHalfOutlined,
+  RadioButtonCheckedOutlined,
+  CheckBoxOutlined,
+  ArrowDropDownCircle, Image
+} from "@material-ui/icons"
 import moment from "moment";
+import IconButton from "@material-ui/core/IconButton";
+import Grid from "@material-ui/core/Grid";
 
 class SurveyBuilder extends Component {
   constructor(props) {
@@ -24,65 +40,110 @@ class SurveyBuilder extends Component {
 
   render() {
     const questionType = {
-      "comment": Question_Icon_SA,
-      "True/False": Question_Icon_TF,
-      "rating": Question_Icon_Rating,
-      "radiogroup": Question_Icon_MC,
-      "checkbox": Question_Icon_Checkbox,
-      "dropdown": Question_Icon_Dropdown
+      "comment": <ChatBubbleOutlined/>,
+      "True/False": <ThumbsUpDownOutlined/>,
+      "rating": <StarHalfOutlined/>,
+      "radiogroup": <RadioButtonCheckedOutlined/>,
+      "checkbox": <CheckBoxOutlined/>,
+      "dropdown": <ArrowDropDownCircle/>
     };
 
     return (
         <div className='survey-builder'>
-          <table className="toolbox-table">
-            <tbody className="table-header">
-            <tr>
-              <td>TOOLBOX</td>
-            </tr>
-            </tbody>
-            <tbody className="questions">
-            <tr>
-              <td>
-                {Object.keys(questionType).map((key) =>
-                    <div className="question-type" key={key} onClick={() => this.props.addQuestion(key)}>
-                      <img className="Icon-SA" alt="logo" src={questionType[key]}/>
-                      {key}
-                    </div>
-                )}
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <TextField
-                    onChange = {this.props.handleSurveyOpenDate}
-                    id="datetime-local"
-                    label="Survey Open Time"
-                    type="datetime-local"
-                    defaultValue={this.defaultSurveyOpenDate}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    error={this.props.openDateInvalid}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <TextField
-                    onChange = {this.props.handleSurveyCloseDate}
-                    id="datetime-local"
-                    label="Survey Expiry Time"
-                    type="datetime-local"
-                    defaultValue={this.defaultSurveyCloseDate}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    error={this.props.expiryDateInvalid}
-                />
-              </td>
-            </tr>
-            </tbody>
-          </table>
+          <Paper className={'toolbox-table'}>
+            <Typography style={{margin: '5% 0'}} variant={'h3'}>Question Types</Typography>
+            <Grid container spacing={1} justify={'space-between'} style={{padding: '0 5%'}}>
+
+              {Object.keys(questionType).map((key, index) =>
+                  <Grid item sm={3} md={3} lg={6} key={index}>
+                    <Card className="question-type" onClick={() => this.props.addQuestion(key)}>
+                      {questionType[key]}
+                      <Typography>{key}</Typography>
+                    </Card>
+                  </Grid>
+              )}
+
+            </Grid>
+            {/*<Typography style={{margin: '5% 0'}} variant={'h3'}>Settings</Typography>*/}
+            {/*<Card style={{margin: '0 3%', padding: '5%'}}>*/}
+            {/*  <TextField*/}
+            {/*      fullWidth*/}
+            {/*      onChange={this.props.handleSurveyOpenDate}*/}
+            {/*      id="datetime-local"*/}
+            {/*      label="Survey Open Time"*/}
+            {/*      type="datetime-local"*/}
+            {/*      defaultValue={this.defaultSurveyOpenDate}*/}
+            {/*      InputLabelProps={{*/}
+            {/*        shrink: true,*/}
+            {/*      }}*/}
+            {/*      error={this.props.openDateInvalid}/>*/}
+            {/*  <TextField*/}
+            {/*      style={{marginTop: '15px'}}*/}
+            {/*      fullWidth*/}
+            {/*      onChange={this.props.handleSurveyCloseDate}*/}
+            {/*      id="datetime-local"*/}
+            {/*      label="Survey Expiry Time"*/}
+            {/*      type="datetime-local"*/}
+            {/*      defaultValue={this.defaultSurveyCloseDate}*/}
+            {/*      InputLabelProps={{*/}
+            {/*        shrink: true,*/}
+            {/*      }}*/}
+            {/*      error={this.props.expiryDateInvalid}*/}
+            {/*  />*/}
+            {/*</Card>*/}
+            <img src={logo} style={{margin: '25% 9%'}}/>
+          </Paper>
+          {/*<table className="toolbox-table">*/}
+          {/*  <tbody className="table-header">*/}
+          {/*  <tr>*/}
+          {/*    <td><Typography variant={'h3'}>QUESTION TYPES</Typography></td>*/}
+          {/*  </tr>*/}
+          {/*  </tbody>*/}
+          {/*  <tbody className="questions">*/}
+          {/*  <tr>*/}
+          {/*    <td>*/}
+          {/*      <Card>*/}
+          {/*      {Object.keys(questionType).map((key) =>*/}
+          {/*          <div className="question-type" key={key} onClick={() => this.props.addQuestion(key)}>*/}
+          {/*            {questionType[key]}*/}
+          {/*            <Typography>{key}</Typography>*/}
+          {/*          </div>*/}
+          {/*      )}*/}
+          {/*      </Card>*/}
+          {/*    </td>*/}
+          {/*  </tr>*/}
+          {/*  <tr>*/}
+          {/*    <td>*/}
+          {/*      <TextField*/}
+          {/*          onChange = {this.props.handleSurveyOpenDate}*/}
+          {/*          id="datetime-local"*/}
+          {/*          label="Survey Open Time"*/}
+          {/*          type="datetime-local"*/}
+          {/*          defaultValue={this.defaultSurveyOpenDate}*/}
+          {/*          InputLabelProps={{*/}
+          {/*            shrink: true,*/}
+          {/*          }}*/}
+          {/*          error={this.props.openDateInvalid}*/}
+          {/*      />*/}
+          {/*    </td>*/}
+          {/*  </tr>*/}
+          {/*  <tr>*/}
+          {/*    <td>*/}
+          {/*      <TextField*/}
+          {/*          onChange = {this.props.handleSurveyCloseDate}*/}
+          {/*          id="datetime-local"*/}
+          {/*          label="Survey Expiry Time"*/}
+          {/*          type="datetime-local"*/}
+          {/*          defaultValue={this.defaultSurveyCloseDate}*/}
+          {/*          InputLabelProps={{*/}
+          {/*            shrink: true,*/}
+          {/*          }}*/}
+          {/*          error={this.props.expiryDateInvalid}*/}
+          {/*      />*/}
+          {/*    </td>*/}
+          {/*  </tr>*/}
+          {/*  </tbody>*/}
+          {/*</table>*/}
 
           <div className='questions-display'>
             {(this.props.questions.length !== 0) ?
@@ -95,7 +156,7 @@ class SurveyBuilder extends Component {
 
                           <div className="question-title-view">
                             <form>
-                              <Input
+                              <TextField
                                   style={{marginTop: '0px'}}
                                   placeholder='Enter your question here'
                                   value={this.props.questions[index].title}
@@ -118,9 +179,10 @@ class SurveyBuilder extends Component {
                                 color={'primary'}
                             />
                           </div>
-                          <button className="delete-button" key={index} onClick={() => this.removeQuestion(index)}>
-                            <img className="delete-logo" alt="delete_icon" src={delete_icon}/>
-                          </button>
+                          <IconButton color='primary' className="delete-button" key={index}
+                                      onClick={() => this.removeQuestion(index)}>
+                            <Delete className={'delete-logo'}/>
+                          </IconButton>
                         </td>
                         {type.question}
                       </tr>
@@ -129,7 +191,7 @@ class SurveyBuilder extends Component {
                 </table>
                 :
                 <p className="empty-count">
-                  Please add some questions using the button
+                  Please add some questions using the buttons to the left
                 </p>
             }
           </div>
@@ -137,11 +199,15 @@ class SurveyBuilder extends Component {
             {this.props.question_bank.map((question, question_bank_index) =>
 
                 <Card className='question-bank-card' key={question._id}>
-                  <Button children={<Add/>} onClick={this.props.addQuestionFromQuestionBank.bind(this, question, question_bank_index)}className='question-bank-card-add'/>
+                  <Button children={<Add/>}
+                          onClick={this.props.addQuestionFromQuestionBank.bind(this, question, question_bank_index)}
+                          className='question-bank-card-add'/>
                   <CardContent>
-                  <Typography
-                      variant={'h5'} color={'primary'}> {question.question_data.title ? question.question_data.title : question.name}</Typography>
-                    <Typography component={'div'}><Box fontStyle='italic'>{question.question_data.type}</Box></Typography>
+                    <Typography
+                        variant={'h5'}
+                        color={'primary'}> {question.question_data.title ? question.question_data.title : question.name}</Typography>
+                    <Typography component={'div'}><Box
+                        fontStyle='italic'>{question.question_data.type}</Box></Typography>
                     <Typography>{JSON.stringify(question.question_data.choices)}</Typography>
                   </CardContent>
                 </Card>
