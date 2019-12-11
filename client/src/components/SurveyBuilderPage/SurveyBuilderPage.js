@@ -3,11 +3,12 @@ import './SurveyBuilderPage.css';
 import Builder from '../SurveyBuilder';
 import Question from '../Question';
 import EmployeeSelector from "../EmployeeSelector/EmployeeSelector";
-import { Button, Input } from '@material-ui/core';
+import {Button, TextField, Modal, Paper, makeStyles, Typography, Card} from '@material-ui/core';
 import $ from "jquery";
 import {connect} from 'react-redux';
 import {getQuestions} from "../../actions/questions";
 import moment from 'moment';
+import Grid from "@material-ui/core/Grid";
 
 const mapStateToProps = ({questions}) => ({
   question_bank: questions,
@@ -23,9 +24,10 @@ class SurveyBuilderPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      submitModalOpen: false,
       questions: [],
       employees: {tags: [], suggestions: []},
-      title: "Enter your title here",
+      title: "",
       surveyOpenDate: parseInt(moment().format('x')),
       surveyCloseDate: parseInt(moment().add('1', 'days').format('x'))
     };
@@ -37,10 +39,11 @@ class SurveyBuilderPage extends Component {
     this.updateData = this.updateData.bind(this);
     this.generateSurveyJSON = this.generateSurveyJSON.bind(this);
     this.createSurvey = this.createSurvey.bind(this);
+    this.handleModalOpen = this.handleModalOpen.bind(this);
+    this.handleModalClose = this.handleModalClose.bind(this);
   }
 
   componentDidMount() {
-    console.log("Survey Builder Page Mounted");
     this.props.getQuestions();
   }
 
@@ -104,7 +107,6 @@ class SurveyBuilderPage extends Component {
         }]
       }
     });
-    // console.log("QUESTIONBANK:", this.props.question_bank[questionBankIndex]);
     this.props.question_bank.splice(questionBankIndex, 1);
   }
 
@@ -161,28 +163,28 @@ class SurveyBuilderPage extends Component {
     });
   }
 
-  handleSurveyOpenDate(event){
+  handleSurveyOpenDate(event) {
     let closeDate = this.state.surveyCloseDate;
     let openDate = parseInt(moment(event.target.value).format('x'));
-    if (closeDate < openDate){
+    if (closeDate < openDate) {
       this.setState({expiryDateInvalid: true})
-    }else{
+    } else {
       this.setState({expiryDateInvalid: false})
     }
-    if (openDate < Date.now()){
+    if (openDate < Date.now()) {
       this.setState({openDateInvalid: true})
-    }else{
+    } else {
       this.setState({openDateInvalid: false})
     }
     this.setState({surveyOpenDate: parseInt(moment(event.target.value).format('x'))});
   }
 
-  handleSurveyCloseDate(event){
+  handleSurveyCloseDate(event) {
     let closeDate = parseInt(moment(event.target.value).format('x'));
     let openDate = this.state.surveyOpenDate;
-    if (closeDate < openDate){
+    if (closeDate < openDate) {
       this.setState({expiryDateInvalid: true})
-    }else{
+    } else {
       this.setState({expiryDateInvalid: false})
     }
     this.setState({surveyCloseDate: parseInt(moment(event.target.value).format('x'))})
@@ -229,12 +231,17 @@ class SurveyBuilderPage extends Component {
       alert('Please select at least one employee to assign the survey to before submitting.');
       return;
     }
-    if (this.state.expiryDateInvalid){
+    if (this.state.expiryDateInvalid) {
       alert('Survey close date can not be before open date');
       return;
     }
-    if (this.state.openDateInvalid){
+    if (this.state.openDateInvalid) {
       alert('Survey open date can not be before survey creation');
+      return;
+    }
+    if(this.state.title.length < 1){
+      alert('Please assign the survey a title before creation');
+      return;
     }
 
     const toServer = {
@@ -250,12 +257,85 @@ class SurveyBuilderPage extends Component {
     })
   }
 
+  handleModalClose(){
+    this.setState({submitModalOpen: false});
+  }
+
+  handleModalOpen(){
+    this.setState({submitModalOpen: true});
+  }
+
+  renderModal(){
+
+
+    const classes = {
+      paper: {
+        dropShadow: '0 3px 7px rgba(0, 0, 0, 0.3)',
+        position: 'absolute',
+        top: '20vh',
+        left: '20vw',
+        width: '60vw',
+        height: '60vh',
+        padding: '2%',
+        justifyContent: 'center',
+      },
+      gridDiv: {
+        marginTop: '2%'
+      }
+    }
+
+
+    return (
+      <Modal open={this.state.submitModalOpen} onClose={this.handleModalClose}>
+        <Paper style={classes.paper}>
+          <Typography variant={'h3'}>Send to Employees</Typography>
+          <Grid container style={classes.gridDiv} direction={'row'} spacing={2}>
+            <Grid item lg={4} md={4} sm={4}>
+              {/*<EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>*/}
+              <Card style={{margin: '0 3%', padding: '5%'}}>
+                <TextField
+                    fullWidth
+                    onChange={this.handleSurveyOpenDate.bind(this)}
+                    defaultValue={moment(this.state.surveyOpenDate).format('YYYY-MM-DD[T]HH:mm')}
+                    id="datetime-local"
+                    label="Survey Open Time"
+                    type="datetime-local"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={this.state.openDateInvalid}/>
+                <TextField
+                    style={{marginTop: '15px'}}
+                    fullWidth
+                    defaultValue={moment(this.state.surveyCloseDate).format('YYYY-MM-DD[T]HH:mm')}
+                    onChange={this.handleSurveyCloseDate.bind(this)}
+                    id="datetime-local"
+                    label="Survey Expiry Time"
+                    type="datetime-local"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    error={this.state.expiryDateInvalid}
+                />
+              </Card>
+            </Grid>
+            <Grid item sm={8} md={8} lg={8}>
+              <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>
+            </Grid>
+          </Grid>
+          <Button onClick={this.createSurvey}>Send Survey</Button>
+        </Paper>
+      </Modal>
+    );
+  }
+
   render() {
     return (
         <>
-          <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)} style={{zIndex: -100}}/>
+          {/*<EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)} style={{zIndex: -100}}/>*/}
           <div className="header">
-            <Input color={'primary'} placeholder='Enter your title here' value={this.state.title} className="title" onChange={(event) => this.changeTitle(event)}/>
+            <TextField color={'primary'} placeholder='Enter Survey Title here' value={this.state.title} className="title"
+                       onChange={(event) => this.changeTitle(event)}/>
           </div>
 
           <Builder
@@ -270,14 +350,15 @@ class SurveyBuilderPage extends Component {
               handleSurveyOpenDate={this.handleSurveyOpenDate.bind(this)}
               surveyCloseDate={this.state.surveyCloseDate}
               handleSurveyCloseDate={this.handleSurveyCloseDate.bind(this)}
-              expiryDateInvalid = {this.state.expiryDateInvalid}
-              openDateInvalid = {this.state.openDateInvalid}
+              expiryDateInvalid={this.state.expiryDateInvalid}
+              openDateInvalid={this.state.openDateInvalid}
           />
-
+          {this.renderModal()}
           <Button variant={'contained'} onClick={this.generateSurveyJSON}
                   title='View Console Log to See Survey JSON (debugging purposes)'>Generate JSON</Button>
-          <Button variant={'contained'} color={'primary'} onClick={this.createSurvey} title={'Create Survey'}>Create
-            Survey</Button>
+          <Button variant={'contained'} color={'primary'} onClick={this.handleModalOpen} title={'Create Survey'}>
+            Create Survey
+          </Button>
 
         </>
     );

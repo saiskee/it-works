@@ -19,11 +19,9 @@
   align-items: center;
 }
 
-.title {
-  position: relative;
-  font-weight: 600;
-  font-size: 48px;
-  color: #6A6E70;
+.title{
+
+  width: 35vw;
 }
 
 .App-background {
