@@ -19,6 +19,7 @@
   align-items: center;
 }
 
+
 .title{
 
   width: 35vw;
@@ -35,4 +36,8 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+.react-tags__suggestions{
+  z-index: 1000;
 }

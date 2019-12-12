@@ -29,7 +29,8 @@ class SurveyBuilderPage extends Component {
       employees: {tags: [], suggestions: []},
       title: "",
       surveyOpenDate: parseInt(moment().format('x')),
-      surveyCloseDate: parseInt(moment().add('1', 'days').format('x'))
+      surveyCloseDate: parseInt(moment().add('1', 'days').format('x')),
+      employeeMessage : ''
     };
     this.addQuestion = this.addQuestion.bind(this);
     this.initDataForType = this.initDataForType.bind(this);
@@ -41,6 +42,7 @@ class SurveyBuilderPage extends Component {
     this.createSurvey = this.createSurvey.bind(this);
     this.handleModalOpen = this.handleModalOpen.bind(this);
     this.handleModalClose = this.handleModalClose.bind(this);
+    this.handleEmployeeMessage = this.handleEmployeeMessage.bind(this);
   }
 
   componentDidMount() {
@@ -95,11 +97,11 @@ class SurveyBuilderPage extends Component {
         questions: [...prevState.questions, {
           data: question_data.choices,
           title: question_data.title,
-          // TODO: Fix how rating (rateMax) is rendered, currently using a hacky solution
           question: <Question type={question_data.type}
                               data={question_data.choices ? question_data.choices : Array.from(Array(question_data.rateMax).keys())}
                               index={prevState.questions.length}
-                              updateData={this.updateData}/>,
+                              updateData={this.updateData}
+                              />,
           type: question_data.type,
           questionBankQuestion: true,
           _id: question._id,
@@ -124,10 +126,11 @@ class SurveyBuilderPage extends Component {
       newQuestions.splice(index, 1);
       // Modify all questions following question being removed
       for (let i = index; i < prevState.questions.length; i++) {
-        if(newQuestions[i].question.props.type !== null) {
-            newQuestions[i].question =
-            <Question type={newQuestions[i].question.props.type} data={newQuestions[i].data} index={i}
-        updateData={this.updateData}/> }
+        if (newQuestions[i].question.props.type !== null) {
+          newQuestions[i].question =
+              <Question type={newQuestions[i].question.props.type} data={newQuestions[i].data} index={i}
+                        updateData={this.updateData}/>
+        }
       }
       return {questions: newQuestions};
     });
@@ -185,6 +188,11 @@ class SurveyBuilderPage extends Component {
     this.setState({surveyCloseDate: parseInt(moment(event.target.value).format('x'))})
   }
 
+  handleEmployeeMessage(event){
+    this.setState({
+      employeeMessage: event.target.value
+    })
+  }
 
   updateData(index, data) {
     const newData = data;
@@ -193,7 +201,7 @@ class SurveyBuilderPage extends Component {
       newQ[index].data = newData;
       newQ[index].question =
           <Question type={prevState.questions[index].question.props.type} data={newData} index={index}
-                    updateData={this.updateData}/>;
+                    updateData={this.updateData} />;
       return {questions: newQ};
     });
   }
@@ -234,7 +242,7 @@ class SurveyBuilderPage extends Component {
       alert('Survey open date can not be before survey creation');
       return;
     }
-    if(this.state.title.length < 1){
+    if (this.state.title.length < 1) {
       alert('Please assign the survey a title before creation');
       return;
     }
@@ -243,7 +251,8 @@ class SurveyBuilderPage extends Component {
       employees,
       surveyTemplate: surveyJSON,
       openDate: this.state.surveyOpenDate,
-      expiryDate: this.state.surveyCloseDate
+      expiryDate: this.state.surveyCloseDate,
+      employeeMessage: this.state.employeeMessage
     }
     $.ajax('/api/survey', {
       method: 'POST',
@@ -252,75 +261,83 @@ class SurveyBuilderPage extends Component {
     })
   }
 
-  handleModalClose(){
+  handleModalClose() {
     this.setState({submitModalOpen: false});
   }
 
-  handleModalOpen(){
+  handleModalOpen() {
     this.setState({submitModalOpen: true});
   }
 
-  renderModal(){
-
-
+  renderModal() {
     const classes = {
       paper: {
+        flexDirection: 'column',
         dropShadow: '0 3px 7px rgba(0, 0, 0, 0.3)',
         position: 'absolute',
         top: '20vh',
         left: '20vw',
         width: '60vw',
-        height: '60vh',
         padding: '2%',
-        justifyContent: 'center',
       },
       gridDiv: {
         marginTop: '2%'
+      },
+      sendButton: {
+        marginTop: '4%',
+        right: '-85%',
       }
     }
-
-
     return (
-      <Modal open={this.state.submitModalOpen} onClose={this.handleModalClose}>
-        <Paper style={classes.paper}>
-          <Typography variant={'h3'}>Send to Employees</Typography>
-          <Grid container style={classes.gridDiv} direction={'row'} spacing={2}>
-            <Grid item lg={4} md={4} sm={4}>
-              {/*<EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>*/}
-              <Card style={{margin: '0 3%', padding: '5%'}}>
-                <TextField
-                    fullWidth
-                    onChange={this.handleSurveyOpenDate.bind(this)}
-                    defaultValue={moment(this.state.surveyOpenDate).format('YYYY-MM-DD[T]HH:mm')}
-                    id="datetime-local"
-                    label="Survey Open Time"
-                    type="datetime-local"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    error={this.state.openDateInvalid}/>
-                <TextField
-                    style={{marginTop: '15px'}}
-                    fullWidth
-                    defaultValue={moment(this.state.surveyCloseDate).format('YYYY-MM-DD[T]HH:mm')}
-                    onChange={this.handleSurveyCloseDate.bind(this)}
-                    id="datetime-local"
-                    label="Survey Expiry Time"
-                    type="datetime-local"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    error={this.state.expiryDateInvalid}
+        <Modal open={this.state.submitModalOpen} onClose={this.handleModalClose}>
+          <Paper style={classes.paper}>
+            <Typography variant={'h3'} color={'primary'}>Send to Employees</Typography>
+            <Grid container style={classes.gridDiv} direction={'row'} spacing={2}>
+              <Grid item lg={4} md={4} sm={4}>
+                {/*<EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>*/}
+                <Card style={{margin: '0 3%', padding: '5%'}}>
+                  <TextField
+                      fullWidth
+                      onChange={this.handleSurveyOpenDate.bind(this)}
+                      defaultValue={moment(this.state.surveyOpenDate).format('YYYY-MM-DD[T]HH:mm')}
+                      id="datetime-local"
+                      label="Survey Open Time"
+                      type="datetime-local"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      error={this.state.openDateInvalid}/>
+                  <TextField
+                      style={{marginTop: '15px'}}
+                      fullWidth
+                      defaultValue={moment(this.state.surveyCloseDate).format('YYYY-MM-DD[T]HH:mm')}
+                      onChange={this.handleSurveyCloseDate.bind(this)}
+                      id="datetime-local"
+                      label="Survey Expiry Time"
+                      type="datetime-local"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      error={this.state.expiryDateInvalid}
+                  />
+                </Card>
+              </Grid>
+              <Grid item sm={8} md={8} lg={8}>
+                <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>
+                <TextField id="standard-multiline-static"
+                           multiline
+                           rows="10"
+                           style={{paddingTop: '5px', width: '100%'}}
+                           variant={'outlined'}
+                           placeholder="Enter a message to send with the survey to the assigned employees..."
+                           value={this.state.employeeMessage}
+                           onChange={this.handleEmployeeMessage}
                 />
-              </Card>
+              </Grid>
             </Grid>
-            <Grid item sm={8} md={8} lg={8}>
-              <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>
-            </Grid>
-          </Grid>
-          <Button onClick={this.createSurvey}>Send Survey</Button>
-        </Paper>
-      </Modal>
+            <Button color={'primary'} style={classes.sendButton} onClick={this.createSurvey}>Send Survey</Button>
+          </Paper>
+        </Modal>
     );
   }
 
@@ -329,7 +346,8 @@ class SurveyBuilderPage extends Component {
         <>
           {/*<EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)} style={{zIndex: -100}}/>*/}
           <div className="header">
-            <TextField color={'primary'} placeholder='Enter Survey Title here' value={this.state.title} className="title"
+            <TextField color={'primary'} placeholder='Enter Survey Title here' value={this.state.title}
+                       className="title"
                        onChange={(event) => this.changeTitle(event)}/>
           </div>
 
