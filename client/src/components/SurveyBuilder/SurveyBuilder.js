@@ -172,7 +172,7 @@ class SurveyBuilder extends Component {
                           </div>
                           <div>
                             <Switch
-                                checked={this.props.questions[index].isRequired}
+                                checked={!!this.props.questions[index].isRequired}
                                 onChange={(event) => {
                                   this.props.handleIsRequiredChange(index, event.target.checked);
                                 }}

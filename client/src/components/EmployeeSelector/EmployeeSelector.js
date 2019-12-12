@@ -71,6 +71,7 @@ class EmployeeSelector extends Component{
   render(){
     return(<div>
       <ReactTags
+          autofocus={'false'}
           placeholder={"Add employees to receive this survey"}
           minQueryLength={0}
           tags={this.state.tags}
