@@ -83,7 +83,7 @@ class SurveyBuilderPage extends Component {
           data: initData,
           title: "",
           question: <Question type={type} data={initData} index={prevState.questions.length}
-                              updateData={this.updateData}/>,
+                              updateData={this.updateData} inputDisabled={false}/>,
           type: type
         }]
       };
@@ -101,6 +101,7 @@ class SurveyBuilderPage extends Component {
                               data={question_data.choices ? question_data.choices : Array.from(Array(question_data.rateMax).keys())}
                               index={prevState.questions.length}
                               updateData={this.updateData}
+                              inputDisabled={true}
                               />,
           type: question_data.type,
           questionBankQuestion: true,
@@ -129,7 +130,7 @@ class SurveyBuilderPage extends Component {
         if (newQuestions[i].question.props.type !== null) {
           newQuestions[i].question =
               <Question type={newQuestions[i].question.props.type} data={newQuestions[i].data} index={i}
-                        updateData={this.updateData}/>
+                        updateData={this.updateData} inputDisabled={newQuestions[i].questionBankQuestion}/>
         }
       }
       return {questions: newQuestions};
@@ -201,7 +202,7 @@ class SurveyBuilderPage extends Component {
       newQ[index].data = newData;
       newQ[index].question =
           <Question type={prevState.questions[index].question.props.type} data={newData} index={index}
-                    updateData={this.updateData} />;
+                    updateData={this.updateData} inputDisabled={prevState.questions[index].questionBankQuestion}/>;
       return {questions: newQ};
     });
   }

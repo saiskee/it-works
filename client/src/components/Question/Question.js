@@ -95,26 +95,26 @@ class Question extends Component {
   questionPicker() {
     switch (this.props.type) {
       case "comment":
-        return <ShortAnswer data={this.props.data} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
+        return <ShortAnswer data={this.props.data} toSurveyJSQuestion={this.toSurveyJSQuestion} inputDisabled={this.props.inputDisabled}/>;
 
       case "radiogroup":
         return <MultipleChoice data={this.props.data} changeData={this.changeData} addOption={this.addOption}
-                               removeOption={this.removeOption} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
+                               removeOption={this.removeOption} toSurveyJSQuestion={this.toSurveyJSQuestion} inputDisabled={this.props.inputDisabled}/>;
 
       case "rating":
         return <Rating data={this.props.data} addOption={this.addOption} removeOption={this.removeOption}
-                       toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
+                       toSurveyJSQuestion={this.toSurveyJSQuestion} inputDisabled={this.props.inputDisabled}/>;
 
       case "True/False":
-        return <TrueFalse data={this.props.data} toSurveyJSQuestion={this.toSurveyJSQuestion}/>;
+        return <TrueFalse data={this.props.data} toSurveyJSQuestion={this.toSurveyJSQuestion} inputDisabled={this.props.inputDisabled}/>;
 
       case "dropdown":
         return <Dropdown data={this.props.data} changeData={this.changeData} addOption={this.addOption}
-                         removeOption={this.removeOption}/>; //TODO: Finish
+                         removeOption={this.removeOption} inputDisabled={this.props.inputDisabled}/>; //TODO: Finish
 
       case "checkbox":
         return <Checkbox data={this.props.data} changeData={this.changeData} addOption={this.addOption}
-                         removeOption={this.removeOption}/>;
+                         removeOption={this.removeOption} inputDisabled={this.props.inputDisabled}/>;
 
       default:
         alert("Error Bad Argument");

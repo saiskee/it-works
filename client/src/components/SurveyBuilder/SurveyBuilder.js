@@ -64,87 +64,8 @@ class SurveyBuilder extends Component {
               )}
 
             </Grid>
-            {/*<Typography style={{margin: '5% 0'}} variant={'h3'}>Settings</Typography>*/}
-            {/*<Card style={{margin: '0 3%', padding: '5%'}}>*/}
-            {/*  <TextField*/}
-            {/*      fullWidth*/}
-            {/*      onChange={this.props.handleSurveyOpenDate}*/}
-            {/*      id="datetime-local"*/}
-            {/*      label="Survey Open Time"*/}
-            {/*      type="datetime-local"*/}
-            {/*      defaultValue={this.defaultSurveyOpenDate}*/}
-            {/*      InputLabelProps={{*/}
-            {/*        shrink: true,*/}
-            {/*      }}*/}
-            {/*      error={this.props.openDateInvalid}/>*/}
-            {/*  <TextField*/}
-            {/*      style={{marginTop: '15px'}}*/}
-            {/*      fullWidth*/}
-            {/*      onChange={this.props.handleSurveyCloseDate}*/}
-            {/*      id="datetime-local"*/}
-            {/*      label="Survey Expiry Time"*/}
-            {/*      type="datetime-local"*/}
-            {/*      defaultValue={this.defaultSurveyCloseDate}*/}
-            {/*      InputLabelProps={{*/}
-            {/*        shrink: true,*/}
-            {/*      }}*/}
-            {/*      error={this.props.expiryDateInvalid}*/}
-            {/*  />*/}
-            {/*</Card>*/}
             <img src={logo} style={{margin: '25% 9%'}}/>
           </Paper>
-          {/*<table className="toolbox-table">*/}
-          {/*  <tbody className="table-header">*/}
-          {/*  <tr>*/}
-          {/*    <td><Typography variant={'h3'}>QUESTION TYPES</Typography></td>*/}
-          {/*  </tr>*/}
-          {/*  </tbody>*/}
-          {/*  <tbody className="questions">*/}
-          {/*  <tr>*/}
-          {/*    <td>*/}
-          {/*      <Card>*/}
-          {/*      {Object.keys(questionType).map((key) =>*/}
-          {/*          <div className="question-type" key={key} onClick={() => this.props.addQuestion(key)}>*/}
-          {/*            {questionType[key]}*/}
-          {/*            <Typography>{key}</Typography>*/}
-          {/*          </div>*/}
-          {/*      )}*/}
-          {/*      </Card>*/}
-          {/*    </td>*/}
-          {/*  </tr>*/}
-          {/*  <tr>*/}
-          {/*    <td>*/}
-          {/*      <TextField*/}
-          {/*          onChange = {this.props.handleSurveyOpenDate}*/}
-          {/*          id="datetime-local"*/}
-          {/*          label="Survey Open Time"*/}
-          {/*          type="datetime-local"*/}
-          {/*          defaultValue={this.defaultSurveyOpenDate}*/}
-          {/*          InputLabelProps={{*/}
-          {/*            shrink: true,*/}
-          {/*          }}*/}
-          {/*          error={this.props.openDateInvalid}*/}
-          {/*      />*/}
-          {/*    </td>*/}
-          {/*  </tr>*/}
-          {/*  <tr>*/}
-          {/*    <td>*/}
-          {/*      <TextField*/}
-          {/*          onChange = {this.props.handleSurveyCloseDate}*/}
-          {/*          id="datetime-local"*/}
-          {/*          label="Survey Expiry Time"*/}
-          {/*          type="datetime-local"*/}
-          {/*          defaultValue={this.defaultSurveyCloseDate}*/}
-          {/*          InputLabelProps={{*/}
-          {/*            shrink: true,*/}
-          {/*          }}*/}
-          {/*          error={this.props.expiryDateInvalid}*/}
-          {/*      />*/}
-          {/*    </td>*/}
-          {/*  </tr>*/}
-          {/*  </tbody>*/}
-          {/*</table>*/}
-
           <div className='questions-display'>
             {(this.props.questions.length !== 0) ?
                 <table className="survey-builder-view">
@@ -164,6 +85,7 @@ class SurveyBuilder extends Component {
                                   name='question-name'
                                   onChange={(event) => this.props.changeQuestionTitle(index, event)}
                                   color={'primary'}
+                                  disabled={this.props.questions[index].questionBankQuestion}
                               />
                             </form>
                           </div>

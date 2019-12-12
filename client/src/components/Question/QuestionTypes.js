@@ -37,17 +37,24 @@ function MultipleChoice(props) {
                   value={key}
                   className="mc-question"
                   onChange={(event) => props.changeData(event, index)}
+                  disabled={props.inputDisabled}
               />
-              <IconButton title={'Delete \'' + key + '\''} color='primary'
-                          onClick={() => props.removeOption(index)}><BackspaceOutlined/></IconButton>
+              {
+                !props.inputDisabled &&
+                <IconButton title={'Delete \'' + key + '\''} color='primary'
+                            onClick={() => props.removeOption(index)}><BackspaceOutlined/></IconButton>
+              }
             </div>
         )}
-        <div>
-          <Button color={'primary'} variant='outlined'
-                  onClick={() => props.addOption()}>
-            <AddCircleOutlined style={{marginRight: '5px'}}/><Typography color={'primary'}>Add Choice</Typography>
-          </Button>
-        </div>
+        {
+          !props.inputDisabled &&
+          <div>
+            <Button color={'primary'} variant='outlined'
+                    onClick={() => props.addOption()}>
+              <AddCircleOutlined style={{marginRight: '5px'}}/><Typography color={'primary'}>Add Choice</Typography>
+            </Button>
+          </div>
+        }
       </div>
   )
 }
@@ -66,7 +73,8 @@ function Rating(props) {
                   {value}
                 </Button>
             )}
-          </ButtonGroup>{data.length > 0 && <IconButton title='Remove One Rating Step'
+          </ButtonGroup>
+          {!props.inputDisabled && data.length > 0 && <IconButton title='Remove One Rating Step'
                                                         onClick={() => props.removeOption(0)}><BackspaceOutlined/></IconButton>}
           <IconButton title={'Add One Rating Step'} onClick={props.addOption}
                       color={'primary'}><AddCircleOutlined/></IconButton>
@@ -112,15 +120,22 @@ function Dropdown(props) {
                   value={value}
                   className="dropdown-question"
                   onChange={(event) => props.changeData(event, index)}
+                  disabled={props.inputDisabled}
               />
-              <IconButton color='primary' onClick={() => props.removeOption(index)}><BackspaceOutlined/></IconButton>
+              {
+                !props.inputDisabled &&
+                <IconButton color='primary' onClick={() => props.removeOption(index)}><BackspaceOutlined/></IconButton>
+              }
             </div>
         )}
-        <div>
-          <Button title={'Add Another Choice'} variant='outlined' color='primary' onClick={() => props.addOption()}>
-            <AddCircleOutlined style={{marginRight: '5px'}}/><Typography color={'primary'}>Add Choice</Typography>
-          </Button>
-        </div>
+        {
+          !props.inputDisabled &&
+          <div>
+            <Button title={'Add Another Choice'} variant='outlined' color='primary' onClick={() => props.addOption()}>
+              <AddCircleOutlined style={{marginRight: '5px'}}/><Typography color={'primary'}>Add Choice</Typography>
+            </Button>
+          </div>
+        }
       </div>
   )
 }
@@ -139,17 +154,24 @@ function Checkbox(props) {
                   value={value}
                   className="checkbox-choice"
                   onChange={(event) => props.changeData(event, index)}
+                  disabled={props.inputDisabled}
               />
-              <IconButton title={'Remove \'' + value + '\''} onClick={() => props.removeOption(index)}
-                          color={'primary'}>
-                <BackspaceOutlined/>
-              </IconButton>
+              {
+                !props.inputDisabled &&
+                <IconButton title={'Remove \'' + value + '\''} onClick={() => props.removeOption(index)}
+                            color={'primary'}>
+                  <BackspaceOutlined/>
+                </IconButton>
+              }
             </div>
         )}
         <div>
-          <Button title={'Add Another Choice'} variant='outlined' color='primary' onClick={() => props.addOption()}>
-            <AddCircleOutlined style={{marginRight: '5px'}}/><Typography color={'primary'}>Add Choice</Typography>
-          </Button>
+          {
+            !props.inputDisabled &&
+            <Button title={'Add Another Choice'} variant='outlined' color='primary' onClick={() => props.addOption()}>
+              <AddCircleOutlined style={{marginRight: '5px'}}/><Typography color={'primary'}>Add Choice</Typography>
+            </Button>
+          }
         </div>
       </div>
   )

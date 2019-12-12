@@ -131,7 +131,7 @@ surveyRoutes.post('/:surveyId', async (req, res) => {
 
 // Route for Manager to create a new survey
 surveyRoutes.post('', async (req, res) => {
-  let {employees, surveyTemplate, openDate, expiryDate} = req.body;
+  let {employees, surveyTemplate, openDate, expiryDate, employeeMessage} = req.body;
   const {userId} = req.session.user;
 
   // From the survey, create new question records and replace survey template with the object ids of these new records
@@ -142,7 +142,6 @@ surveyRoutes.post('', async (req, res) => {
     assigned_to: employees.tags.map(emp => ({employee: emp.id, status: 'Unfinished'})),
     start_date: openDate,
     expiry_date: expiryDate
-    //Todo: Maybe include creation date?
   });
   newSurvey.save().then((err, survey) => {
     try {
@@ -166,7 +165,7 @@ surveyRoutes.post('', async (req, res) => {
     } catch (err) {
       res.status(400).send(parseError(err));
     }
-  }).then(() => scheduleEmailAlerts(newSurvey._id, newSurvey.start_date, newSurvey.expiry_date, "Survey is open!"));
+  }).then(() => scheduleEmailAlerts(newSurvey._id, newSurvey.start_date, newSurvey.expiry_date, employeeMessage));
 });
 
 
