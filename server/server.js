@@ -43,13 +43,15 @@ app.use(
 mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true}).then(() => { console.log("MONGODB Connected")})
 
 
-import {userRoutes, sessionRoutes, surveyRoutes} from './api/routes';
+import {userRoutes, sessionRoutes, surveyRoutes, questionRoutes, analyticsRoutes, employeeRoutes} from './api/routes';
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
 apiRouter.use('/survey', surveyRoutes);
 apiRouter.use('/users', userRoutes);
-apiRouter.use('/session', sessionRoutes); 
-
+apiRouter.use('/session', sessionRoutes);
+apiRouter.use('/questions', questionRoutes);
+apiRouter.use('/analytics', analyticsRoutes);
+apiRouter.use('/employees', employeeRoutes)
 
 app.listen(port);
 console.log('REST API server running on: ' + port);

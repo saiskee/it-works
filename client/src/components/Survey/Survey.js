@@ -55,9 +55,9 @@ class Survey extends Component {
     result = result.data;
     console.log(result);
     const {pages} = this.props.survey.survey.survey_template;
-    pages.map((page) => {
+    pages.forEach((page) => {
       const {elements} = page;
-      elements.map((question) => {
+      elements.forEach((question) => {
         if (result.hasOwnProperty(question.name)){
           Object.defineProperty(result, question.question_id,
               Object.getOwnPropertyDescriptor(result, question.name));

@@ -15,6 +15,12 @@ Once yarn is installed and the directory is cloned on to your machine, run the f
 
 _If these do not install correctly, please try running these commands as administrator, whether that be opening the command prompt as Admin, or running yarn using sudo._
 
+To start the server run this command from the project root directory:
+```sudo yarn dev```
+
+Then you can connect on ```localhost:3000/login```
+
+
 ## Technologies used
 #### Client-Side Technologies
 * React-Redux

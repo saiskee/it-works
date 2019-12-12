@@ -1,41 +1,49 @@
 import React, {Component} from "react";
-import {Route} from 'react-router-dom';
+import { Route, Switch} from 'react-router-dom';
 import {AuthRoute, ProtectedRoute} from "../../util/router";
-import Survey from "../Survey"
-import Login from "../Login"
-import Register from "../Register"
-import Dashboard from "../Dashboard/Dashboard"
-import SurveyBuilder from "../SurveyBuilder/SurveyBuilder"
-import {createMuiTheme, CssBaseline, MuiThemeProvider} from "@material-ui/core";
-import {green, pink} from "@material-ui/core/colors";
-
-const theme = createMuiTheme({
-  palette: {
-    primary: green,
-    secondary: pink
-  }
-})
-
+import Survey from "../Survey";
+import Login from "../Login";
+import Register from "../Register";
+import Dashboard from "../Dashboard/Dashboard";
+import SurveyBuilder from "../SurveyBuilderUnusable/SurveyBuilder";
+import ManagerDashboard from "../ManagerDashboard/ManagerDashboard";
+import {MuiThemeProvider} from "@material-ui/core";
+import theme from '../../theme';
+import SurveyAnalytics from "../SurveyAnalytics/SurveyAnalytics";
+import NavBar from "../NavBar/NavBar";
+import SurveyBuilderPage from "../SurveyBuilderPage/SurveyBuilderPage";
+import Paper from "@material-ui/core/Paper";
 
 
 class App extends Component {
 
   render() {
 
-
     return (
-        <div className="App">
-          <CssBaseline />
+        <Paper className="App" style={{border: 'none', boxShadow: 'none'}}>
+          <Switch>
+            <AuthRoute path="/" exact component={Login} />
+            <AuthRoute path="/login" exact component={Login}/>
+            <AuthRoute path="/register" exact component={Register}/>
+            <ProtectedRoute path="/survey/:surveyId" exact component={Survey}/>
 
-          <AuthRoute path="/login" exact component={Login}/>
-          <AuthRoute path="/register" exact component={Register}/>
+            <MuiThemeProvider theme={theme}>
+              <NavBar/>
+            </MuiThemeProvider>
+          </Switch>
+
+          <Switch>
           <MuiThemeProvider theme={theme}>
-          <ProtectedRoute path="/dashboard" exact component={Dashboard}/>
+            <ProtectedRoute path="/builder" exact component={SurveyBuilderPage}/>
+            <ProtectedRoute path="/dashboard" exact component={Dashboard}/>
+            <ProtectedRoute path="/managerdashboard" exact component={ManagerDashboard}/>
+            <ProtectedRoute path="/analytics/:surveyId" exact component={SurveyAnalytics}/>
           </MuiThemeProvider>
-          <ProtectedRoute path="/survey/:surveyId" component={Survey}/>
-          <Route path="/builder" component={SurveyBuilder} />
+          </Switch>
+          <Route path="/oldBuilder" component = {SurveyBuilder} />
 
-        </div>
+
+        </Paper>
     );
   }
 }

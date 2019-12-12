@@ -20,16 +20,14 @@
         font-size: 14px;
         display: block;
       }
-      .logo {
-        width: 190px;
-        height: 60px;
-        background: #DDD;
-      }
       .register-title {
         flex-basis: 100%;
       }
       #register-page {
         display: flex;
+      }
+      .logo {
+        width: 50%;
       }
       .register {
         width: 30%;
@@ -37,11 +35,12 @@
         background: #FFF;
         padding: 50px;
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         justify-content: center;
         align-items: center;
         align-content: center;
         text-align: center;
+        flex-direction: column;
       }
       .register a {
         margin-top: 25px;

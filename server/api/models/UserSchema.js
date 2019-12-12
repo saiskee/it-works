@@ -8,16 +8,16 @@ const UserSchema = new mongoose.Schema({
         required: true,
     },
     username: {
-      type: String,
-      required: true,
-      // validate: {
-      //     validator: username => User.doesNotExist({ username }),
-      //     message: "Username has already been registered"
-      // }
+        type: String,
+        required: true,
+        // validate: {
+        //     validator: username => User.doesNotExist({ username }),
+        //     message: "Username has already been registered"
+        // }
     },
     password: {
-      type: String,
-      required: true
+        type: String,
+        required: true
     },
     surveys_assigned: {
         type: [{ survey_id: { type: mongoose.Types.ObjectId, ref:'survey'}, survey_status: String }],
@@ -30,7 +30,14 @@ const UserSchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'user'
-    }
+    },
+    manager: {
+        type: mongoose.Types.ObjectId,
+        ref: 'user'
+    },
+    positionTitle: String,
+    companyName: String,
+    startDate: String
 
 });
 

@@ -20,11 +20,6 @@
         font-size: 14px;
         display: block;
       }
-      .logo {
-        width: 190px;
-        height: 60px;
-        background: #DDD;
-      }
       .login-title {
         flex-basis: 100%;
       }
@@ -37,7 +32,8 @@
         background: #FFF;
         padding: 50px;
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         align-content: center;
@@ -45,6 +41,9 @@
       }
       .login a {
         margin-top: 25px;
+      }
+      .logo {
+        width: 50%;
       }
       .form-login label {
         text-align: left;

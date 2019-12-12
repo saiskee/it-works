@@ -16,12 +16,11 @@ const QuestionSchema = new mongoose.Schema({
     type: Object,
     default: {}
   },
-  author:{
+  author: {
     type: mongoose.Types.ObjectId,
     ref: 'user'
   }
-
-})
+});
 
 const Question = mongoose.model('question', QuestionSchema);
 export default Question;
