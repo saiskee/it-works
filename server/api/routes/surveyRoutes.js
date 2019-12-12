@@ -6,6 +6,7 @@ import 'babel-polyfill'
 import {parseError} from '../../util/helper'
 import mongoose from 'mongoose';
 import {parseNewTemplateIntoQuestions, parseExistingTemplateIntoQuestions} from "./util/helpers";
+import {scheduleEmailAlerts} from '../mailer/mailer.js';
 
 const surveyRoutes = express.Router();
 
@@ -143,8 +144,7 @@ surveyRoutes.post('', async (req, res) => {
     expiry_date: expiryDate
     //Todo: Maybe include creation date?
   });
-
-  newSurvey.save((err, survey) => {
+  newSurvey.save().then((err, survey) => {
     try {
       if (err) throw new Error(err);
       User.find({_id: {$in: employees.tags.map(employee => employee.id)}}, (err, users) => {
@@ -166,9 +166,7 @@ surveyRoutes.post('', async (req, res) => {
     } catch (err) {
       res.status(400).send(parseError(err));
     }
-
-  });
-
+  }).then(() => scheduleEmailAlerts(newSurvey._id, newSurvey.start_date, newSurvey.expiry_date, "Survey is open!"));
 });
 
 
