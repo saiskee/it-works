@@ -124,15 +124,10 @@ class SurveyBuilderPage extends Component {
       newQuestions.splice(index, 1);
       // Modify all questions following question being removed
       for (let i = index; i < prevState.questions.length; i++) {
-        const newQ = (newQuestions[i].question.props.type !== null) ?
+        if(newQuestions[i].question.props.type !== null) {
+            newQuestions[i].question =
             <Question type={newQuestions[i].question.props.type} data={newQuestions[i].data} index={i}
-                      updateData={this.updateData}/> : null;
-        newQuestions[i] = (newQ !== null) ? {
-          data: newQuestions[i].data,
-          title: newQuestions[i].title,
-          question: newQ,
-          ...newQuestions[i]
-        } : prevState.questions[i + 1];
+        updateData={this.updateData}/> }
       }
       return {questions: newQuestions};
     });

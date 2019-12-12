@@ -17,6 +17,13 @@ class Question extends Component {
     }
 
     changeData(event, index) {
+        if(this.state.type !== this.props.type) {
+            this.setState({
+                data: this.props.data,
+                type: this.props.type,
+                isRequired: this.props.type
+            })
+        }
         const newVal = event.target.value;
         this.setState(prevState => {
             const newData = prevState.data.map((val, i) => {
@@ -34,6 +41,13 @@ class Question extends Component {
     }
 
     addOption() {
+        if(this.state.type !== this.props.type) {
+            this.setState({
+                data: this.props.data,
+                type: this.props.type,
+                isRequired: this.props.type
+            })
+        }
         this.setState(prevState => {
             if(prevState.type === "rating") {
                 const newMax = prevState.data + 1;
@@ -58,6 +72,13 @@ class Question extends Component {
     }
 
     removeOption(index) {
+        if(this.state.type !== this.props.type) {
+            this.setState({
+                data: this.props.data,
+                type: this.props.type,
+                isRequired: this.props.type
+            })
+        }
         this.setState(prevState => {
             if(prevState.type === "rating") {
                 const newMax = prevState.data - 1;
