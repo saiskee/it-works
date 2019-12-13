@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import { Route, Switch} from 'react-router-dom';
-import {AuthRoute, ProtectedRoute} from "../../util/router";
+import {AuthRoute, ProtectedRoute, ManagerRoute} from "../../util/router";
 import Survey from "../Survey";
 import Login from "../Login";
 import Register from "../Register";
@@ -34,10 +34,10 @@ class App extends Component {
 
           <Switch>
           <MuiThemeProvider theme={theme}>
-            <ProtectedRoute path="/builder" exact component={SurveyBuilderPage}/>
+            <ManagerRoute path="/builder" exact component={SurveyBuilderPage}/>
             <ProtectedRoute path="/dashboard" exact component={Dashboard}/>
-            <ProtectedRoute path="/managerdashboard" exact component={ManagerDashboard}/>
-            <ProtectedRoute path="/analytics/:surveyId" exact component={SurveyAnalytics}/>
+            <ManagerRoute path="/managerdashboard" exact component={ManagerDashboard}/>
+            <ManagerRoute path="/analytics/:surveyId" exact component={SurveyAnalytics}/>
           </MuiThemeProvider>
           </Switch>
           <Route path="/oldBuilder" component = {SurveyBuilder} />

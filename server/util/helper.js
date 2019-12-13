@@ -13,6 +13,7 @@ export const sessionizeUser = user => {
     positionTitle: user.positionTitle,
     companyName: user.companyName,
     startDate: user.startDate,
+    permRole: user.role,
 
   };
 }

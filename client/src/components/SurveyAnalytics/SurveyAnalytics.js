@@ -39,12 +39,10 @@ class SurveyAnalytics extends Component {
     this.props.getSurvey(this.state.surveyId);
   }
 
-  componentWillUnmount() {
-  }
-
   surveyCompletionStatus(survey){
     const {assigned_to} = survey;
-    const completion_number = assigned_to.reduce((acc, obj) => {if (obj.completion_status === 'Finished') {return acc +1}}, 0);
+    const completion_number = assigned_to.reduce((acc, obj) => (obj.completion_status === 'Finished' ? acc +1 : acc), 0);
+    console.log(completion_number);
     return String(Math.floor(completion_number * 100/assigned_to.length)) + "% (" + String(assigned_to.length - completion_number) + " incomplete)";
   }
 
