@@ -3,11 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@material-ui/icons": "^4.5.1",
-    "body-parser": "^1.18.3",
+
     "concurrently": "^5.0.0",
-    "date-fns": "^2.8.1",
-    "express": "^4.16.4",
+    "nodemon": "^1.19.4"
   },
   "scripts": {
     "start": "react-scripts start",

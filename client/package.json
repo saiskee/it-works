@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.5.1",
+    "@material-ui/icons": "^4.5.1",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^3.3.7",
     "chart.js": "^2.9.3",
