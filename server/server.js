@@ -22,6 +22,12 @@ app.use(body_parser.urlencoded({ extended: true }));
 app.use(body_parser.json());
 app.disable('x-powered-by'); // We don't want hackers to know we are using Express
 // Use MongoDB for Persistent session storage
+const isDevMode = process.env.NODE_ENV === 'development';
+
+// 1st change.
+if (!isDevMode) {
+  app.set('trust proxy', 1);
+}
 app.use(
     session({
     name: SESS_NAME,
