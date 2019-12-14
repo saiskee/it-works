@@ -14,7 +14,7 @@ sessionRoutes.post("", async (req, res) => {
         const sessionUser = sessionizeUser(user);
         req.session.user = sessionUser;
         res.send({valid: true, ...sessionUser});
-
+        console.log(JSON.stringify(sessionUser));
       } else {
         throw new Error('Invalid Login Credentials');
       }

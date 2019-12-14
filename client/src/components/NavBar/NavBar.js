@@ -93,6 +93,10 @@ const NavBar = (props) => {
     setAnchorEl(null);
   };
 
+  const isManager = () => {
+    return props.session.permRole === 'manager';
+  }
+
   const renderMenu = (
       <Menu
           anchorEl={anchorEl}
@@ -103,9 +107,12 @@ const NavBar = (props) => {
           onClose={handleMenuClose}
       >
         <MenuItem className={classes.menuLabel} disabled={true}>Currently Logged in as {session.fullName}</MenuItem>
-        <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/builder')}}>Survey Builder</MenuItem>
         <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/dashboard')}}>Switch to Employee View</MenuItem>
+        {isManager() && <>
+        <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/builder')}}>Survey Builder</MenuItem>
         <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/managerdashboard')}}>Switch To Manager View</MenuItem>
+        </>
+        }
         <MenuItem className={classes.logoutButton} onClick={logout}>Log Out</MenuItem>
       </Menu>
   );
