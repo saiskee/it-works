@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ce1533f6.chunk.css",
+    "main.js": "/static/js/main.6b77986c.chunk.js",
+    "main.js.map": "/static/js/main.6b77986c.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.e077b804.js",
+    "runtime-main.js.map": "/static/js/runtime-main.e077b804.js.map",
+    "static/css/2.65382761.chunk.css": "/static/css/2.65382761.chunk.css",
+    "static/js/2.8db40abc.chunk.js": "/static/js/2.8db40abc.chunk.js",
+    "static/js/2.8db40abc.chunk.js.map": "/static/js/2.8db40abc.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.0084025097b52b7ccbe8f223920a4916.js": "/precache-manifest.0084025097b52b7ccbe8f223920a4916.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.65382761.chunk.css.map": "/static/css/2.65382761.chunk.css.map",
+    "static/css/main.ce1533f6.chunk.css.map": "/static/css/main.ce1533f6.chunk.css.map",
+    "static/media/Register.css": "/static/media/download2.26cf7550.png",
+    "static/media/bootstrap.css": "/static/media/glyphicons-halflings-regular.fa277232.woff",
+    "static/media/it-works-logo.png": "/static/media/it-works-logo.c605dad0.png",
+    "static/media/logo512.jpeg": "/static/media/logo512.3972fe4d.jpeg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e077b804.js",
+    "static/css/2.65382761.chunk.css",
+    "static/js/2.8db40abc.chunk.js",
+    "static/css/main.ce1533f6.chunk.css",
+    "static/js/main.6b77986c.chunk.js"
+  ]
+}

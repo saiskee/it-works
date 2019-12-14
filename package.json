@@ -8,8 +8,9 @@
     "nodemon": "^1.19.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "preinstall": "echo --PREINSTALL-- && cd server && yarn",
+    "start": "cd server && nodemon start.js",
+    "build": " cd client && yarn && echo ---BUILDING--- && yarn run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "server": "cd server && nodemon start.js",
