@@ -6,6 +6,7 @@ import cors from 'cors';
 import body_parser from 'body-parser';
 import session from 'express-session';
 import connectStore from 'connect-mongo';
+import path from 'path';
 
 import {PORT, NODE_ENV, MONGO_URI, SESS_NAME, SESS_SECRET, SESS_LIFETIME} from './config';
 
@@ -42,7 +43,6 @@ app.use(
 // mongoose.Promise = global.Promise; 
 mongoose.connect(MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true}).then(() => { console.log("MONGODB Connected")})
 
-
 import {userRoutes, sessionRoutes, surveyRoutes, questionRoutes, analyticsRoutes, employeeRoutes} from './api/routes';
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
@@ -53,7 +53,14 @@ apiRouter.use('/questions', questionRoutes);
 apiRouter.use('/analytics', analyticsRoutes);
 apiRouter.use('/employees', employeeRoutes)
 
-app.listen(port);
-console.log('REST API server running on: ' + port);
+
+app.use(express.static(path.resolve(__dirname + '/../client/build')));
+app.get('*', function(req, res) {
+  res.sendFile(path.resolve(__dirname + '/../client/build/index.html'));
+});
+app.listen(port, ()=> {
+  console.log('REST API server running on: ' + port);
+});
+
 
 
