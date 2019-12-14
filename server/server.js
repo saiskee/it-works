@@ -15,7 +15,9 @@ const app = express();
 const MongoStore = connectStore(session);
 const  port = PORT || 4000; // Either the port we were assigned, or 4000
 app.use(cors()); // Allow all Cross-Domain traffic to see this server. On actual project might want to limit to only project domain.
-app.use(morgan("combined", {}));
+app.use(morgan("tiny", {
+  skip: function(req, res){ return !req.originalUrl.startsWith("/api")}
+}));
 app.use(body_parser.urlencoded({ extended: true }));
 app.use(body_parser.json());
 app.disable('x-powered-by'); // We don't want hackers to know we are using Express
