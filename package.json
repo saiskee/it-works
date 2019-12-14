@@ -8,7 +8,7 @@
     "nodemon": "^1.19.4"
   },
   "scripts": {
-    "preinstall": "echo --PREINSTALL-- && yarn && cd server && yarn && cd ../client && yarn && echo ---BUILDING--- && yarn run build && cd ../",
+    "preinstall": "echo --PREINSTALL-- && cd server && yarn && cd ../client && yarn && echo ---BUILDING--- && yarn run build && cd ../",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
