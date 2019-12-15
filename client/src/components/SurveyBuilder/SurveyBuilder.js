@@ -115,24 +115,28 @@ class SurveyBuilder extends Component {
                 </p>
             }
           </div>
-          <Paper className='question-bank-table'>
-            {this.props.question_bank.map((question, question_bank_index) =>
+          {/* QUESTION BANK */}
 
-                <Card className='question-bank-card' key={question._id}>
-                  <Button children={<Add/>}
-                          onClick={this.props.addQuestionFromQuestionBank.bind(this, question, question_bank_index)}
-                          className='question-bank-card-add'/>
-                  <CardContent>
-                    <Typography
-                        variant={'h5'}
-                        color={'primary'}> {question.question_data.title ? question.question_data.title : question.name}</Typography>
-                    <Typography component={'div'}><Box
-                        fontStyle='italic'>{question.question_data.type}</Box></Typography>
-                    <Typography>{JSON.stringify(question.question_data.choices)}</Typography>
-                  </CardContent>
-                </Card>
-            )}
-          </Paper>
+            <Paper className='question-bank-table'>
+              {this.props.question_bank.length < 1 && <Typography style={{marginTop:'50%', padding:'5%'}} variant={'h5'}>This is where your previous questions go, to be reused. Create a survey to reuse questions!</Typography>}
+              {this.props.question_bank.map((question, question_bank_index) =>
+
+                  <Card className='question-bank-card' key={question._id}>
+                    <Button children={<Add/>}
+                            onClick={this.props.addQuestionFromQuestionBank.bind(this, question, question_bank_index)}
+                            className='question-bank-card-add'/>
+                    <CardContent>
+                      <Typography
+                          variant={'h5'}
+                          color={'primary'}> {question.question_data.title ? question.question_data.title : question.name}</Typography>
+                      <Typography component={'div'}><Box
+                          fontStyle='italic'>{question.question_data.type}</Box></Typography>
+                      <Typography>{JSON.stringify(question.question_data.choices)}</Typography>
+                    </CardContent>
+                  </Card>
+              )}
+            </Paper>
+
         </div>
     )
   }
