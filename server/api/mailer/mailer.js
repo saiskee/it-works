@@ -17,7 +17,7 @@ async function EmailUsers(users, message) {
   // This was mostly taken from the Node Mailer documentation page:
   // https://nodemailer.com/about/
   let transporter = nodemailer.createTransport({
-    service: 'Zoho',
+    service: 'gmail',
     auth: {
       // Plain text password because we are cool like that.
       user: 'ItWorksRobot@gmail.com',
@@ -34,7 +34,7 @@ async function EmailUsers(users, message) {
     // NodeMailer takes its emails as a string list... for some ungodly reason.
     emails = emails.reduce((full_string, email) => full_string += ', ' + email, "");
     transporter.sendMail({
-      from: '"ItWorks Mail Robot 🤖" <itworksrobot@zohomail.com>', // sender address
+      from: 'ItWorksRobot@gmail.com', // sender address
       to: emails,
       subject: "Update from It Works!", // Subject line
       text: message
@@ -57,7 +57,7 @@ function EmailUnfinishedUsersForSurvey(surveyId, message) {
 
 export function scheduleEmailAlerts(surveyId, start_date, end_date, message) {
   // We want to send one email now.
-  EmailUnfinishedUsersForSurvey(surveyId, "Fun Stuff");
+  EmailUnfinishedUsersForSurvey(surveyId, message);
   // Then one in the middle of the time interval.
   let days_to_midpoint = differenceInDays(end_date, start_date);
   if (days_to_midpoint >= 1) {
