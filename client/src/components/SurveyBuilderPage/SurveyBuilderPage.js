@@ -30,7 +30,7 @@ class SurveyBuilderPage extends Component {
       surveyOpenDate: parseInt(moment().format('x')),
       surveyCloseDate: parseInt(moment().add('1', 'days').format('x')),
       employeeMessage : '',
-      surveyCreationSuccess: true
+      surveyCreationSuccess: false
     };
     this.addQuestion = this.addQuestion.bind(this);
     this.initDataForType = this.initDataForType.bind(this);
