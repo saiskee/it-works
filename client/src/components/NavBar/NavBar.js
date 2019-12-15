@@ -5,7 +5,6 @@ import {logout} from "../../actions/session";
 import {AccountCircle} from '@material-ui/icons';
 import {withRouter} from "react-router-dom";
 import logo from './it-works-logo.png';
-import {red} from "@material-ui/core/colors";
 
 const mapStateToProps = ({session}) => ({
   session, // this puts session as a prop

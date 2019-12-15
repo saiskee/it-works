@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import './SurveyBuilderPage.css';
-import Builder from '../SurveyBuilder';
-import Question from '../Question';
-import EmployeeSelector from "../EmployeeSelector/EmployeeSelector";
+import {SurveyBuilder as Builder, Question, EmployeeSelector} from "../";
 import {Button, TextField, Modal, Paper, Typography, Card} from '@material-ui/core';
 import $ from "jquery";
 import {connect} from 'react-redux';
