@@ -227,7 +227,8 @@ class ManagerDashboard extends Component {
             <Grid item lg={8} md={8} xl={9} xs={12}>
               {authoredSurveys.surveys.length > 0 &&
               <Paper>
-                <Table>
+                <div style={{maxHeight: '86vh', overflow: 'auto'}}>
+                <Table stickyHeader>
                   <TableHead>
                     <TableRow>
                       <TableCell>
@@ -253,7 +254,7 @@ class ManagerDashboard extends Component {
                           <TableCell>
                             <Link
                                 to={"/analytics/" + survey_object._id}><Typography
-                                variant={'subtitle1'}>{survey_object.survey_template.title ? survey_object.survey_template.title : "Survey"}</Typography>
+                                variant={'subtitle1'} color={'primary'}>{survey_object.survey_template.title ? survey_object.survey_template.title : "Survey"}</Typography>
                             </Link>
                           </TableCell>
                           <TableCell>
@@ -274,6 +275,7 @@ class ManagerDashboard extends Component {
                     ))}
                   </TableBody>
                 </Table>
+                </div>
               </Paper>}
               {authoredSurveys.surveys.length === 0 &&
                   <>
