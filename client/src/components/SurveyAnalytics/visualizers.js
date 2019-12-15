@@ -98,7 +98,7 @@ const visualizeTrendData = (question, currentSurveyId) => {
 
 const visualizeCurrentData = (question, currentSurveyId) => {
   const {analytics} = question;
-  console.log(question, currentSurveyId);
+  if (!analytics) return;
   if (question.type === "text" || question.type === 'comment') {
     return (
 

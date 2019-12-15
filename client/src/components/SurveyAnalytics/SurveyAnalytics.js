@@ -126,8 +126,9 @@ class SurveyAnalytics extends Component {
                         </div>
                         <Typography variant={'h1'}>{question.title ? question.title : question.name}</Typography>
                         <Typography variant={'h5'}>{question.type}</Typography>
-                        {!this.state.showTrendObject[question.question_id._id] && visualizeCurrentData(question, this.state.surveyId)}
-                        {this.state.showTrendObject[question.question_id._id] && visualizeTrendData(question, this.state.surveyId)}
+                        {question.analytics && !this.state.showTrendObject[question.question_id._id] && visualizeCurrentData(question, this.state.surveyId)}
+                        {question.analytics && this.state.showTrendObject[question.question_id._id] && visualizeTrendData(question, this.state.surveyId)}
+                        {!question.analytics && <Typography variant={'subtitle1'} color={'primary'} style={{marginTop: '15px'}}>No Analytics to Display Yet!</Typography>}
                       </Card>
                     </Grid>
                 ))
