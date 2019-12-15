@@ -13,7 +13,7 @@ import {
   Grid,
   Paper,
   Typography,
-  Card, makeStyles
+  Card
 } from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -44,10 +44,6 @@ const styles = theme => ({
 
 class Dashboard extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount = () => {
     this.props.getSurveys();
   }
@@ -62,7 +58,7 @@ class Dashboard extends Component {
     return(
 
     <Card className={classes.profileCard}>
-      <img className={classes.logo} src={logo}/>
+      <img alt={'Profile Picture'} className={classes.logo} src={logo}/>
       <Typography variant={'h2'}>{fullName}</Typography>
       <Typography variant={'subtitle2'}>{companyName}, {positionTitle}</Typography>
       <Typography variant={'body2'}>You've been with {companyName} for {calculateLoyalty(startDate)} days!</Typography>

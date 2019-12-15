@@ -20,7 +20,6 @@ const SurveyStatus = {
  * Will return all surveys currently assigned to a user
  */
 surveyRoutes.get('/surveys', async (req, res) => {
-  console.log(req.session);
       const {userId} = req.session.user;
 
       User.findOne({_id: mongoose.Types.ObjectId(userId)}, (err, user) => {

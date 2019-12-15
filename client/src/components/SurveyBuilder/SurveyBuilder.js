@@ -9,9 +9,7 @@ import {
   Box,
   Button,
   Switch,
-  Input,
   TextField,
-  CardHeader
 } from "@material-ui/core";
 import {
   Add,
@@ -21,7 +19,7 @@ import {
   StarHalfOutlined,
   RadioButtonCheckedOutlined,
   CheckBoxOutlined,
-  ArrowDropDownCircle, Image
+  ArrowDropDownCircle
 } from "@material-ui/icons"
 import moment from "moment";
 import IconButton from "@material-ui/core/IconButton";
@@ -64,7 +62,7 @@ class SurveyBuilder extends Component {
               )}
 
             </Grid>
-            <img src={logo} style={{margin: '25% 9%'}}/>
+            <img alt='It works logo' src={logo} style={{margin: '25% 9%'}}/>
           </Paper>
           <div className='questions-display'>
             {(this.props.questions.length !== 0) ?

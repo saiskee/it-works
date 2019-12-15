@@ -20,7 +20,6 @@ SurveyJSCreator.StylesManager.applyTheme("default");
 class SurveyBuilder extends Component {
 
   saveSurvey = () => {
-    console.log(JSON.stringify(this.surveyCreator.JSON));
     $.ajax('/api/survey', {
       method: 'POST',
       data: JSON.stringify(this.surveyCreator.JSON),

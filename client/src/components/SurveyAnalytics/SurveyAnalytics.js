@@ -1,4 +1,4 @@
-import React, {Component, useEffect} from 'react';
+import React, {Component} from 'react';
 import {Grid, Table, Typography, Card, TableHead, TableRow, TableBody, TableCell, IconButton} from '@material-ui/core';
 import {TrendingUp} from '@material-ui/icons';
 import {connect} from "react-redux";

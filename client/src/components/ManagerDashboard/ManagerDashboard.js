@@ -185,7 +185,7 @@ class ManagerDashboard extends Component {
     return (
 
         <Card style={styles.profileCard}>
-          <img style={styles.logo} src={logo}/>
+          <img alt={'Profile Picture Logo'} style={styles.logo} src={logo}/>
           <Typography variant={'h2'}>{fullName}</Typography>
           <Typography variant={'subtitle2'}>{companyName}, {positionTitle}</Typography>
           <Typography variant={'body2'}>You've been

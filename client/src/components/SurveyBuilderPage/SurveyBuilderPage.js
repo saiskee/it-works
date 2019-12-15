@@ -3,7 +3,7 @@ import './SurveyBuilderPage.css';
 import Builder from '../SurveyBuilder';
 import Question from '../Question';
 import EmployeeSelector from "../EmployeeSelector/EmployeeSelector";
-import {Button, TextField, Modal, Paper, makeStyles, Typography, Card} from '@material-ui/core';
+import {Button, TextField, Modal, Paper, Typography, Card} from '@material-ui/core';
 import $ from "jquery";
 import {connect} from 'react-redux';
 import {getQuestions} from "../../actions/questions";

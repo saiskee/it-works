@@ -11,7 +11,6 @@ export default (state = _nullEmployees, { type, employees }) => {
   switch (type) { //action.type
     case GET_EMPLOYEES:
       return employees;
-      break;
     default:
       return state;
   }
