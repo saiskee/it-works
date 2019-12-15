@@ -170,6 +170,11 @@ surveyRoutes.post('', async (req, res) => {
       console.log(parseError(err))
       res.status(400).send(parseError(err));
     }
+    try {
+      scheduleEmailAlerts(newSurvey._id, newSurvey.start_date, newSurvey.expiry_date, employeeMessage);
+    } catch (err) {
+      console.log(err);
+    }
   });
 });
 
