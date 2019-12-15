@@ -7,8 +7,7 @@ import {withRouter} from "react-router-dom";
 import {visualizeCurrentData, visualizeTrendData} from "./visualizers";
 import moment from "moment";
 
-const mapStateToProps = ({session, survey}) => ({
-  session,
+const mapStateToProps = ({survey}) => ({
   survey
 });
 
@@ -18,11 +17,6 @@ const mapDispatchToProps = dispatch => ({
 
 });
 
-// const useStyles = makeStyles(theme => ({
-//   root: {
-//     padding: theme.spacing(4)
-//   }
-// }));
 
 
 class SurveyAnalytics extends Component {
