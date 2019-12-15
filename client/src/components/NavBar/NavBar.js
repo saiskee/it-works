@@ -2,11 +2,9 @@ import React, {useEffect} from "react";
 import {connect} from "react-redux";
 import {AppBar, Toolbar, Typography, makeStyles, Menu, MenuItem, IconButton, Button} from "@material-ui/core";
 import {logout} from "../../actions/session";
-import {AccountCircle, Create} from '@material-ui/icons';
+import {AccountCircle} from '@material-ui/icons';
 import {withRouter} from "react-router-dom";
 import logo from './it-works-logo.png';
-import {green, red} from "@material-ui/core/colors";
-import {withStyles} from "@material-ui/core";
 
 const mapStateToProps = ({session}) => ({
   session, // this puts session as a prop
@@ -78,7 +76,7 @@ const NavBar = (props) => {
     props.history.listen(() => {
       setTitle(processWindowName(window.location.pathname));
     })
-  }, []);
+  }, [props.history]);
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -108,11 +106,8 @@ const NavBar = (props) => {
       >
         <MenuItem className={classes.menuLabel} disabled={true}>Currently Logged in as {session.fullName}</MenuItem>
         <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/dashboard')}}>Switch to Employee View</MenuItem>
-        {isManager() && <>
-        <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/builder')}}>Survey Builder</MenuItem>
-        <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/managerdashboard')}}>Switch To Manager View</MenuItem>
-        </>
-        }
+        {isManager() && <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/builder')}}>Survey Builder</MenuItem>}
+        {isManager() && <MenuItem className={classes.menuItem} onClick={() => {menuCloseAndRedirect('/managerdashboard')}}>Switch To Manager View</MenuItem>}
         <MenuItem className={classes.logoutButton} onClick={logout}>Log Out</MenuItem>
       </Menu>
   );
@@ -121,7 +116,7 @@ const NavBar = (props) => {
       <div className={classes.root} style={{marginBottom: '5%'}}>
         <AppBar color="secondary" position={'fixed'}>
           <Toolbar>
-            <img className={classes.logo} src={logo} width={'8%'} onClick={()=>{props.history.push('/dashboard')}}/>
+            <img alt={'It Works Logo'} className={classes.logo} src={logo} width={'8%'} onClick={()=>{props.history.push('/dashboard')}}/>
               <Typography variant={'h4'} color="primary" style={{marginLeft: '1%'}}>{title}</Typography>
             <div className={classes.root}/>
             <Button edge='end' color={'primary'} onClick={() => {menuCloseAndRedirect('/builder')}}>

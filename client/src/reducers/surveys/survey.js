@@ -13,7 +13,6 @@ export default (state = _nullSurvey, { type, survey }) => {
     case GET_SURVEY_WITH_ID:
     case GET_SURVEY_WITH_RESPONSES:
       return survey;
-      break;
     default:
       return state;
   }

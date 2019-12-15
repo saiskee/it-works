@@ -12,7 +12,6 @@ export default (state = _nullSurveys, { type, surveys }) => {
   switch (type) { //action.type
     case GET_CURRENT_USER_SURVEYS:
       return surveys;
-      break;
     default:
     return state;
   }
