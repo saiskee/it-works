@@ -151,13 +151,15 @@ const visualizeCurrentData = (question, currentSurveyId) => {
       labels: Object.keys(question.analytics[currentSurveyId].answers),
       datasets: [{
         label: "Survey " + currentSurveyId,
-        data: Object.values(question.analytics[currentSurveyId].answers)
+        data: Object.values(question.analytics[currentSurveyId].answers),
+        backgroundColor: ['#389E3CCA', '#388E3CCA', '#387E3CCA', '#386E3CCA', '#385E3CCA', '#384E3CCA']
       }],
     };
     let options = {
       scales: {
         yAxes: [{ticks: {beginAtZero: true}}]
-      }
+      },
+
     }
     return (
         <>

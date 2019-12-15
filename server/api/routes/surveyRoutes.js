@@ -133,7 +133,6 @@ surveyRoutes.post('/:surveyId', async (req, res) => {
 // Route for Manager to create a new survey
 surveyRoutes.post('', async (req, res) => {
   let {employees, surveyTemplate, openDate, expiryDate, employeeMessage} = req.body;
-  console.log(req.session);
   const {userId} = req.session.user;
 
   // From the survey, create new question records and replace survey template with the object ids of these new records
@@ -158,6 +157,8 @@ surveyRoutes.post('', async (req, res) => {
             });
             user.save();
           })
+
+          employeeMessage = "You have a new survey assigned to you by your manager. \n\n Message from your manager: \n" + employeeMessage;
           res.send({employees:employees.tags.map(employee=>employee.fullName), openDate, expiryDate, surveyTemplate});
           scheduleEmailAlerts(newSurvey._id, newSurvey.start_date, newSurvey.expiry_date, employeeMessage)
 

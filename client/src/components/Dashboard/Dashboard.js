@@ -124,7 +124,7 @@ class Dashboard extends Component {
                       {surveys.surveys.length < 1 &&
                       <TableRow>
                         <TableCell>
-                          <Typography variant={'h5'}>No surveys to display</Typography></TableCell>
+                          <Typography variant={'h5'}>No Surveys Assigned</Typography></TableCell>
                       </TableRow>}
 
                     </TableBody>

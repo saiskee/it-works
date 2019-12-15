@@ -119,9 +119,11 @@ const NavBar = (props) => {
             <img alt={'It Works Logo'} className={classes.logo} src={logo} width={'8%'} onClick={()=>{props.history.push('/dashboard')}}/>
               <Typography variant={'h4'} color="primary" style={{marginLeft: '1%'}}>{title}</Typography>
             <div className={classes.root}/>
+            {isManager() &&
             <Button edge='end' color={'primary'} onClick={() => {menuCloseAndRedirect('/builder')}}>
               New Survey
-            </Button>
+            </Button>}
+
             <IconButton
                 edge="end"
                 color="primary"
