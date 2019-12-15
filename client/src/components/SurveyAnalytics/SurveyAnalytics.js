@@ -4,7 +4,7 @@ import {TrendingUp} from '@material-ui/icons';
 import {connect} from "react-redux";
 import {getSurveyAndResponses} from "../../actions/analytics";
 import {withRouter} from "react-router-dom";
-import {visualizeCurrentData, visualizeTrendData} from "./visualizers";
+import {VisualizeCurrentData, visualizeTrendData} from "./visualizers";
 import moment from "moment";
 
 const mapStateToProps = ({survey}) => ({
@@ -20,11 +20,13 @@ const mapDispatchToProps = dispatch => ({
 
 
 class SurveyAnalytics extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
       surveyId: props.match.params.surveyId,
-      showTrendObject: {}
+      showTrendObject: {},
+      surveyViews : {}
     }
   }
 
@@ -48,6 +50,15 @@ class SurveyAnalytics extends Component {
       showTrendObject: prevState.showTrendObject
     }});
     console.log(question_id);
+  }
+
+  handleSurveyViewChange(event, index, newValue){
+    console.log(event)
+    // this.setState((prevState) => {
+    //   let {surveyViews} = prevState;
+    //   surveyViews[index] = newValue;
+    //   return {surveyViews: surveyViews};
+    // });
   }
 
   render() {
@@ -120,8 +131,8 @@ class SurveyAnalytics extends Component {
                         </div>
                         <Typography variant={'h1'}>{question.title ? question.title : question.name}</Typography>
                         <Typography variant={'h5'}>{question.type}</Typography>
-                        {question.analytics && !this.state.showTrendObject[question.question_id._id] && visualizeCurrentData(question, this.state.surveyId)}
-                        {question.analytics && this.state.showTrendObject[question.question_id._id] && visualizeTrendData(question, this.state.surveyId)}
+                        {question.analytics && !this.state.showTrendObject[question.question_id._id] && <VisualizeCurrentData  question={question} currentSurveyId={this.state.surveyId}/> }
+                        {question.analytics && this.state.showTrendObject[question.question_id._id] && visualizeTrendData.bind(this)(question, this.state.surveyId)}
                         {!question.analytics && <Typography variant={'subtitle1'} color={'primary'} style={{marginTop: '15px'}}>No Analytics to Display Yet!</Typography>}
                       </Card>
                     </Grid>
