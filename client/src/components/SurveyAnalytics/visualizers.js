@@ -96,18 +96,12 @@ const visualizeTrendData = (question, currentSurveyId) => {
 }
 
 const VisualizeCurrentData = ({question, currentSurveyId}) => {
+  let currentDateIndex = 0;
   const {analytics} = question;
-  const [surveyToDisplay, setSurvey] = useState(currentSurveyId);
-  if (!analytics) {
-    return (<></>)
-  }
-  ;
-
   const dates = Object.keys(analytics).map(survey_id => ({
     survey_id,
     date: analytics[survey_id].expiry
   })).sort(obj => -obj.date);
-  let currentDateIndex = 0;
   const marks = dates.map((obj, index) => {
     if (obj.survey_id === currentSurveyId){
       currentDateIndex = index;
@@ -118,15 +112,25 @@ const VisualizeCurrentData = ({question, currentSurveyId}) => {
     }
   });
 
+
+  const [surveyToDisplay, setSurvey] = useState(currentSurveyId);
+  const [surveyIndex, setSurveyIndex] = useState(currentDateIndex);
+  if (!analytics) {
+    return (<></>)
+  };
+
+
+
   function handleSliderChange(event, index) {
-    console.log(dates[index]);
-    setSurvey(dates[index].survey_id)
+    if (dates[index].survey_id !== surveyToDisplay) {
+      setSurveyIndex(index);
+      setSurvey(dates[index].survey_id)
+    }
   }
 
   const SurveySlider = () => {
-
     return (
-        <Slider marks={marks} step={null} min={-1} defaultValue={currentDateIndex} max={dates.length}
+        <Slider marks={marks} step={null} min={-1} defaultValue={surveyIndex} max={dates.length}
                 onChange={handleSliderChange}/>
     );
   };
