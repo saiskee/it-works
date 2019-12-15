@@ -114,7 +114,7 @@ class SurveyAnalytics extends Component {
                     >
                       <Card style={classes.root}>
                         <div width={'100%'}>
-                          <IconButton color={'primary'} style={classes.analyticsButton} onClick={() => {this.handleTrendShowChange(question, index);}}>
+                          <IconButton title={'Show Trend Analytics for this Question'} color={'primary'} style={classes.analyticsButton} onClick={() => {this.handleTrendShowChange(question, index);}}>
                             <TrendingUp color={'primary'}/>
                           </IconButton>
                         </div>
