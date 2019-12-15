@@ -133,6 +133,7 @@ surveyRoutes.post('/:surveyId', async (req, res) => {
 // Route for Manager to create a new survey
 surveyRoutes.post('', async (req, res) => {
   let {employees, surveyTemplate, openDate, expiryDate, employeeMessage} = req.body;
+  console.log(req.session);
   const {userId} = req.session.user;
 
   // From the survey, create new question records and replace survey template with the object ids of these new records
