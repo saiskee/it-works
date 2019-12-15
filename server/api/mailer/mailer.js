@@ -57,7 +57,7 @@ function EmailUnfinishedUsersForSurvey(surveyId, message) {
 
 export function scheduleEmailAlerts(surveyId, start_date, end_date, message) {
   // We want to send one email now.
-  EmailUnfinishedUsersForSurvey(surveyId, "Fun Stuff");
+  EmailUnfinishedUsersForSurvey(surveyId, message);
   // Then one in the middle of the time interval.
   let days_to_midpoint = differenceInDays(end_date, start_date);
   if (days_to_midpoint >= 1) {
