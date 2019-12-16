@@ -9,6 +9,7 @@ If you would like to test our the product without setting up your own environmen
 [https://itworks320.herokuapp.com](https://itworks320.herokuapp.com)
 
 This version is preloaded with test data obtained from the following dataset: [flipchart_dataset.json]
+
 If you would like to access any of the accounts please use the login information in the provided dataset to access the application, or create your own account!
 
 An example login would be the CEO of the company:
@@ -16,7 +17,7 @@ An example login would be the CEO of the company:
 Username: Abigail_Keith@flipchart.com 
 Password: keithab
 ```
-You could then create a survey inside this account and assign it to any employee beneath the CEO, for example Jaslene Sparks:
+You could then create a survey inside Abigail's account and assign it to any employee beneath her in the hierarchy of the company, for example Jaslene Sparks:
 ```
 Username: Jaslene_Sparks@flipchart.com
 Password: sparksja
@@ -48,11 +49,16 @@ This can be done by prepending sudo to the yarn command like so:
 
 
 To start the server run this command from the project root directory:
+
 ```sudo yarn dev```
 
 Then you can connect by opening a browser and going to:
+
 ```localhost:3000/login```
 
+This version of the product will by default be connected to our MongoDB instance. If you would like to use a clean database with your own data please modify the ```MONGO_URI``` variable inside the ```server/config.js``` file to point to your MongoDB instance. A simple service to setup a Mongo instance and get a connection URI would be [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+
+__Important Note:__ You will not be able to assign a survey to someone unless they are beneath you in the company hierarchy. They must have their manager field in their User document set to the manager's object id.
 
 ## Technologies used
 
