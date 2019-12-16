@@ -11,7 +11,6 @@ export default (state = _nullQuestions, { type, questions }) => {
   switch (type) { //action.type
     case GET_QUESTIONS_AUTHORED_BY_USER:
       return questions;
-      break;
     default:
       return state;
   }

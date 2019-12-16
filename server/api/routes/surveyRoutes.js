@@ -11,16 +11,16 @@ import {scheduleEmailAlerts} from '../mailer/mailer.js';
 const surveyRoutes = express.Router();
 
 const SurveyStatus = {
+  NOT_OPEN: "Not Open",
   UNFINISHED: "Unfinished",
   FINISHED: "Finished",
   EXPIRED: "Expired"
 };
 
-/* GET /surveys
+/* GET /api/survey/surveys
  * Will return all surveys currently assigned to a user
  */
 surveyRoutes.get('/surveys', async (req, res) => {
-  console.log(req.session);
       const {userId} = req.session.user;
 
       User.findOne({_id: mongoose.Types.ObjectId(userId)}, (err, user) => {
@@ -35,6 +35,10 @@ surveyRoutes.get('/surveys', async (req, res) => {
               let surveys_with_statuses = await Promise.all(surveys.map(async (survey_object) => {
                 let user_survey_object = user.surveys_assigned.find((user_survey) => (mongoose.Types.ObjectId(user_survey.survey_id).equals(survey_object._id)));
                 // Return the survey with the status appended.
+                if (survey_object.start_date > (new Date).getTime() && user_survey_object.survey_status !== SurveyStatus.NOT_OPEN){
+                  user_survey_object.survey_status = SurveyStatus.NOT_OPEN;
+                  await user.save();
+                }
                 if (survey_object.expiry_date < (new Date).getTime() && user_survey_object.survey_status !== SurveyStatus.EXPIRED) {
                   user_survey_object.survey_status = SurveyStatus.EXPIRED;
                   await user.save();
@@ -54,7 +58,7 @@ surveyRoutes.get('/surveys', async (req, res) => {
     }
 );
 
-/* GET /:surveyId
+/* GET /api/survey/:surveyId
 * Route for employee to get survey data to take survey
  */
 surveyRoutes.get('/:surveyId', async (req, res) => {
@@ -100,7 +104,7 @@ surveyRoutes.get('/:surveyId', async (req, res) => {
     }
 );
 
-/* POST /:surveyId
+/* POST /api/survey/:surveyId
  * Route for Employee to send survey responses to
  */
 surveyRoutes.post('/:surveyId', async (req, res) => {
@@ -130,6 +134,7 @@ surveyRoutes.post('/:surveyId', async (req, res) => {
   survey.save();
 });
 
+// POST /api/survey
 // Route for Manager to create a new survey
 surveyRoutes.post('', async (req, res) => {
   let {employees, surveyTemplate, openDate, expiryDate, employeeMessage} = req.body;
@@ -144,7 +149,7 @@ surveyRoutes.post('', async (req, res) => {
     start_date: openDate,
     expiry_date: expiryDate
   });
-  newSurvey.save().then((err, survey) => {
+  newSurvey.save((err, survey) => {
     try {
       if (err) throw new Error(err);
       User.find({_id: {$in: employees.tags.map(employee => employee.id)}}, (err, users) => {
@@ -158,15 +163,26 @@ surveyRoutes.post('', async (req, res) => {
             user.save();
           })
 
+          employeeMessage = "You have a new survey assigned to you by your manager. \n\n Message from your manager: \n" + employeeMessage;
+          res.send({employees:employees.tags.map(employee=>employee.fullName), openDate, expiryDate, surveyTemplate});
+          scheduleEmailAlerts(newSurvey._id, newSurvey.start_date, newSurvey.expiry_date, employeeMessage)
+
         } catch (err) {
+          console.log(parseError(err))
+
           res.status(400).send(parseError(err));
         }
-        res.send(survey._id);
       });
     } catch (err) {
+      console.log(parseError(err))
       res.status(400).send(parseError(err));
     }
-  }).then(() => scheduleEmailAlerts(newSurvey._id, newSurvey.start_date, newSurvey.expiry_date, employeeMessage));
+    try {
+      scheduleEmailAlerts(newSurvey._id, newSurvey.start_date, newSurvey.expiry_date, employeeMessage);
+    } catch (err) {
+      console.log(err);
+    }
+  });
 });
 
 
