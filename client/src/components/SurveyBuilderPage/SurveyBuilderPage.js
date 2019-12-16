@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import './SurveyBuilderPage.css';
-import Builder from '../SurveyBuilder';
-import Question from '../Question';
-import EmployeeSelector from "../EmployeeSelector/EmployeeSelector";
-import {Button, TextField, Modal, Paper, makeStyles, Typography, Card} from '@material-ui/core';
+import {SurveyBuilder as Builder, Question, EmployeeSelector} from "../";
+import {Button, TextField, Modal, Paper, Typography, Card} from '@material-ui/core';
+import {CheckCircleOutlined} from "@material-ui/icons";
 import $ from "jquery";
 import {connect} from 'react-redux';
 import {getQuestions} from "../../actions/questions";
@@ -30,7 +29,8 @@ class SurveyBuilderPage extends Component {
       title: "",
       surveyOpenDate: parseInt(moment().format('x')),
       surveyCloseDate: parseInt(moment().add('1', 'days').format('x')),
-      employeeMessage : ''
+      employeeMessage : '',
+      surveyCreationSuccess: false
     };
     this.addQuestion = this.addQuestion.bind(this);
     this.initDataForType = this.initDataForType.bind(this);
@@ -255,15 +255,25 @@ class SurveyBuilderPage extends Component {
       expiryDate: this.state.surveyCloseDate,
       employeeMessage: this.state.employeeMessage
     }
-    $.ajax('/api/survey', {
+    const response = $.ajax('/api/survey', {
       method: 'POST',
       data: JSON.stringify(toServer),
-      contentType: 'application/json'
+      contentType: 'application/json',
+      success: (data, status, xhttp) => {
+        if (status === 'success'){
+          this.setState({surveyCreationSuccess: true})
+        }
+      }
     })
+    if (response.statusText === 'OK'){
+
+    }
   }
 
   handleModalClose() {
-    this.setState({submitModalOpen: false});
+    if (!this.state.surveyCreationSuccess) {
+      this.setState({submitModalOpen: false});
+    }
   }
 
   handleModalOpen() {
@@ -292,51 +302,67 @@ class SurveyBuilderPage extends Component {
     return (
         <Modal open={this.state.submitModalOpen} onClose={this.handleModalClose}>
           <Paper style={classes.paper}>
-            <Typography variant={'h3'} color={'primary'}>Send to Employees</Typography>
-            <Grid container style={classes.gridDiv} direction={'row'} spacing={2}>
-              <Grid item lg={4} md={4} sm={4}>
-                {/*<EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>*/}
-                <Card style={{margin: '0 3%', padding: '5%'}}>
-                  <TextField
-                      fullWidth
-                      onChange={this.handleSurveyOpenDate.bind(this)}
-                      defaultValue={moment(this.state.surveyOpenDate).format('YYYY-MM-DD[T]HH:mm')}
-                      id="datetime-local"
-                      label="Survey Open Time"
-                      type="datetime-local"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      error={this.state.openDateInvalid}/>
-                  <TextField
-                      style={{marginTop: '15px'}}
-                      fullWidth
-                      defaultValue={moment(this.state.surveyCloseDate).format('YYYY-MM-DD[T]HH:mm')}
-                      onChange={this.handleSurveyCloseDate.bind(this)}
-                      id="datetime-local"
-                      label="Survey Expiry Time"
-                      type="datetime-local"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      error={this.state.expiryDateInvalid}
+            {this.state.surveyCreationSuccess ? <>
+              <Grid container direction={'column'} spacing={2} alignItems={'center'}>
+                <Grid item s={12} md={12} lg={12}>
+                  <CheckCircleOutlined style={{fontSize: '10em'}} color={'primary'}/>
+                </Grid>
+                <Grid item s={12} md={12} lg={12}>
+                  <Typography variant={'h2'}>Your survey has been successfully created</Typography>
+                </Grid>
+                <Grid item s={12} md={12} lg={12} style={{marginTop: '20px'}}>
+                  <Button color={'primary'} variant={'outlined'} onClick={() => this.props.history.push('/managerdashboard')}>Back to Dashboard</Button>
+                </Grid>
+              </Grid>
+
+            </> : <>
+              <Typography variant={'h3'} color={'primary'}>Send to Employees</Typography>
+              <Grid container style={classes.gridDiv} direction={'row'} spacing={2}>
+                <Grid item lg={4} md={4} sm={4}>
+                  {/*<EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>*/}
+                  <Card style={{margin: '0 3%', padding: '5%'}}>
+                    <TextField
+                        fullWidth
+                        onChange={this.handleSurveyOpenDate.bind(this)}
+                        defaultValue={moment(this.state.surveyOpenDate).format('YYYY-MM-DD[T]HH:mm')}
+                        id="datetime-local"
+                        label="Survey Open Time"
+                        type="datetime-local"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        error={this.state.openDateInvalid}/>
+                    <TextField
+                        style={{marginTop: '15px'}}
+                        fullWidth
+                        defaultValue={moment(this.state.surveyCloseDate).format('YYYY-MM-DD[T]HH:mm')}
+                        onChange={this.handleSurveyCloseDate.bind(this)}
+                        id="datetime-local"
+                        label="Survey Expiry Time"
+                        type="datetime-local"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        error={this.state.expiryDateInvalid}
+                    />
+                  </Card>
+                </Grid>
+                <Grid item sm={8} md={8} lg={8}>
+                  <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>
+                  <TextField id="standard-multiline-static"
+                             multiline
+                             rows="10"
+                             style={{paddingTop: '5px', width: '100%'}}
+                             variant={'outlined'}
+                             placeholder="Enter a message to send with the survey to the assigned employees..."
+                             value={this.state.employeeMessage}
+                             onChange={this.handleEmployeeMessage}
                   />
-                </Card>
+                </Grid>
               </Grid>
-              <Grid item sm={8} md={8} lg={8}>
-                <EmployeeSelector handleEmployeeChange={this.handleEmployeeChange.bind(this)}/>
-                <TextField id="standard-multiline-static"
-                           multiline
-                           rows="10"
-                           style={{paddingTop: '5px', width: '100%'}}
-                           variant={'outlined'}
-                           placeholder="Enter a message to send with the survey to the assigned employees..."
-                           value={this.state.employeeMessage}
-                           onChange={this.handleEmployeeMessage}
-                />
-              </Grid>
-            </Grid>
-            <Button color={'primary'} style={classes.sendButton} onClick={this.createSurvey}>Send Survey</Button>
+              <Button color={'primary'} style={classes.sendButton} onClick={this.createSurvey}>Send Survey</Button>
+            </>}
+
           </Paper>
         </Modal>
     );

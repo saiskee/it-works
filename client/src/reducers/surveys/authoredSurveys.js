@@ -7,7 +7,6 @@ export default (state = _nullauthoredSurveys, { type, authoredSurveys }) => {
   switch (type) { //action.type
     case GET_MANAGER_AUTHORED_SURVEYS:
       return authoredSurveys;
-      break;
     default:
       return state;
   }

@@ -35,7 +35,6 @@ export const login = user => async dispatch => {
   };
   
   export const logout = () => async dispatch => {
-    console.log("I AM TRYING TO LOG OUT NOW");
     const response = await apiUtil.logout();
     const data = await response.json();
   if (response.ok) {
