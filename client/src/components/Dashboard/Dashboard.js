@@ -104,7 +104,7 @@ class Dashboard extends Component {
 
                             <TableCell>
                               <Link
-                                  to={survey_object.survey_status === 'Unfinished' ? '/survey/' + survey_object.survey._id : '/dashboard'}
+                                  to={survey_object.survey_status !== 'Unfinished' ?  '/dashboard' : '/survey/' + survey_object.survey._id}
                                   color={'primary'}
                               ><Typography variant={'subtitle1'} color={'primary'}>{survey_object.survey.survey_template.title ? survey_object.survey.survey_template.title : "Survey"}</Typography></Link>
                             </TableCell>
