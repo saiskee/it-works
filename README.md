@@ -6,7 +6,7 @@ It Works is a Survey Creation and Management Tool, being created for Ultimate So
 ## Using the project:
 
 If you would like to test our the product without setting up your own environment, we offer a production version hosted here:
-[https://itworks320.herokuapp.com]()
+[https://itworks320.herokuapp.com](https://itworks320.herokuapp.com)
 
 This version is preloaded with test data obtained from the following dataset: [flipchart_dataset.json]
 If you would like to access any of the accounts please use the login information in the provided dataset to access the application, or create your own account!
