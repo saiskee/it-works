@@ -76,8 +76,9 @@ function Rating(props) {
           </ButtonGroup>
           {!props.inputDisabled && data.length > 0 && <IconButton title='Remove One Rating Step'
                                                         onClick={() => props.removeOption(0)}><BackspaceOutlined/></IconButton>}
-          <IconButton title={'Add One Rating Step'} onClick={props.addOption}
-                      color={'primary'}><AddCircleOutlined/></IconButton>
+
+          {!props.inputDisabled && <IconButton title={'Add One Rating Step'} onClick={props.addOption}
+                      color={'primary'}><AddCircleOutlined/></IconButton>}
         </div>
       </div>
   )
