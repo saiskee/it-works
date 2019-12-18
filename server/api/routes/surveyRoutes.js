@@ -35,17 +35,21 @@ surveyRoutes.get('/surveys', async (req, res) => {
               let surveys_with_statuses = await Promise.all(surveys.map(async (survey_object) => {
                 let user_survey_object = user.surveys_assigned.find((user_survey) => (mongoose.Types.ObjectId(user_survey.survey_id).equals(survey_object._id)));
                 // Return the survey with the status appended.
-                if (survey_object.start_date > (new Date).getTime() && user_survey_object.survey_status !== SurveyStatus.NOT_OPEN){
-                  user_survey_object.survey_status = SurveyStatus.NOT_OPEN;
-                  await user.save();
-                }
-                if (survey_object.expiry_date < (new Date).getTime() && user_survey_object.survey_status !== SurveyStatus.EXPIRED) {
-                  user_survey_object.survey_status = SurveyStatus.EXPIRED;
-                  await user.save();
+                if (user_survey_object.survey_status !== SurveyStatus.FINISHED){
+                  console.log(user_survey_object.survey_status);
+                  if (survey_object.start_date > (new Date).getTime() && user_survey_object.survey_status !== SurveyStatus.NOT_OPEN) {
+                    user_survey_object.survey_status = SurveyStatus.NOT_OPEN;
+
+                  } else if (survey_object.expiry_date < (new Date).getTime() && user_survey_object.survey_status !== SurveyStatus.EXPIRED) {
+                    user_survey_object.survey_status = SurveyStatus.EXPIRED;
+                  } else {
+                    user_survey_object.survey_status = SurveyStatus.UNFINISHED;
+                  }
                 }
                 let final_object = {survey: survey_object, survey_status: user_survey_object.survey_status};
                 return final_object;
               }));
+              await user.save();
               res.send({surveys: surveys_with_statuses});
             } catch (err) {
               res.status(400).send(parseError(err));
