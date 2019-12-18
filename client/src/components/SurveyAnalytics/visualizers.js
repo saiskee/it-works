@@ -1,4 +1,4 @@
-import {Table, TableBody, TableCell, TableHead, TableRow, Slider} from "@material-ui/core";
+import {Table, TableBody, TableCell, TableHead, TableRow, Slider, Typography} from "@material-ui/core";
 import {Bar, Line} from "react-chartjs-2";
 import React, {useState} from "react";
 import moment from 'moment';
@@ -92,6 +92,7 @@ const visualizeTrendData = (question, currentSurveyId) => {
     );
   }
   if (question.type === "rating") {
+    return (<Typography>Trend Graphs for Rating Questions are coming soon...</Typography>)
   }
 }
 
