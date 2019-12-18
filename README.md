@@ -74,3 +74,6 @@ It Works Employee Perception Tool uses a wide variety of technologies including 
 #### Server-Side Technologies
 * MongoDB - For storing the surveys and it's results.
 * ExpressJS (Mongoose) - An API used to safely and securely communicate with our MongoDB Database.
+* NodeMailer - An API used to send out email reminders to employees.
+
+Code for ItWorks can be found at: https://github.com/saiskee/it-works
