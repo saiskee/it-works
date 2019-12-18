@@ -91,6 +91,7 @@ class SurveyBuilderPage extends Component {
   }
 
   addQuestionFromQuestionBank(question, questionBankIndex) {
+    console.log(question);
     const {question_data} = question;
     this.setState((prevState) => {
       return {
@@ -98,7 +99,7 @@ class SurveyBuilderPage extends Component {
           data: question_data.choices,
           title: question_data.title,
           question: <Question type={question_data.type}
-                              data={question_data.choices ? question_data.choices : Array.from(Array(question_data.rateMax).keys())}
+                              data={question_data.choices ? question_data.choices :question_data.rateMax}
                               index={prevState.questions.length}
                               updateData={this.updateData}
                               inputDisabled={true}

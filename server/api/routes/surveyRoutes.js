@@ -11,6 +11,7 @@ import {scheduleEmailAlerts} from '../mailer/mailer.js';
 const surveyRoutes = express.Router();
 
 const SurveyStatus = {
+  NOT_OPEN: "Not Open",
   UNFINISHED: "Unfinished",
   FINISHED: "Finished",
   EXPIRED: "Expired"
@@ -34,13 +35,21 @@ surveyRoutes.get('/surveys', async (req, res) => {
               let surveys_with_statuses = await Promise.all(surveys.map(async (survey_object) => {
                 let user_survey_object = user.surveys_assigned.find((user_survey) => (mongoose.Types.ObjectId(user_survey.survey_id).equals(survey_object._id)));
                 // Return the survey with the status appended.
-                if (survey_object.expiry_date < (new Date).getTime() && user_survey_object.survey_status !== SurveyStatus.EXPIRED) {
-                  user_survey_object.survey_status = SurveyStatus.EXPIRED;
-                  await user.save();
+                if (user_survey_object.survey_status !== SurveyStatus.FINISHED){
+                  console.log(user_survey_object.survey_status);
+                  if (survey_object.start_date > (new Date).getTime() && user_survey_object.survey_status !== SurveyStatus.NOT_OPEN) {
+                    user_survey_object.survey_status = SurveyStatus.NOT_OPEN;
+
+                  } else if (survey_object.expiry_date < (new Date).getTime() && user_survey_object.survey_status !== SurveyStatus.EXPIRED) {
+                    user_survey_object.survey_status = SurveyStatus.EXPIRED;
+                  } else {
+                    user_survey_object.survey_status = SurveyStatus.UNFINISHED;
+                  }
                 }
                 let final_object = {survey: survey_object, survey_status: user_survey_object.survey_status};
                 return final_object;
               }));
+              await user.save();
               res.send({surveys: surveys_with_statuses});
             } catch (err) {
               res.status(400).send(parseError(err));
@@ -157,6 +166,8 @@ surveyRoutes.post('', async (req, res) => {
             });
             user.save();
           })
+
+          employeeMessage = "You have a new survey assigned to you by your manager. \n\n Message from your manager: \n" + employeeMessage;
           res.send({employees:employees.tags.map(employee=>employee.fullName), openDate, expiryDate, surveyTemplate});
           scheduleEmailAlerts(newSurvey._id, newSurvey.start_date, newSurvey.expiry_date, employeeMessage)
 
@@ -169,6 +180,11 @@ surveyRoutes.post('', async (req, res) => {
     } catch (err) {
       console.log(parseError(err))
       res.status(400).send(parseError(err));
+    }
+    try {
+      scheduleEmailAlerts(newSurvey._id, newSurvey.start_date, newSurvey.expiry_date, employeeMessage);
+    } catch (err) {
+      console.log(err);
     }
   });
 });
